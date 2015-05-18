@@ -1,0 +1,37 @@
+﻿@using StudentFinanceSupport.Helpers
+<!DOCTYPE html>
+<html lang="en">
+@RenderPage("Template/header.cshtml")
+<body>
+
+    <div id="wrapper">
+
+            <!--render navbar-->
+            @RenderPage("Template/navbar.cshtml")
+
+
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                
+                @RenderBody()
+
+            </div><!--Content Fluid End-->
+        </div><!--end page-wrapper-->
+
+
+    </div>
+    <!-- /#wrapper -->
+    <!--These scripts are not needed unless admin-->
+    @if (Helpers.UserLoggedIn())
+    {
+        <!-- Admin Scripts Charts JavaScript -->
+        @Scripts.Render("~/bundles/adminScripts")
+    }
+  
+    <!-- This is to remove the internal validation css been adding as im using custom alert boxes-->
+    <script>
+        //$(".validation-summary-errors").removeClass("validation-summary-errors");
+        //$(".input-validation-error").removeClass("input-validation-error").parent().addClass("has-error");
+    </script>
+</body>
+</html>

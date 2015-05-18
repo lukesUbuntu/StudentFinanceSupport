@@ -1,0 +1,23 @@
+﻿@model IEnumerable<StudentFinanceSupport.Models.StudentRegistration>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Main_Layout_.cshtml";
+}
+
+<h2>Index</h2>
+
+@foreach (var student in Model)
+{
+    <div>
+        <span>
+            @Html.DisplayFor(modelItem => student.Student_ID)
+        </span>
+        <span>
+            @Html.DisplayFor(modelItem => student.Fname)
+        </span>
+        <span>
+            @Html.DisplayFor(modelItem => student.Lname)
+        </span>
+        
+    </div>
+}

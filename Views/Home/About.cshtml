@@ -1,0 +1,170 @@
+﻿@using StudentFinanceSupport.Helpers;
+@{
+    ViewBag.Title = "About";
+    Layout = "~/Views/Shared/_Main_Layout_.cshtml";
+    
+    
+}
+<div class="panel-body">
+    <h3>About @Helpers.SystemName()</h3>
+    <blockquote>
+        <p>System has been moved to a MVC framework, has been re-designed with Bootstrap boilplae. With the following additional jQuery</p>
+        <small>
+            Designed by
+            <cite title="Source Title">Luke Hardiman 9901623</cite>
+        </small>
+    </blockquote>
+</div>
+            <!-- /.panel -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <i class="fa fa-clock-o fa-fw"></i> @Helpers.SystemName() Time line and refrences 
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <ul class="timeline">
+            <li>
+                <div class="timeline-badge">
+                    <i class="fa fa-check"></i>
+                </div>
+                <div class="timeline-panel">
+                    <div class="timeline-heading">
+                        <h4 class="timeline-title">Step 1. Implmenting MVC</h4>
+                        <p>
+                            <small class="text-muted"><i class="fa fa-clock-o"></i> 15/05/2015</small>
+                        </p>
+                    </div>
+                    <div class="timeline-body">
+                        <p>Started implmenting @Helpers.SystemName() into MVC starting from a empty MVC project</p>
+                    </div>
+                </div>
+            </li>
+
+
+            <li class="timeline-inverted">
+                <div class="timeline-badge success">
+                    <i class="fa fa-graduation-cap"></i>
+                </div>
+                <div class="timeline-panel">
+                    <div class="timeline-heading">
+                        <h4 class="timeline-title">Required Enity Checks On duplications</h4>
+                    </div>
+                    <div class="timeline-body">
+                        <p>Implmented a @@overide method that uses http://stackoverflow.com/questions/9603131/where-to-run-a-duplicate-check-for-an-entity</p>
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <div class="timeline-badge">
+                    <i class="fa fa-check"></i>
+                </div>
+                <div class="timeline-panel">
+                    <div class="timeline-heading">
+                        <h4 class="timeline-title">Step 1. Implmenting MVC</h4>
+                        <p>
+                            <small class="text-muted"><i class="fa fa-clock-o"></i> 16/05/2015</small>
+                        </p>
+                    </div>
+                    <div class="timeline-body">
+                        <p>Added bootstrap,jquery and implmented the bundlescript manager</p>
+                        <p>Completed the studentregistration tables and added a enity relshonship between faculity and courses</p>
+                        <p>added controlers and views with using a wizard type style for adding a studentregistration with ajax</p>
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <div class="timeline-badge">
+                    <i class="fa fa-check"></i>
+                </div>
+                <div class="timeline-panel">
+                    <div class="timeline-heading">
+                        <h4 class="timeline-title">Step 2. Bootstrap</h4>
+                        <p>
+                            <small class="text-muted"><i class="fa fa-clock-o"></i> 17/05/2015</small>
+                        </p>
+                    </div>
+                    <div class="timeline-body">
+                        <p>Added a helper class under the helper namspace</p>
+                        <p>this has improved templating and additional tasks required</p>
+                    </div>
+                </div>
+            </li>
+
+            <li class="timeline-inverted">
+                <div class="timeline-badge success">
+                    <i class="fa fa-graduation-cap"></i>
+                </div>
+                <div class="timeline-panel">
+                    <div class="timeline-heading">
+                        <h4 class="timeline-title">accessing session state from a static helper </h4>
+                    </div>
+                    <div class="timeline-body">
+                        <p>Required additional help on using a session within a static helper, good refrence from http://stackoverflow.com/questions/14588441/asp-net-mvc-htmlhelper-and-session-data</p>
+                    </div>
+                </div>
+            </li>
+
+            <li class="timeline-inverted">
+                <div class="timeline-badge success">
+                    <i class="fa fa-graduation-cap"></i>
+                </div>
+                <div class="timeline-panel">
+                    <div class="timeline-heading">
+                        <h4 class="timeline-title">Base Controllers </h4>
+                    </div>
+                    <div class="timeline-body">
+                        <p>Instead of checking a session on every single admin Action i implmented a base class abstuct but had trouble gaining session access before returing to base, good guide here  </p>
+                    </div>
+                </div>
+            </li>
+
+
+            <li>
+                <div class="timeline-badge">
+                    <i class="fa fa-check"></i>
+                </div>
+                <div class="timeline-panel">
+                    <div class="timeline-heading">
+                        <h4 class="timeline-title">Step 3. AddVoucher</h4>
+                        <p>
+                            <small class="text-muted"><i class="fa fa-clock-o"></i> 18/05/2015</small>
+                        </p>
+                    </div>
+                    <div class="timeline-body">
+                        <p>Added tables for adding student voucher, added model ,implmented controller and views</p>
+                        <p>Added about us page (viewing now). Fixed up BaseController adding in a SKIP function for Actions to be skipped on secuirty checks </p>
+                    </div>
+                </div>
+            </li>
+
+            <li class="timeline-inverted">
+                <div class="timeline-badge success">
+                    <i class="fa fa-graduation-cap"></i>
+                </div>
+                <div class="timeline-panel">
+                    <div class="timeline-heading">
+                        <h4 class="timeline-title">Base Controllers </h4>
+                        <p>
+                            <small class="text-muted"><i class="fa fa-clock-o"></i> 19/05/2015</small>
+                        </p>
+                    </div>
+                    <div class="timeline-body">
+                        <p>Today before i get carried away with features amd more implmentation i am learning how to do Unit Testing in MVC </p>
+                        <ul>
+                            <li>https://msdn.microsoft.com/en-us/library/ff936235(v=vs.100).aspx</li>
+                            <li>http://www.asp.net/mvc/overview/older-versions-1/unit-testing/creating-unit-tests-for-asp-net-mvc-applications-cs</li>
+                            <li>https://msdn.microsoft.com/en-us/library/dd410597(v=vs.100).aspx</li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+
+           
+        </ul>
+    </div>
+    <!-- /.panel-body -->
+</div>
+<!-- /.panel -->
+
