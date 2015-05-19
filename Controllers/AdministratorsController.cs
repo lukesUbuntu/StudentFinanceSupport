@@ -74,8 +74,8 @@ namespace StudentFinanceSupport.Controllers
                 Session["logged_in"] = true;
                 //return RedirectToAction("Index", "Home");
                 //Request.QueryString["fromUrl"]
-
-                if (Request.QueryString["[fromUrl]"] != "" && Request.QueryString["[fromUrl]"] != null)
+                //Request.QueryString["[fromUrl]"] != "" && 
+                if (Request.QueryString["fromUrl"] != null)
                 {
 
                     return Redirect(Request.QueryString["fromUrl"]);

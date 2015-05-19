@@ -54,9 +54,17 @@ namespace StudentFinanceSupport.Controllers
                 //need to make sure we check current action is not our login route otherwise we will cause a endless redirect
                if (bypassAdminCheck(filterContext) == false)
               {
-
-                //append the previous URL a user was trying to access so we can redirect them back
-                 Response.RedirectToRoute(LoginRoute, new { fromUrl = Request.Url.ToString() }); //defined it our routeConfig
+                 
+                    //append the previous URL a user was trying to access so we can redirect them back
+                  if (Request.RawUrl.Count() > 1)
+                  {
+                      Response.RedirectToRoute(LoginRoute, new { fromUrl = Request.Url.ToString() }); //defined it our routeConfig
+                  }
+                  else
+                  {
+                      Response.RedirectToRoute(LoginRoute); //defined it our routeConfig
+                  }
+                    
             }
             else
             {
@@ -74,6 +82,28 @@ namespace StudentFinanceSupport.Controllers
         {
             return Helpers.Helpers.UserLoggedIn();
             //return (Session["logged_in"] != null) && (bool)Session["logged_in"] == true;
+        }
+
+        private string getAC()
+        {
+
+           
+            // Split the url to url + query string
+            if (Request.UrlReferrer == null) return null;
+
+            var fullUrl = Request.UrlReferrer.ToString();
+            var questionMarkIndex = fullUrl.IndexOf('?');
+            string queryString = null;
+            string url = fullUrl;
+            if (questionMarkIndex != -1) // There is a QueryString
+            {    
+                url = fullUrl.Substring(0, questionMarkIndex); 
+                queryString = fullUrl.Substring(questionMarkIndex + 1);
+            }
+
+
+            return queryString;
+           
         }
 
     }
