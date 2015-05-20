@@ -1,3 +1,6 @@
+
+
+/*Suggestion Box for student voucher add*/
 .suggest-holder {
         /*width: 150px;*/
 }
@@ -15,7 +18,7 @@
       z-index: 1000;
       float: left;
       display: none;
-      min-width: 160px;
+      min-width: 250px;
       _width: 160px;
       padding: 4px 0;
       margin: 2px 0 0 0;
@@ -47,16 +50,22 @@
 .suggest-holder li:hover, li.active {
     background: rgba(0,120,0, .2);
 }
-.suggest-holder .suggest-name {
+.suggest-holder .student-name {
      font-weight: bold;
      display: block;
      height: 15px;
 }
-.suggest-holder .suggest-description {
+.suggest-holder .student-id {
     font-style: italic;
     font-size: 11px;
     color: #999;
 }
+
+
+
+
+
+
 
 #dashboard_panel a {
     color: #FFFFFF;

@@ -4,89 +4,158 @@
     Layout = "~/Views/Shared/_Main_Layout_.cshtml";
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    
-</head>
-<body>
+
     @using (Html.BeginForm()) 
     {
         @Html.AntiForgeryToken()
-        
-        <div class="form-horizontal">
-            <h4>StudentVoucher</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.student_ID, "student_ID", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownList("student_ID", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.student_ID, "", new { @class = "text-danger" })
+
+    <div id="add-student-form" class="form-horizontal">
+        <h4>StudentVoucher</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.student_ID, "student_ID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="input-group custom-search-form">
+
+                   
+
+                    <div class='suggest-holder'>
+                       
+                        
+                        <span class="input-group-btn">
+                                <i class="fa fa-search"></i>
+                            @Html.TextBoxFor(model => model.student_ID, new { @class = "form-control suggest-prompt", @placeholder = "Search Student ID Or Name...", @autofocus = "" })
+                        </span>
+                        
+                        <ul>  
+                        </ul>
+                    </div>
+
+
+
+
                 </div>
-            </div>
-    
-            <div class="form-group">
-                @Html.LabelFor(model => model.GrantType, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    
-                    @Html.DropDownList("Grant_Types", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.GrantType, "", new { @class = "text-danger" })
-                </div>
-            </div>
-    
-            <div class="form-group">
-                @Html.LabelFor(model => model.GrantDescription, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.GrantDescription, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.GrantDescription, "", new { @class = "text-danger" })
-                </div>
-            </div>
-    
-            <div class="form-group">
-                @Html.LabelFor(model => model.GrantValue, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.GrantValue, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.GrantValue, "", new { @class = "text-danger" })
-                </div>
-            </div>
-    
-            <div class="form-group">
-                @Html.LabelFor(model => model.DateOfIssue, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.DateOfIssue, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.DateOfIssue, "", new { @class = "text-danger" })
-                </div>
-            </div>
-    
-            <div class="form-group">
-                @Html.LabelFor(model => model.Refno, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Refno, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Refno, "", new { @class = "text-danger" })
-                </div>
-            </div>
-    
-            <div class="form-group">
-                @Html.LabelFor(model => model.KuhaFunds, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.KuhaFunds, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.KuhaFunds, "", new { @class = "text-danger" })
-                </div>
-            </div>
-    
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
-                </div>
+
+
+                @Html.ValidationMessageFor(model => model.student_ID, "", new { @class = "text-danger" })
             </div>
         </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.GrantType, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                @Html.DropDownList("Grant_Types", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.GrantType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.GrantDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.GrantDescription, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.GrantDescription, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.GrantValue, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.GrantValue, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.GrantValue, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateOfIssue, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DateOfIssue, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DateOfIssue, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Refno, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Refno, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Refno, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.KuhaFunds, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.KuhaFunds, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.KuhaFunds, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+        
+
     }
     
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>
-</body>
-</html>
+   <script type="text/javascript">
+       $(document).ready(function () {
+
+           //set our suggestion selected
+           var $suggest_holder = $('.suggest-holder ul');
+           //set where the textbox entry is
+           //var $suggest_holder = $('.suggest-holder ul');
+
+           $('#add-student-form').on('keyup', "input#student_ID", studentSuggestion);
+
+
+           //returns the value details of the suggest box
+           $('body').on('click',".suggested-student", function (e) {
+               var student_id = $(this).attr("student_id");
+               console.log("student_id", student_id);
+               $('#student_ID').val(student_id)
+           });
+
+            /*
+              @@name  : studentSuggestion
+              @@description : creates <li> based on search results from json response 
+             */
+           function studentSuggestion(response) {
+               //hide and empty ul
+               $suggest_holder.hide();
+               $suggest_holder.empty();
+
+               $.ajax({
+                   url: "/StudentVouchers/studentSearch",
+                   type: "POST",
+                   dataType: "json",
+                   data: { query: $(this).val() },
+                   success: function (data) {
+                       console.log("data", data)
+                       $.map(data, function (student) {
+                           console.log("map", student)
+                          
+                           //append to our ul
+                           $suggest_holder.append($("<li class='suggested-student' student_id='" + student.student_id + "'>" +
+                               "<span class='student-name'>" + student.first_name + "</span>" +
+                               "<span class='student-id'>" + student.student_id + "</span>" +
+                               "</li>")
+                               );
+                           
+
+                       })
+                       $suggest_holder.show();
+
+                   }
+               });
+           }
+       })
+
+
+
+   </script>
+
