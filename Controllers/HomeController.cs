@@ -21,7 +21,8 @@ namespace StudentFinanceSupport.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            //ViewBag.name = "";
+            ViewBag.Message = "About Application.";
 
             return View();
         }

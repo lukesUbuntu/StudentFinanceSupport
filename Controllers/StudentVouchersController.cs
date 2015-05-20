@@ -46,7 +46,29 @@ namespace StudentFinanceSupport.Controllers
             ViewBag.Grant_Types = Helpers.Helpers.GrantTypes();
             return View();
         }
+        public JsonResult studentSearch(string query)
+        {
 
+            var result_id = db.StudentRegistrations.Where(x => x.Student_ID.Contains(query.ToString())).Select(x => new
+            {
+                student_id = x.Student_ID,
+                first_name = x.Fname
+            });
+            var result_fname = db.StudentRegistrations.Where(x => x.Fname.Contains(query.ToString())).Select(x => new
+            {
+                      student_id = x.Student_ID,
+                      first_name = x.Fname
+            });
+            var result_lname = db.StudentRegistrations.Where(x => x.Lname.Contains(query.ToString())).Select(x => new
+            {
+                student_id = x.Student_ID,
+                first_name = x.Fname
+            });
+
+            var result = result_lname.Concat(result_id.Concat(result_fname));
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         // POST: StudentVouchers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.

@@ -30,7 +30,6 @@ namespace StudentFinanceSupport.Controllers
      
 
              ViewBag.id_courses = new SelectList(db.Courses, "id_courses", "course_name");
-
              ViewBag.id_faculty = new SelectList(db.Faculties, "id_faculty", "faculty_name");
              
              return View();
@@ -41,6 +40,7 @@ namespace StudentFinanceSupport.Controllers
          public ActionResult Create([Bind(Include =
              "Student_ID,Fname,Lname,Gender,DOB,Address1,Accomodition_Type,Phone,Mobile,Email,Marital_Status,Contact,Main_Ethnicity,id_faculty,id_courses,Detailed_Ethnicity,campus")] StudentRegistration studentRegistration)
          {
+             //error checking goes here
 
              //lets make sure we don't already have this Student_ID
              if (this.studentExists(studentRegistration.Student_ID))
@@ -95,12 +95,59 @@ namespace StudentFinanceSupport.Controllers
          }
         
 
+       
+
         /// <summary>
-        /// ajax call checks if a student id already exists
+        /// Checks if a student exists 
         /// </summary>
-        /// <param name="Student_ID">The student ID</param>
-        /// <returns>true or false</returns>
-        //StudentRegistration/CheckStudentID [POST]
+        /// <param name="theStudentID">ID Of student</param>
+        /// <returns>true or false if exists</returns>
+         private bool studentExists(string theStudentID)
+         {
+             //lets make sure we don't already have this Student_ID .Any(). will return a boolean if the entity was found
+             return (db.StudentRegistrations.Any(m => m.Student_ID.ToLower() == theStudentID.ToLower()));
+         }
+
+        /*********AJAX ONLY TRIGGERS BELOW THIS POINT PUBLIC
+         * POST when parsing data
+         * GET for when we are just retriveing data
+         * @todo add token parsing for x-cross parsing security (cross site injections)
+        /***********************************************************************************/
+        /// <summary>
+        /// Returns JSON response of all courses related to Faculty
+        /// </summary>
+        /// <param name="faculty">Faculity by ID</param>
+         /// <returns>JSON result of id_course & course_name</returns>
+         //StudentRegistration/getCourses [GET]
+        [HttpGet]
+         public JsonResult getCourses(int faculty)
+         {
+             //Get list of courses for a faculty
+             var result = db.Courses.Where(x => x.id_faculty == faculty).Select(x => new
+                  {
+                      id_course = x.id_courses,
+                      course_name = x.course_name
+                  });
+
+             //int count = result.Count();
+             
+             //create a response back
+             //var response = new List<object>();
+             //response.Add(new { exists = (result.Count() == 1) });
+
+             
+             
+             return Json(result, JsonRequestBehavior.AllowGet);
+
+         }
+
+
+         /// <summary>
+         /// ajax call checks if a student id already exists
+         /// </summary>
+         /// <param name="Student_ID">The student ID</param>
+         /// <returns>true or false</returns>
+         //StudentRegistration/CheckStudentID [POST]
          [HttpPost]
          public JsonResult CheckStudentID(string Student_ID)
          {
@@ -121,43 +168,6 @@ namespace StudentFinanceSupport.Controllers
                         new { available = (!this.studentExists(Student_ID)) }
              };
              return Json(response, JsonRequestBehavior.AllowGet);
-
-
-         }
-
-        /// <summary>
-        /// Checks if a student exists 
-        /// </summary>
-        /// <param name="theStudentID">ID Of student</param>
-        /// <returns>true or false if exists</returns>
-         private bool studentExists(string theStudentID)
-         {
-             //lets make sure we don't already have this Student_ID .Any(). will return a boolean if the entity was found
-             return (db.StudentRegistrations.Any(m => m.Student_ID.ToLower() == theStudentID.ToLower()));
-         }
-        
-        /// <summary>
-        /// Returns JSON response of all courses related to Faculty
-        /// </summary>
-        /// <param name="faculty">Faculity by ID</param>
-         /// <returns>JSON result of id_course & course_name</returns>
-         public JsonResult getCourses(int faculty)
-         {
-             //Get list of courses for a faculty
-             var result = db.Courses.Where(x => x.id_faculty == faculty).Select(x => new
-                  {
-                      id_course = x.id_courses,
-                      course_name = x.course_name
-                  });
-
-             //int count = result.Count();
-             //create a response back
-             //var response = new List<object>();
-             //response.Add(new { exists = (result.Count() == 1) });
-
-             
-             
-             return Json(result, JsonRequestBehavior.AllowGet);
 
 
          }
