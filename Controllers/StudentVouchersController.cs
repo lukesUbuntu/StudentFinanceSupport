@@ -13,7 +13,7 @@ namespace StudentFinanceSupport.Controllers
 {
     public class StudentVouchersController : BaseController
     {
-        private StudentVouchersModel db = new StudentVouchersModel();
+        private StudentRegistrationsModel db = new StudentRegistrationsModel();
 
         // GET: StudentVouchers
         public ActionResult Index()
@@ -41,7 +41,7 @@ namespace StudentFinanceSupport.Controllers
         public ActionResult Add()
         {
             //parsing to the view
-            ViewBag.student_ID = new SelectList(db.StudentRegistrations, "Student_ID", "Fname");
+            ViewBag.student_ID = new SelectList(db.StudentRegistrations, "Student_ID", "FirstName");
             //@todo move regiration to passing as helpoer
             ViewBag.Grant_Types = Helpers.Helpers.GrantTypes();
             return View();
@@ -52,17 +52,17 @@ namespace StudentFinanceSupport.Controllers
             var result_id = db.StudentRegistrations.Where(x => x.Student_ID.Contains(query.ToString())).Select(x => new
             {
                 student_id = x.Student_ID,
-                first_name = x.Fname
+                first_name = x.FirstName
             });
-            var result_fname = db.StudentRegistrations.Where(x => x.Fname.Contains(query.ToString())).Select(x => new
+            var result_fname = db.StudentRegistrations.Where(x => x.FirstName.Contains(query.ToString())).Select(x => new
             {
                       student_id = x.Student_ID,
-                      first_name = x.Fname
+                      first_name = x.FirstName
             });
-            var result_lname = db.StudentRegistrations.Where(x => x.Lname.Contains(query.ToString())).Select(x => new
+            var result_lname = db.StudentRegistrations.Where(x => x.LastName.Contains(query.ToString())).Select(x => new
             {
                 student_id = x.Student_ID,
-                first_name = x.Fname
+                first_name = x.FirstName
             });
 
             var result = result_lname.Concat(result_id.Concat(result_fname));
@@ -74,7 +74,7 @@ namespace StudentFinanceSupport.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add([Bind(Include = "student_ID,GrantType,GrantDescription,GrantValue,DateOfIssue,Refno,KuhaFunds")] StudentVoucher studentVoucher)
+        public ActionResult Add([Bind(Include = "student_ID,GrantType,GrantDescription,GrantValue,DateOfIssue,id_student_vouchers,KuhaFunds")] StudentVoucher studentVoucher)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +83,7 @@ namespace StudentFinanceSupport.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.student_ID = new SelectList(db.StudentRegistrations, "Student_ID", "Fname", studentVoucher.student_ID);
+            ViewBag.student_ID = new SelectList(db.StudentRegistrations, "Student_ID", "FirstName", studentVoucher.student_ID);
             return View(studentVoucher);
         }
 
@@ -99,7 +99,7 @@ namespace StudentFinanceSupport.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.student_ID = new SelectList(db.StudentRegistrations, "Student_ID", "Fname", studentVoucher.student_ID);
+            ViewBag.student_ID = new SelectList(db.StudentRegistrations, "Student_ID", "FirstName", studentVoucher.student_ID);
             return View(studentVoucher);
         }
 
@@ -108,7 +108,7 @@ namespace StudentFinanceSupport.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "student_ID,GrantType,GrantDescription,GrantValue,DateOfIssue,Refno,KuhaFunds")] StudentVoucher studentVoucher)
+        public ActionResult Edit([Bind(Include = "student_ID,GrantType,GrantDescription,GrantValue,DateOfIssue,id_student_vouchers,KuhaFunds")] StudentVoucher studentVoucher)
         {
             if (ModelState.IsValid)
             {
@@ -116,7 +116,7 @@ namespace StudentFinanceSupport.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.student_ID = new SelectList(db.StudentRegistrations, "Student_ID", "Fname", studentVoucher.student_ID);
+            ViewBag.student_ID = new SelectList(db.StudentRegistrations, "Student_ID", "FirstName", studentVoucher.student_ID);
             return View(studentVoucher);
         }
 

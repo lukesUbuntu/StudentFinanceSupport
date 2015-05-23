@@ -8,34 +8,28 @@ namespace StudentFinanceSupport.Models
 
     public partial class StudentVoucher
     {
+        
+
         [Key]
-        [Column(Order = 0)]
+        public int id_student_vouchers { get; set; }
+
         [StringLength(20)]
         public string student_ID { get; set; }
 
-        [Key]
-        [Column(Order = 1)]
+       
         [StringLength(50)]
         public string GrantType { get; set; }
 
-        [Key]
-        [Column(Order = 2)]
-        [StringLength(50)]
+      
+
         public string GrantDescription { get; set; }
 
-        [Key]
-        [Column(Order = 3)]
+
         public double GrantValue { get; set; }
 
-        [Key]
-        [Column(Order = 4)]
         public DateTime DateOfIssue { get; set; }
 
         public double? KuhaFunds { get; set; }
-
-        [Key]
-        [Column(Order = 5)]
-        public int Refno { get; set; }
 
         public virtual StudentRegistration StudentRegistration { get; set; }
     }

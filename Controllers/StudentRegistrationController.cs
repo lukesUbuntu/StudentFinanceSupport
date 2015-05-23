@@ -24,21 +24,36 @@ namespace StudentFinanceSupport.Controllers
             return View();
         }
 
+         //StudentRegistration/Edit 
+        /// <summary>
+        /// Allowes editing of a StudentRegistration
+        /// </summary>
+        /// <param name="id">Student ID</param>
+        /// <returns>View</returns>
+         public ActionResult Edit(String id)
+         {
+             //if id == return
+             //StudentRegistration theStudent = (StudentRegistration)db.StudentRegistrations.Where(m => m.Student_ID == id);
+             StudentRegistration theStudent = db.StudentRegistrations.Find(id);
+             ViewBag.id_courses = new SelectList(String.Empty, "id_courses", "course_name");
+             ViewBag.id_faculty = new SelectList(db.Faculties, "id_faculty", "faculty_name");
+             ViewBag.id_campus = new SelectList(db.Campus, "id_campus", "campus_name");
+             return View(theStudent);
+         }
+
          //StudentRegistration/Create 
          public ActionResult Create()
-         {
-     
-
-             ViewBag.id_courses = new SelectList(db.Courses, "id_courses", "course_name");
+         {      
+             ViewBag.id_courses = new SelectList(String.Empty, "id_courses", "course_name");
              ViewBag.id_faculty = new SelectList(db.Faculties, "id_faculty", "faculty_name");
-             
+             ViewBag.id_campus = new SelectList(db.Campus, "id_campus", "campus_name");
              return View();
          }
 
          //StudentRegistration/Create [POST]
          [HttpPost]
          public ActionResult Create([Bind(Include =
-             "Student_ID,Fname,Lname,Gender,DOB,Address1,Accomodition_Type,Phone,Mobile,Email,Marital_Status,Contact,Main_Ethnicity,id_faculty,id_courses,Detailed_Ethnicity,campus")] StudentRegistration studentRegistration)
+             "Student_ID,FirstName,LastName,Gender,DOB,Address1,Accomodition_Type,Phone,Mobile,Email,Marital_Status,Contact,Main_Ethnicity,id_faculty,id_courses,Detailed_Ethnicity,id_campus")] StudentRegistration studentRegistration)
          {
              //error checking goes here
 
@@ -46,10 +61,13 @@ namespace StudentFinanceSupport.Controllers
              if (this.studentExists(studentRegistration.Student_ID))
              {
                  ModelState.AddModelError("Student_ID", "Student ID Already Exists");
-                 
                  //return View(StudentRegistration);
              }
-             
+             if (studentRegistration.Student_ID == null || studentRegistration.Student_ID.ToString().Trim() == String.Empty)
+             {
+                 ModelState.AddModelError("Student_ID", "Can not be blank or empty");
+                 //return View(StudentRegistration);
+             }
             
              if (ModelState.IsValid)
              {
@@ -91,6 +109,7 @@ namespace StudentFinanceSupport.Controllers
 
              ViewBag.id_courses = new SelectList(db.Courses, "id_courses", "course_name");
              ViewBag.id_faculty = new SelectList(db.Faculties, "id_faculty", "faculty_name");
+             ViewBag.id_campus = new SelectList(db.Campus, "id_campus", "campus_name");
              return View(studentRegistration);
          }
         
@@ -109,8 +128,6 @@ namespace StudentFinanceSupport.Controllers
          }
 
         /*********AJAX ONLY TRIGGERS BELOW THIS POINT PUBLIC
-         * POST when parsing data
-         * GET for when we are just retriveing data
          * @todo add token parsing for x-cross parsing security (cross site injections)
         /***********************************************************************************/
         /// <summary>
@@ -119,7 +136,7 @@ namespace StudentFinanceSupport.Controllers
         /// <param name="faculty">Faculity by ID</param>
          /// <returns>JSON result of id_course & course_name</returns>
          //StudentRegistration/getCourses [GET]
-        [HttpGet]
+         [HttpPost]
          public JsonResult getCourses(int faculty)
          {
              //Get list of courses for a faculty

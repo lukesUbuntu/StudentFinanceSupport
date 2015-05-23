@@ -27,7 +27,7 @@ namespace StudentFinanceSupport
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             //re int datbase entities
-            //Database.SetInitializer<StudentRegistrationDB>(null);
+            Database.SetInitializer<StudentRegistrationsModel>(null);
         }
     }
 }

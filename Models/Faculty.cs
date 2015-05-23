@@ -25,4 +25,6 @@ namespace StudentFinanceSupport.Models
 
         public virtual ICollection<StudentRegistration> StudentRegistrations { get; set; }
     }
+
+ 
 }

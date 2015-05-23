@@ -20,15 +20,16 @@ namespace StudentFinanceSupport.Models
 
         [Required]
         [StringLength(20)]
-        public string Fname { get; set; }
+        public string FirstName { get; set; }
 
         [StringLength(20)]
-        public string Lname { get; set; }
+        public string LastName { get; set; }
 
         [Required]
         [StringLength(10)]
         public string Gender { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime DOB { get; set; }
 
         [StringLength(50)]
@@ -55,21 +56,25 @@ namespace StudentFinanceSupport.Models
         [StringLength(50)]
         public string Main_Ethnicity { get; set; }
 
-        public int id_faculty { get; set; }
-
-        public int id_courses { get; set; }
-
+      
         [StringLength(50)]
         public string Detailed_Ethnicity { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string campus { get; set; }
+        public int id_faculty { get; set; }
+        public int id_courses { get; set; }
+
+        public int id_campus { get; set; }
+
 
         public virtual Courses Course { get; set; }
 
         public virtual Faculty Faculty { get; set; }
+
+        public virtual Campus Campus { get; set; }
+
         //Icollection is foreign key in vouchers table
         public virtual ICollection<StudentVoucher> StudentVouchers { get; set; }
+
+     
     }
 }

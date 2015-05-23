@@ -6,27 +6,24 @@ namespace StudentFinanceSupport.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity;
     using System.Linq;
-    using System.Data.Entity.Spatial;
 
-    [Table("Courses")]
-    public partial class Courses
+    [Table("Campus")]
+    public partial class Campus
     {
-        public Courses()
+        public Campus()
         {
             StudentRegistrations = new HashSet<StudentRegistration>();
         }
 
         [Key]
-        public int id_courses { get; set; }
+        public int id_campus { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string course_name { get; set; }
+        public string campus_name { get; set; }
 
-        public int id_faculty { get; set; }
 
-        public virtual Faculty Faculty { get; set; }
-        //foreign key
+
         public virtual ICollection<StudentRegistration> StudentRegistrations { get; set; }
     }
 }

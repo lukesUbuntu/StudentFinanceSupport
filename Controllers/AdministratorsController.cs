@@ -13,7 +13,7 @@ namespace StudentFinanceSupport.Controllers
 {
     public class AdministratorsController : BaseController
     {
-        private AdministratorsModel db = new AdministratorsModel();
+        private StudentRegistrationsModel db = new StudentRegistrationsModel();
 
         public AdministratorsController()
         {
@@ -24,6 +24,9 @@ namespace StudentFinanceSupport.Controllers
         // GET: Administrators
         public ActionResult Index()
         {
+            //Administrator theAdmins = new Administrator();
+            //theAdmins = db.Administrators();
+
             return View(db.Administrators.ToList());
         }
 
