@@ -13,8 +13,8 @@ namespace StudentFinanceSupport.Controllers
     {
         private StudentRegistrationsModel db = new StudentRegistrationsModel();
 
-        // GET: StudentRegistration
-        public ActionResult Index()
+        // GET: StudentRegistration/List
+        public ActionResult List()
         {
             return View(db.StudentRegistrations.ToList());
         }
