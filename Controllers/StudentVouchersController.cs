@@ -41,10 +41,49 @@ namespace StudentFinanceSupport.Controllers
         public ActionResult Add(String id)
         {
             //parsing to the view
-            ViewBag.Grant_Types = Helpers.Helpers.GrantTypes();
+            ViewBag.GrantType = Helpers.Helpers.GrantTypes();
             ViewBag.student_ID = (id != null) ? id : String.Empty;
            
             return View();
+        }
+        // POST: StudentVouchers/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Add([Bind(Include = "student_ID,GrantType,GrantDescription,GrantValue,DateOfIssue,KuhaFunds")] StudentVoucher studentVoucher)
+        {
+            //lets make sure student exists
+            if (this.studentExists(studentVoucher.student_ID) == false)
+            {
+                ModelState.AddModelError("Student_ID", "Student ID Does Not Exist");
+                //return View(StudentRegistration);
+            }
+            //description field is only required value if grant advice selected
+
+            if (studentVoucher.GrantType != null && studentVoucher.GrantType.Contains("Advice")) 
+            {
+                //Clear the GrantValue error as will be triggered otherwise
+                //ModelState["GrantValue"].Errors.Clear();
+                ModelState.Remove("GrantValue");
+                if (String.IsNullOrEmpty(studentVoucher.GrantDescription))
+                {
+                    ModelState.AddModelError("GrantDescription", "Grant description must contain details on advice");
+                }
+                
+                
+            }
+
+            if (ModelState.IsValid)
+            {
+                db.StudentVouchers.Add(studentVoucher);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.GrantType = Helpers.Helpers.GrantTypes();
+            ViewBag.student_ID = (studentVoucher.student_ID != null) ? studentVoucher.student_ID : String.Empty;
+            // ViewBag.student_ID = new SelectList(db.StudentRegistrations, "Student_ID", "FirstName", studentVoucher.student_ID);
+            return View(studentVoucher);
         }
         public JsonResult studentSearch(string query)
         {
@@ -69,31 +108,7 @@ namespace StudentFinanceSupport.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        // POST: StudentVouchers/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Add([Bind(Include = "student_ID,GrantType,GrantDescription,GrantValue,DateOfIssue,id_student_vouchers,KuhaFunds")] StudentVoucher studentVoucher)
-        {
-            //lets make sure student exists
-            if (this.studentExists(studentVoucher.student_ID) == false)
-            {
-                ModelState.AddModelError("Student_ID", "Student ID Does Not Exist");
-                //return View(StudentRegistration);
-            }
-
-            if (ModelState.IsValid)
-            {
-                db.StudentVouchers.Add(studentVoucher);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.Grant_Types = Helpers.Helpers.GrantTypes();
-            ViewBag.student_ID = (studentVoucher.student_ID != null) ? studentVoucher.student_ID : String.Empty;
-           // ViewBag.student_ID = new SelectList(db.StudentRegistrations, "Student_ID", "FirstName", studentVoucher.student_ID);
-            return View(studentVoucher);
-        }
+        
 
         // GET: StudentVouchers/Edit/5
         public ActionResult Edit(string id)

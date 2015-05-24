@@ -1,4 +1,5 @@
 ﻿@model StudentFinanceSupport.Models.StudentVoucher
+@using StudentFinanceSupport.Helpers
 
 @{
     Layout = "~/Views/Shared/_Main_Layout_.cshtml";
@@ -46,8 +47,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.GrantType, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-
-                @Html.DropDownList("Grant_Types", null, htmlAttributes: new { @class = "form-control" })
+               
+                @Html.DropDownList("GrantType", null, Helpers.SelectOneSpacer, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.GrantType, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -55,7 +56,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.GrantDescription, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.GrantDescription, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextAreaFor(model => model.GrantDescription, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.GrantDescription, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -76,13 +77,7 @@
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.id_student_vouchers, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.id_student_vouchers, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.id_student_vouchers, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        
 
         <div class="form-group">
             @Html.LabelFor(model => model.KuhaFunds, htmlAttributes: new { @class = "control-label col-md-2" })

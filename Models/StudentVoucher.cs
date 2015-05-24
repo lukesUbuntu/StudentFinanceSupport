@@ -18,6 +18,7 @@ namespace StudentFinanceSupport.Models
 
        
         [StringLength(50)]
+        [Required]
         public string GrantType { get; set; }
 
       
