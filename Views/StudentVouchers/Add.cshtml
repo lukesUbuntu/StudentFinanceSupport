@@ -18,7 +18,7 @@
             @Html.LabelFor(model => model.student_ID, "student_ID", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <div class="input-group custom-search-form">
-
+                   
                    
 
                     <div class='suggest-holder'>
@@ -26,7 +26,7 @@
                         
                         <span class="input-group-btn">
                                 <i class="fa fa-search"></i>
-                            @Html.TextBoxFor(model => model.student_ID, new { @class = "form-control suggest-prompt", @placeholder = "Search Student ID Or Name...", @autofocus = "" })
+                            @Html.TextBox("student_ID", (string)ViewBag.student_ID, new { @class = "form-control suggest-prompt", @placeholder = "Search Student ID Or Name...", @autofocus = "", @autocomplete ="off" })
                         </span>
                         
                         <ul>  
@@ -71,8 +71,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.DateOfIssue, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.DateOfIssue, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DateOfIssue, "", new { @class = "text-danger" })
+              @Html.TextBox(Html.NameFor(model => model.DateOfIssue).ToString(), @DateTime.Now.ToShortDateString())
+         
             </div>
         </div>
 

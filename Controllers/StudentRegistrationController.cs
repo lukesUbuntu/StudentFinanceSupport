@@ -116,16 +116,7 @@ namespace StudentFinanceSupport.Controllers
 
        
 
-        /// <summary>
-        /// Checks if a student exists 
-        /// </summary>
-        /// <param name="theStudentID">ID Of student</param>
-        /// <returns>true or false if exists</returns>
-         private bool studentExists(string theStudentID)
-         {
-             //lets make sure we don't already have this Student_ID .Any(). will return a boolean if the entity was found
-             return (db.StudentRegistrations.Any(m => m.Student_ID.ToLower() == theStudentID.ToLower()));
-         }
+        
 
         /*********AJAX ONLY TRIGGERS BELOW THIS POINT PUBLIC
          * @todo add token parsing for x-cross parsing security (cross site injections)
