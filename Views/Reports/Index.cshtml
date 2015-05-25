@@ -1,8 +1,95 @@
 ﻿
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout_.cshtml";
+    Layout = "~/Views/Shared/_Main_Layout_.cshtml";
 }
 
+@Scripts.Render("~/bundles/morris")
 <h2>Reports</h2>
 
+<div class="panel-body">
+    <div id="main-report"></div>
+    <div id="pie-report"></div>
+</div>
+
+<script>
+  
+    
+
+        $.ajax({
+            url: "/Reports/getBarReport",
+            type: "GET",
+            dataType: "json",
+            //data: { Student_ID: $(this).val() },
+
+            success: function (data) {
+                var report_data = [];
+                console.log("data", data)
+                var index = 0;
+                $.map(data, function (reportData) {
+
+                    report_data.push(reportData)
+                })
+                donutReport(report_data);
+            }
+        });
+
+        $.ajax({
+            url: "/Reports/MainReport",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                
+                var report_data = [];
+                console.log("data", data)
+                var index = 0;
+                $.map(data, function (reportData) {
+                    console.log("reportData", reportData.GrantType)
+                   
+                    //fix the date conversion by just parsing the date time
+                    var thedate = new Date(parseInt(reportData.DateOfIssue.substr(6)));
+                    //2012-02-24
+                    thedate = thedate.getFullYear() + "-" + (thedate.getMonth() + 1) + "-" + thedate.getDate();
+                   
+                    var data = {
+                        'date': thedate,
+                        'index': index++
+                    }
+                    //add the key as a type name to data object
+                    data[reportData.GrantType] = reportData.GrantValue;
+
+                    report_data.push(data)
+                })
+                reportMorris(report_data);
+            }
+        });
+
+
+
+        function donutReport(report_data) {
+            Morris.Donut({
+                element: 'pie-report',
+                data: report_data
+            });
+        }
+        function reportMorris(report_data) {
+            console.log("report_data", report_data)
+            Morris.Area({
+                element: 'main-report',
+                data: report_data,
+                xkey: 'date',
+                xLabels: 'day',
+                parseTime: false,
+                smooth : false,
+                ykeys: ['Hardship', 'Food', 'TrainTickets'],
+                labels: ['Petrol Vouchers', 'Food Vouchers', 'Train Tickets'],
+                ymax : 'auto',
+                pointSize: 2,
+                hideHover: 'auto',
+                resize: true,
+                lineColors: ['#FFE600', "#223EB2", "#FF8000", "#00FF22"],
+                pointFillColors: ['#00ff00']
+            });
+        }
+    
+</script>
