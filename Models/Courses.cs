@@ -4,6 +4,8 @@ namespace StudentFinanceSupport.Models
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity;
+    using System.Linq;
     using System.Data.Entity.Spatial;
 
     [Table("Courses")]
@@ -24,7 +26,7 @@ namespace StudentFinanceSupport.Models
         public int id_faculty { get; set; }
 
         public virtual Faculty Faculty { get; set; }
-
+        //foreign key
         public virtual ICollection<StudentRegistration> StudentRegistrations { get; set; }
     }
 }

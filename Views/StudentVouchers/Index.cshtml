@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<StudentFinanceSupport.Models.StudentVoucher>
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Main_Layout_.cshtml";
 }
 
 <!DOCTYPE html>
@@ -18,7 +18,7 @@
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.StudentRegistration.Fname)
+                @Html.DisplayNameFor(model => model.StudentRegistration.FirstName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.KuhaFunds)
@@ -29,7 +29,7 @@
     @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.StudentRegistration.Fname)
+                @Html.DisplayFor(modelItem => item.StudentRegistration.FirstName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.KuhaFunds)

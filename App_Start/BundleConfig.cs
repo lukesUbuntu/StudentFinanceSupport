@@ -72,9 +72,16 @@ namespace StudentFinanceSupport
 
          
             
+            //datatables
+            bundles.Add(new StyleBundle("~/Content/datatables").Include(
+                     "~/Content/Plugins/datatables/datatables-responsive/css/dataTables.responsive.css",
+                     "~/Content/Plugins/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css"
+                      )
+             );
+            bundles.Add(new ScriptBundle("~/bundles/datatables").Include(
+                    "~/Content/Plugins/datatables/media/js/jquery.dataTables.min.js",
+                    "~/Content/Plugins/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"));
 
-
-           
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
             BundleTable.EnableOptimizations = false;

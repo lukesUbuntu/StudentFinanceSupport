@@ -8,12 +8,14 @@ using System.Web;
 using System.Web.Mvc;
 using StudentFinanceSupport.Models;
 using System.Web.Security;
+using System.Net.Mail;
+using System.Net.Mime;
 
 namespace StudentFinanceSupport.Controllers
 {
     public class AdministratorsController : BaseController
     {
-        private AdministratorsModel db = new AdministratorsModel();
+        
 
         public AdministratorsController()
         {
@@ -24,6 +26,9 @@ namespace StudentFinanceSupport.Controllers
         // GET: Administrators
         public ActionResult Index()
         {
+            //Administrator theAdmins = new Administrator();
+            //theAdmins = db.Administrators();
+            
             return View(db.Administrators.ToList());
         }
 
@@ -68,6 +73,7 @@ namespace StudentFinanceSupport.Controllers
             if (IsValid(user.Email, user.Password))
             
             {
+                
                 //FormsAuthenticationTicket with the supplied username & persistence options, serializes it,
                 FormsAuthentication.SetAuthCookie(user.Email, false);
                 //http://stackoverflow.com/questions/23301445/formsauthentication-setauthcookie-vs-formsauthentication-encrypt
@@ -116,6 +122,50 @@ namespace StudentFinanceSupport.Controllers
                 }
            
             return IsValid;
+        }
+
+        public void sendEmail()
+        {
+            //retrieve settings from webconfig
+            string FromAddress = System.Configuration.ConfigurationManager.AppSettings.Get("FromAddress");
+            string SmtpServer = System.Configuration.ConfigurationManager.AppSettings.Get("SmtpServer");
+            string UserName = System.Configuration.ConfigurationManager.AppSettings.Get("UserName");
+            string Password = System.Configuration.ConfigurationManager.AppSettings.Get("Password");
+            string EnableSSL = System.Configuration.ConfigurationManager.AppSettings.Get("EnableSSL");
+            string SMTPPort = System.Configuration.ConfigurationManager.AppSettings.Get("SMTPPort");
+            string ReplyTo = System.Configuration.ConfigurationManager.AppSettings.Get("ReplyTo");
+
+          
+
+            var fromAddress = new MailAddress("no-reply@lukes-server.com", "no-reply");
+            var toAddress = new MailAddress("mr.luke.hardiman@gmail.com");
+            //const string fromPassword = Password;
+            const string subject = "Subject";
+            const string body = "Body";
+
+            var smtp = new SmtpClient
+            {
+                Host = SmtpServer,
+                Port = 587,
+                EnableSsl = false,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(UserName, Password)
+               
+            };
+            using (var message = new MailMessage(fromAddress, toAddress)
+            
+            {
+                Subject = subject,
+                Body = body,
+                Priority = MailPriority.High,
+                IsBodyHtml = true
+                
+            })
+            {
+                smtp.Send(message);
+            }
+
         }
 
        

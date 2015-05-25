@@ -1,7 +1,9 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -30,8 +32,16 @@ namespace StudentFinanceSupport
                 defaults: new { controller = "Administrators", action = "Index", id = UrlParameter.Optional }
             );
 
+           
             
 
+            /*
+            routes.MapRoute(
+                name: "DefaultApi",
+                url: "api/{controller}/{id}",
+                defaults: new { controller = "API", id = RouteParameter.Optional }
+            );
+            */
             
         }
     }
