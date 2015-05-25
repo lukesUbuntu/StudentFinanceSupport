@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StudentFinanceSupport.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,6 +13,9 @@ namespace StudentFinanceSupport.Controllers
     /// </summary>
     public abstract class BaseController : Controller
     {
+        public StudentRegistrationsModel db = new StudentRegistrationsModel();
+
+        private bool debug = true;
         //Our predfined login route where to send non admin users needs to be set in route config
         private string LoginRoute = "Login";
 
@@ -21,7 +25,7 @@ namespace StudentFinanceSupport.Controllers
       
         public BaseController()
         {
-            //add the login route we redirect to
+            //add the login route as we dont need to check for admin access here
             bypassAdminCheck(LoginRoute);
         }
 
@@ -52,7 +56,7 @@ namespace StudentFinanceSupport.Controllers
         {
             
                 //need to make sure we check current action is not our login route otherwise we will cause a endless redirect
-               if (bypassAdminCheck(filterContext) == false)
+            if (bypassAdminCheck(filterContext) == false && debug == false)
               {
                  
                     //append the previous URL a user was trying to access so we can redirect them back
@@ -84,28 +88,18 @@ namespace StudentFinanceSupport.Controllers
             //return (Session["logged_in"] != null) && (bool)Session["logged_in"] == true;
         }
 
-        private string getAC()
+
+
+        /// <summary>
+        /// Checks if a student exists 
+        /// </summary>
+        /// <param name="theStudentID">ID Of student</param>
+        /// <returns>true or false if exists</returns>
+        public bool studentExists(string theStudentID)
         {
-
-           
-            // Split the url to url + query string
-            if (Request.UrlReferrer == null) return null;
-
-            var fullUrl = Request.UrlReferrer.ToString();
-            var questionMarkIndex = fullUrl.IndexOf('?');
-            string queryString = null;
-            string url = fullUrl;
-            if (questionMarkIndex != -1) // There is a QueryString
-            {    
-                url = fullUrl.Substring(0, questionMarkIndex); 
-                queryString = fullUrl.Substring(questionMarkIndex + 1);
-            }
-
-
-            return queryString;
-           
+            //lets make sure we don't already have this Student_ID .Any(). will return a boolean if the entity was found
+            return (db.StudentRegistrations.Any(m => m.Student_ID.ToLower() == theStudentID.ToLower()));
         }
-
     }
 
 

@@ -11,7 +11,7 @@ namespace StudentFinanceSupport.Controllers
     
     public class StudentRegistrationController : BaseController
     {
-        private StudentRegistrationsModel db = new StudentRegistrationsModel();
+        //private StudentRegistrationsModel db = new StudentRegistrationsModel();
 
         // GET: StudentRegistration/List
         public ActionResult List()
