@@ -8,10 +8,46 @@
 <h2>Reports</h2>
 
 <div class="panel-body">
-    <div id="main-report"></div>
-    <div id="pie-report"></div>
-</div>
 
+        <div class="col-lg-2">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:150px">Type</th>
+                            <th style="width:50px">Color</th>
+                           
+                          
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Petrol Vouchers</td>
+                            <td style="background-color:#FFE600"></td>
+                        </tr>
+                        <tr>
+                            <td>Food Vouchers</td>
+                            <td style="background-color:#223EB2"></td>
+                        </tr>
+                        <tr>
+                            <td>Train Tickets</td>
+                            <td style="background-color:#FF8000"></td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+           
+        </div>
+        <div class="col-lg-9">
+            <div id="main-report" class=""></div>
+        </div>
+       
+    
+    
+</div>
+<div id="pie-report"></div>
 <script>
   
     
@@ -69,7 +105,14 @@
         function donutReport(report_data) {
             Morris.Donut({
                 element: 'pie-report',
-                data: report_data
+                data: report_data,
+                colors: [
+               '#FFE600',
+               '#223EB2',
+               '#FF8000',
+               '#95D7BB'
+                ],
+                formatter: function (x) { return "$" + x }
             });
         }
         function reportMorris(report_data) {
@@ -87,7 +130,7 @@
                 pointSize: 2,
                 hideHover: 'auto',
                 resize: true,
-                lineColors: ['#FFE600', "#223EB2", "#FF8000", "#00FF22"],
+                lineColors: ['#FFE600', "#223EB2", "#FF8000"],
                 pointFillColors: ['#00ff00']
             });
         }
