@@ -29,5 +29,7 @@ namespace StudentFinanceSupport
             //re int datbase entities
             Database.SetInitializer<StudentRegistrationsModel>(null);
         }
+
+
     }
 }

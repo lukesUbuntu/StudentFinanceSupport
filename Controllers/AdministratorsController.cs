@@ -15,8 +15,8 @@ namespace StudentFinanceSupport.Controllers
 {
     public class AdministratorsController : BaseController
     {
-        
 
+        
         public AdministratorsController()
         {
             //list of Actions in this controller that we don't want to security check session on
@@ -24,6 +24,7 @@ namespace StudentFinanceSupport.Controllers
         }
 
         // GET: Administrators
+        [AuthorizeUser(AccessLevel = "Create")]
         public ActionResult Index()
         {
             //Administrator theAdmins = new Administrator();
@@ -32,7 +33,10 @@ namespace StudentFinanceSupport.Controllers
             return View(db.Administrators.ToList());
         }
 
-        
+        public ActionResult NoAccess()
+        {
+            return View();
+        }
 
         // GET: Administrators/ForgotPassword
         public ActionResult ForgotPassword()
@@ -123,6 +127,7 @@ namespace StudentFinanceSupport.Controllers
            
             return IsValid;
         }
+
 
         public void sendEmail()
         {
