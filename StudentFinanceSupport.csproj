@@ -39,6 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevOne.Security.Cryptography.BCrypt">
+      <HintPath>..\packages\BCrypt.1.0.0.0\lib\DevOne.Security.Cryptography.BCrypt.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -49,6 +52,12 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="MVC.Utilities">
+      <HintPath>..\packages\mvc-utilities.1.13.5.0\lib\net40\MVC.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="MVC.Utilities.BCrypt">
+      <HintPath>..\packages\mvc-utilities-bcrypt.1.13.5.0\lib\net40\MVC.Utilities.BCrypt.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -135,6 +144,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\CustomViewEngine.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\PasswordHashing.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdministratorsController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -152,9 +162,12 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Administrator.cs" />
+    <Compile Include="Models\AuthorizeUserAttribute.cs" />
     <Compile Include="Models\Campus.cs" />
     <Compile Include="Models\Courses.cs" />
     <Compile Include="Models\Faculty.cs" />
+    <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\RoleType.cs" />
     <Compile Include="Models\StudentRegistration.cs" />
     <Compile Include="Models\StudentRegistrationsModel.cs" />
     <Compile Include="Models\StudentVoucher.cs" />
@@ -725,6 +738,7 @@
     <Content Include="Views\StudentRegistration\_student_details.cshtml" />
     <Content Include="Views\StudentRegistration\Edit.cshtml" />
     <Content Include="Views\Reports\Index.cshtml" />
+    <Content Include="Views\Administrators\NoAccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

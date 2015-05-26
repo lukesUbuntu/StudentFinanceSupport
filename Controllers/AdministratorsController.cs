@@ -10,6 +10,7 @@ using StudentFinanceSupport.Models;
 using System.Web.Security;
 using System.Net.Mail;
 using System.Net.Mime;
+using StudentFinanceSupport.App_Start;
 
 namespace StudentFinanceSupport.Controllers
 {
@@ -111,15 +112,20 @@ namespace StudentFinanceSupport.Controllers
         /// <returns>returns true or false</returns>
         private bool IsValid(string email, string password)
         {
-            
+           
             bool IsValid = false;
 
             //grab the user
             var user = db.Administrators.FirstOrDefault(theUser => theUser.Email == email);
                 if (user != null)
                 {
+
+                    PasswordHashing thePassword = new PasswordHashing();
+                    //string newPass = thePassword.Encrypt("123");
+
                     //check password match
-                    if (user.Password == password)
+                   
+                    if (thePassword.passwordValid(password,user.Password))
                     {
                         IsValid = true;
                     }
