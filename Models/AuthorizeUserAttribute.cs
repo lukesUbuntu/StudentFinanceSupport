@@ -21,26 +21,39 @@ namespace StudentFinanceSupport.Models
                 return false;
             }
 
-            string privilegeLevels = string.Join("", GetUserRoles(httpContext.User.Identity.Name.ToString())); // Call another method to get rights of the user from DB
+            return GetUserRoles(httpContext.User.Identity.Name.ToString(), this.AccessLevel); // Call another method to get rights of the user from DB
 
-            if (privilegeLevels.Contains(this.AccessLevel))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
 
-        public string GetUserRoles(string username)
+        public bool GetUserRoles(string username, string access_level)
         {
-            if (username == null) return null;
+            if (username == null || access_level == null) return false;
             //get users roles
-            StudentRegistrationsModel db = new StudentRegistrationsModel();
-            var theAdmin = db.Administrators.FirstOrDefault(theUser => theUser.Email == username);
+            try {
 
-            return theAdmin.UserType;
+                StudentRegistrationsModel db = new StudentRegistrationsModel();
+
+                var adminRoles = from theAdmin in db.Administrators
+                              where theAdmin.Email == username
+                              join theRoles in db.Roles on theAdmin.UserId equals theRoles.UserId
+                              join theAdminRoles in db.RoleTypes on theRoles.role_type_id equals theAdminRoles.role_type_id
+                              select new 
+                              {
+                                  role_name = theAdminRoles.role_name
+
+                              };
+
+
+                foreach (var role in adminRoles){
+                    if (role.role_name == access_level) return true;
+                }
+                return false;
+            }
+            catch (Exception e) {
+
+                return false;
+            }
+            
         }
 
         public override void OnAuthorization(AuthorizationContext filterContext)

@@ -4,8 +4,7 @@
     [Password]  VARCHAR (250) NOT NULL,
     [FirstName] VARCHAR (50)  NOT NULL,
     [LastName]  VARCHAR (50)  NULL,
-    [role_id]   INT           NULL,
-    PRIMARY KEY CLUSTERED ([UserId] ASC)
+    PRIMARY KEY CLUSTERED ([UserId] ASC),
     
 );
 

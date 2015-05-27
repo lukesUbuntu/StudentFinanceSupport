@@ -738,7 +738,7 @@
     <Content Include="Views\StudentRegistration\_student_details.cshtml" />
     <Content Include="Views\StudentRegistration\Edit.cshtml" />
     <Content Include="Views\Reports\Index.cshtml" />
-    <Content Include="Views\Administrators\NoAccess.cshtml" />
+    <Content Include="Views\Shared\NoAccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -8,11 +8,6 @@ namespace StudentFinanceSupport.Models
 
     public partial class Role
     {
-        public Role()
-        {
-            Administrators = new HashSet<Administrator>();
-        }
-
         [Key]
         public int role_id { get; set; }
 
@@ -20,7 +15,7 @@ namespace StudentFinanceSupport.Models
 
         public int role_type_id { get; set; }
 
-        public virtual ICollection<Administrator> Administrators { get; set; }
+        public virtual Administrator Administrator { get; set; }
 
         public virtual RoleType RoleType { get; set; }
     }

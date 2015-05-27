@@ -25,7 +25,7 @@ namespace StudentFinanceSupport.Controllers
         }
 
         // GET: Administrators
-        [AuthorizeUser(AccessLevel = "Create")]
+        [AuthorizeUser(AccessLevel = "CreateAdmins")]
         public ActionResult Index()
         {
             //Administrator theAdmins = new Administrator();
@@ -34,10 +34,7 @@ namespace StudentFinanceSupport.Controllers
             return View(db.Administrators.ToList());
         }
 
-        public ActionResult NoAccess()
-        {
-            return View();
-        }
+       
 
         // GET: Administrators/ForgotPassword
         public ActionResult ForgotPassword()

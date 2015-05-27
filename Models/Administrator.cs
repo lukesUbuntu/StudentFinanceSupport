@@ -5,7 +5,7 @@ namespace StudentFinanceSupport.Models
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
-
+    //just for loging in purposes
     public partial class AdministratorLogin
     {
         public string Email { get; set; }
@@ -14,6 +14,11 @@ namespace StudentFinanceSupport.Models
     }
     public partial class Administrator
     {
+        public Administrator()
+        {
+            Roles = new HashSet<Role>();
+        }
+
         [Key]
         public int UserId { get; set; }
 
@@ -32,8 +37,6 @@ namespace StudentFinanceSupport.Models
         [StringLength(50)]
         public string LastName { get; set; }
 
-        public int? role_id { get; set; }
-
-        public virtual Role Role { get; set; }
+        public virtual ICollection<Role> Roles { get; set; }
     }
 }

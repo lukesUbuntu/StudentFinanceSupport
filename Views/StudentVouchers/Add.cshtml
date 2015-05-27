@@ -127,28 +127,41 @@
                $suggest_holder.hide();
                //$suggest_holder.empty();
            });
+
+           function emptySearch() {
+               if ($.trim($('#student_ID').val()) == "") {
+                   $suggest_holder.hide();
+               }
+               console.log("Empting search div");
+               $suggest_holder.empty();
+           }
            /*
             @@name  : studentSuggestion
             @@description : creates <li> based on json search results 
            */
            function studentSuggestion(response) {
                //hide and empty ul
-               $suggest_holder.hide();
-               $suggest_holder.empty();
-
                $.ajax({
                    url: "/StudentVouchers/studentSearch",
                    type: "POST",
                    dataType: "json",
                    data: { query: $(this).val() },
                    success: function (data) {
-                       console.log("data", data)
+                       console.log("studentSuggestion data", data);
+                      
+                       if (data.length < 1) {
+                           $suggest_holder.hide();
+                           //emptySearch();
+                           console.log("Just hiding the div");
+                           return false;
+                       }
+                       emptySearch();
                        $.map(data, function (student) {
-                           console.log("map", student)
-                          
+                           console.log("map students ->", student)
+                           
                            //append to our ul
                            $suggest_holder.append($("<li class='suggested-student' student_id='" + student.student_id + "'>" +
-                               "<span class='student-name'>" + student.first_name + "</span>" +
+                               "<span class='student-name'>" + student.student_name + "</span>" +
                                "<span class='student-id'>" + student.student_id + "</span>" +
                                "</li>")
                                );

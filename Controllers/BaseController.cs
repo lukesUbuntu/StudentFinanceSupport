@@ -47,6 +47,12 @@ namespace StudentFinanceSupport.Controllers
             }
             return false;
         }
+
+        //NoAcess   [GLOBAL] can be called from anywhere and will show user no access page
+        public ActionResult NoAccess()
+        {
+            return View();
+        }
         /// <summary>
         /// This is to overide OnActionExecuting https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.onactionexecuting(v=vs.118).aspx
         /// it will be called for every action method in the class.
