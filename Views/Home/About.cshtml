@@ -169,12 +169,37 @@
                     <div class="timeline-heading">
                         <h4 class="timeline-title">Step 3. AddVoucher</h4>
                         <p>
-                            <small class="text-muted"><i class="fa fa-clock-o"></i> 24/05/2015</small>
+                            <small class="text-muted"><i class="fa fa-clock-o"></i> 25/05/2015</small>
                         </p>
                     </div>
                     <div class="timeline-body">
                         <p>Skipped a few days due to other assignments cleaned up HTML code added in List View in the student controller with data tables in the view</p>
-                        <p>Cleaned up the BaseController</p>
+                        <p>Cleaned up the BaseController started to add  in password storeing and encryption.</p>
+                    </div>
+                </div>
+            </li>
+
+            <li class="timeline-inverted">
+                <div class="timeline-badge success">
+                    <i class="fa fa-graduation-cap"></i>
+                </div>
+                <div class="timeline-panel">
+                    <div class="timeline-heading">
+                        <h4 class="timeline-title">Encryption and Admin Roles </h4>
+                        <p>
+                            <small class="text-muted"><i class="fa fa-clock-o"></i> 26/05/2015</small>
+                        </p>
+                    </div>
+                    <div class="timeline-body">
+                        <p>Implmented Bcrypt nice libary for encrypting and decrypting using salt, there is not much documentation but reading the source and git was easy to implment </p>
+                        <ul>
+                            <li>https://www.nuget.org/packages/mvc-utilities-bcrypt/</li>
+                        </ul>
+                        <p>Implementing ROLES today and access level rites, since i started MVC blank project it didnt come with role management so i am building it based on the <b>AuthorizeAttribute</b> required help from </p>
+                        <ul>
+                            <li>http://stackoverflow.com/questions/13264496/asp-net-mvc-4-custom-authorize-attribute-with-permission-codes-without-roles</li>
+                        </ul>
+                    
                     </div>
                 </div>
             </li>

@@ -10,13 +10,14 @@ using StudentFinanceSupport.Models;
 using System.Web.Security;
 using System.Net.Mail;
 using System.Net.Mime;
+using StudentFinanceSupport.App_Start;
 
 namespace StudentFinanceSupport.Controllers
 {
     public class AdministratorsController : BaseController
     {
-        
 
+        
         public AdministratorsController()
         {
             //list of Actions in this controller that we don't want to security check session on
@@ -24,6 +25,7 @@ namespace StudentFinanceSupport.Controllers
         }
 
         // GET: Administrators
+        [AuthorizeUser(AccessLevel = "CreateAdmins")]
         public ActionResult Index()
         {
             //Administrator theAdmins = new Administrator();
@@ -32,7 +34,7 @@ namespace StudentFinanceSupport.Controllers
             return View(db.Administrators.ToList());
         }
 
-        
+       
 
         // GET: Administrators/ForgotPassword
         public ActionResult ForgotPassword()
@@ -107,15 +109,20 @@ namespace StudentFinanceSupport.Controllers
         /// <returns>returns true or false</returns>
         private bool IsValid(string email, string password)
         {
-            
+           
             bool IsValid = false;
 
             //grab the user
             var user = db.Administrators.FirstOrDefault(theUser => theUser.Email == email);
                 if (user != null)
                 {
+
+                    PasswordHashing thePassword = new PasswordHashing();
+                    //string newPass = thePassword.Encrypt("123");
+
                     //check password match
-                    if (user.Password == password)
+                   
+                    if (thePassword.passwordValid(password,user.Password))
                     {
                         IsValid = true;
                     }
@@ -123,6 +130,7 @@ namespace StudentFinanceSupport.Controllers
            
             return IsValid;
         }
+
 
         public void sendEmail()
         {

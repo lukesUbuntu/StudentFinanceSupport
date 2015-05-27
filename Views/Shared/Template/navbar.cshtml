@@ -67,9 +67,17 @@
                     </div>
                     <!-- /input-group -->
                 </li>
+        
+                 <li>
+                    <a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                </li>
                 <li>
                     <a href="@Url.Action("Create", "StudentRegistration")"><i class="fa fa-table fa-fw"></i> Add Student</a>
                    
+                </li>
+        
+                <li>
+                    <a href="@Url.Action("List", "StudentRegistration")"><i class="fa fa-graduation-cap fa-fw"></i> List Students</a>
                 </li>
                 <li>
                     <a href="@Url.Action("Add", "StudentVouchers")"><i class="fa fa-edit fa-fw"></i> Add Voucher</a>
@@ -77,14 +85,21 @@
                 </li>
         
 
+                
                 <li>
-                    <a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                    <a href="@Url.Action("Index", "Reports")"><i class="fa fa-bar-chart-o fa-fw"></i> View Reports</a>
                 </li>
-         
-               
-                }
-                else
-                {
+        
+                
+
+                <li>
+                    <a href="@Url.Action("Index", "Administrators")"><i class="fa fa-eye-slash fa-fw"></i> Admin Menu</a>
+                </li>
+        
+        
+    }
+    else
+    {
                 <!-- Guest User side menus-->
                 <li>
                     <a href="@Url.Action("Login", "Administrators")"><i class="fa fa-dashboard fa-fw"></i> Login System</a>

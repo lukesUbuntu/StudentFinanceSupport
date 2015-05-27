@@ -90,18 +90,18 @@ namespace StudentFinanceSupport.Controllers
 
             var result_id = db.StudentRegistrations.Where(x => x.Student_ID.Contains(query.ToString())).Select(x => new
             {
-                student_id = x.Student_ID,
-                first_name = x.FirstName
+                        student_id = x.Student_ID,
+                        student_name = x.FirstName + " " + x.LastName
             });
             var result_fname = db.StudentRegistrations.Where(x => x.FirstName.Contains(query.ToString())).Select(x => new
             {
                       student_id = x.Student_ID,
-                      first_name = x.FirstName
+                      student_name = x.FirstName + " " + x.LastName
             });
             var result_lname = db.StudentRegistrations.Where(x => x.LastName.Contains(query.ToString())).Select(x => new
             {
-                student_id = x.Student_ID,
-                first_name = x.FirstName
+                        student_id = x.Student_ID,
+                        student_name = x.FirstName + " " + x.LastName
             });
 
             var result = result_lname.Concat(result_id.Concat(result_fname));

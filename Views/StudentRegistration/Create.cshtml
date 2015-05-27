@@ -75,7 +75,11 @@
             //$('#add-student-form').on('keydown', "input#Student_ID", pressedKey)
             $('#add-student-form').on('keyup', "input#Student_ID", studenIDCheck)
             function studenIDCheck(response) {
-
+                //check blank response
+                if ($.trim($(this).val()) == "") {
+                    $(this).removeClass("btn-success");
+                    return false;
+                }
                 $.ajax({
                     url: "/StudentRegistration/CheckStudentID",
                     type: "POST",

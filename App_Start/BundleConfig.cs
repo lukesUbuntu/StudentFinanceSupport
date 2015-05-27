@@ -48,8 +48,8 @@ namespace StudentFinanceSupport
             //bundles/morris (js)
             bundles.Add(new ScriptBundle("~/bundles/morris").Include(
                       "~/Content/Plugins/raphael/raphael.js",
-                      "~/Content/Plugins/morrisjs/morris.js",
-                      "~/Scripts/morris-data.js"
+                      "~/Content/Plugins/morrisjs/morris.js"
+                     
                       
                       ));
 

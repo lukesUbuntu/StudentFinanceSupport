@@ -16,7 +16,10 @@ namespace StudentFinanceSupport.Models
         public virtual DbSet<Faculty> Faculties { get; set; }
         public virtual DbSet<StudentRegistration> StudentRegistrations { get; set; }
 
+        //admin and admin roles
         public virtual DbSet<Administrator> Administrators { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<RoleType> RoleTypes { get; set; }
 
         public virtual DbSet<StudentVoucher> StudentVouchers { get; set; }
 

@@ -109,8 +109,71 @@
                adviceSelected()
           */
            //if grantype changed lets update other information
-           $("#GrantType").change(selectionChange)
-       });
+           $("#GrantType").change(selectionChange);
+
+           //set our suggestion selected
+           var $suggest_holder = $('.suggest-holder ul');
+           //set where the textbox entry is
+           //var $suggest_holder = $('.suggest-holder ul');
+
+           $('#add-student-form').on('keyup', "input#student_ID", studentSuggestion);
+
+
+           //returns the value details of the suggest box
+           $('body').on('click', ".suggested-student", function (e) {
+               var student_id = $(this).attr("student_id");
+               console.log("student_id", student_id);
+               $('#student_ID').val(student_id);
+               $suggest_holder.hide();
+               //$suggest_holder.empty();
+           });
+
+           function emptySearch() {
+               if ($.trim($('#student_ID').val()) == "") {
+                   $suggest_holder.hide();
+               }
+               console.log("Empting search div");
+               $suggest_holder.empty();
+           }
+           /*
+            @@name  : studentSuggestion
+            @@description : creates <li> based on json search results 
+           */
+           function studentSuggestion(response) {
+               //hide and empty ul
+               $.ajax({
+                   url: "/StudentVouchers/studentSearch",
+                   type: "POST",
+                   dataType: "json",
+                   data: { query: $(this).val() },
+                   success: function (data) {
+                       console.log("studentSuggestion data", data);
+                      
+                       if (data.length < 1) {
+                           $suggest_holder.hide();
+                           //emptySearch();
+                           console.log("Just hiding the div");
+                           return false;
+                       }
+                       emptySearch();
+                       $.map(data, function (student) {
+                           console.log("map students ->", student)
+                           
+                           //append to our ul
+                           $suggest_holder.append($("<li class='suggested-student' student_id='" + student.student_id + "'>" +
+                               "<span class='student-name'>" + student.student_name + "</span>" +
+                               "<span class='student-id'>" + student.student_id + "</span>" +
+                               "</li>")
+                               );
+                           
+
+                       })
+                       $suggest_holder.show();
+
+                   }
+               });
+           }
+              
 
        function selectionChange(element) {
            var selection_element = (typeof element == "string") ? $(element) : $(this)
@@ -145,6 +208,10 @@
            $(".amount_holders").hide();
 
            $(GrantValue).show();
+
+
        }
+
+       });
    </script>
 
