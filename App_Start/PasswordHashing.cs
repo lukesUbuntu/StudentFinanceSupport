@@ -12,12 +12,12 @@ namespace StudentFinanceSupport.App_Start
 {
     public class PasswordHashing
     {
-        private readonly int BCRYPT_WORK_FACTOR = 10;
+        private readonly int BCRYPT_WORK_FACTOR = 12;
        
         public string Encrypt(string password)
         {
 
-            return DevOne.Security.Cryptography.BCrypt.BCryptHelper.HashPassword(password, DevOne.Security.Cryptography.BCrypt.BCryptHelper.GenerateSalt(12));
+            return DevOne.Security.Cryptography.BCrypt.BCryptHelper.HashPassword(password, DevOne.Security.Cryptography.BCrypt.BCryptHelper.GenerateSalt(BCRYPT_WORK_FACTOR));
         }
 
         public bool passwordValid(string password,string dbasepassword)

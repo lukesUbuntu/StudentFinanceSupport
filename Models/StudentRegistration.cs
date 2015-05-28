@@ -44,7 +44,10 @@ namespace StudentFinanceSupport.Models
         [StringLength(20)]
         public string Mobile { get; set; }
 
-        [StringLength(50)]
+        [Display(Name = "Email address")]
+        [Required(ErrorMessage = "The email address is required")]
+        [EmailAddress(ErrorMessage = "The email address is not valid")]
+        [StringLength(100)]
         public string Email { get; set; }
 
         [StringLength(50)]

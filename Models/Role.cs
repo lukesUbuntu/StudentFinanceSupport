@@ -15,6 +15,7 @@ namespace StudentFinanceSupport.Models
 
         public int role_type_id { get; set; }
 
+        
         public virtual Administrator Administrator { get; set; }
 
         public virtual RoleType RoleType { get; set; }

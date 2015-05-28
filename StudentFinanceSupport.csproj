@@ -392,6 +392,7 @@
     <Content Include="Content\Plugins\font-awesome\css\font-awesome.css" />
     <Content Include="Content\Plugins\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\Plugins\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\Plugins\password\pwstrength.js" />
     <Content Include="Content\Plugins\raphael\dev\amdDev.js" />
     <Content Include="Content\Plugins\raphael\dev\index.js" />
     <Content Include="Content\Plugins\raphael\dev\require.js" />
@@ -739,6 +740,7 @@
     <Content Include="Views\StudentRegistration\Edit.cshtml" />
     <Content Include="Views\Reports\Index.cshtml" />
     <Content Include="Views\Shared\NoAccess.cshtml" />
+    <Content Include="Views\Administrators\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

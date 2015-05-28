@@ -25,7 +25,7 @@ namespace StudentFinanceSupport.Controllers
         }
 
         // GET: Administrators
-        [AuthorizeUser(AccessLevel = "CreateAdmins")]
+       // [AuthorizeUser(AccessLevel = "CreateAdmins")]
         public ActionResult Index()
         {
             //Administrator theAdmins = new Administrator();
@@ -34,7 +34,68 @@ namespace StudentFinanceSupport.Controllers
             return View(db.Administrators.ToList());
         }
 
-       
+        // GET: Administrators/Add
+      
+        public ActionResult Add()
+        {
+            Administrator theAdmins = new Administrator();
+           
+            //theAdmins = db.Administrators();
+
+
+
+            var role_list = db.RoleTypes;
+            //var model = new Administrator();
+            //model.Roles = new SelectList(db.RoleTypes, "role_type_id", "role_name");
+            ViewBag.admin_roles = new SelectList(db.RoleTypes, "role_type_id", "role_description");
+            return View(theAdmins);
+        }
+ 
+        [HttpPost]
+        public ActionResult Add(Administrator newAdmin)
+        {
+            ViewBag.admin_roles = new SelectList(db.RoleTypes, "role_type_id", "role_description");
+            //check for unique email address
+
+            if (db.Administrators.Any(m => m.Email.ToLower() == newAdmin.Email.ToLower()))
+            {
+                ModelState.AddModelError("Email", "Admin email already exists!");
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(newAdmin);
+            }
+
+            PasswordHashing passwordHash = new PasswordHashing();
+            newAdmin.Password = passwordHash.Encrypt(newAdmin.Password);
+
+            //add the admin
+            db.Administrators.Add(newAdmin);
+            db.SaveChanges();
+
+            //we will now have admin id if saved
+            int theAdmin_id = newAdmin.UserId;
+            //check roles that need to be added
+
+            //store roles into a string array
+            string[] AddRoles = Request.Form["admin_roles"].Split(new Char[] { ',' });
+
+            //add in 
+           
+            if (AddRoles.Count() > 0)
+            {
+                var theRoles = new Role();
+                theRoles.UserId = theAdmin_id;
+                foreach (var role_type in AddRoles)
+                {
+                    int role_id = Convert.ToInt32(role_type);
+                    theRoles.role_type_id = role_id;
+                    db.Roles.Add(theRoles);
+                }
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
 
         // GET: Administrators/ForgotPassword
         public ActionResult ForgotPassword()

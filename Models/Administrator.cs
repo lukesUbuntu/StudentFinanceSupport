@@ -5,15 +5,21 @@ namespace StudentFinanceSupport.Models
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
-    //just for loging in purposes
+    using System.Web.Mvc;
+
+     //just for loging in purposes
     public partial class AdministratorLogin
     {
+        [Display(Name = "Email address")]
+        [Required(ErrorMessage = "The email address is required")]
+        [EmailAddress(ErrorMessage = "The email address is not valid")]
         public string Email { get; set; }
         public int UserId { get; set; }
         public string Password { get; set; }
     }
     public partial class Administrator
     {
+
         public Administrator()
         {
             Roles = new HashSet<Role>();
@@ -22,7 +28,9 @@ namespace StudentFinanceSupport.Models
         [Key]
         public int UserId { get; set; }
 
-        [Required]
+        [Display(Name = "Email address")]
+        [Required(ErrorMessage = "The email address is required")]
+        [EmailAddress(ErrorMessage = "The email address is not valid")]
         [StringLength(100)]
         public string Email { get; set; }
 
@@ -37,6 +45,11 @@ namespace StudentFinanceSupport.Models
         [StringLength(50)]
         public string LastName { get; set; }
 
+        public int? mobile { get; set; }
+
         public virtual ICollection<Role> Roles { get; set; }
+
+
+      
     }
 }

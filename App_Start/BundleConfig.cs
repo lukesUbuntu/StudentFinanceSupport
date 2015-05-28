@@ -82,6 +82,9 @@ namespace StudentFinanceSupport
                     "~/Content/Plugins/datatables/media/js/jquery.dataTables.min.js",
                     "~/Content/Plugins/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"));
 
+            //password strength metor
+            bundles.Add(new ScriptBundle("~/bundles/pwstrength").Include(
+                   "~/Content/Plugins/password/pwstrength.js"));
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
             BundleTable.EnableOptimizations = false;
