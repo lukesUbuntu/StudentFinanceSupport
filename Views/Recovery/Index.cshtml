@@ -4,7 +4,8 @@
     <h4>Recovery Wizard</h4>
     
     <h3>Student Details</h3>
-    <section id="account_details">
+    <div id="recovery_form">
+    <section id="recovery_email">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.Administrator.Email, "Email", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -13,30 +14,69 @@
                 @Html.ValidationMessageFor(model => model.Administrator.Email, "", new { @class = "text-danger" })
             </div>
         </div>
-     </section>
-    <h3>Recovery Options</h3>
-    <section id="student_entrollment">
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.recovery_option, htmlAttributes: new { @class = "control-label col-md-8" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model =>  model.recovery_option, Helpers.RecoveryOptions(), Helpers.SelectOneSpacer, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model =>  model.recovery_option, "", new { @class = "text-danger" })
-            </div>
-        </div>
     </section>
-        
+    <h3>Recovery Options</h3>
+        <section id="recovery_details">
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.recovery_option, htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.recovery_option, Helpers.RecoveryOptions(), Helpers.SelectOneSpacer, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.recovery_option, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </section>
+</div>
+ 
 <script>
     //recovery.js
     $(document).ready(function () {
 
         //selected options change
         $("#recovery_option").change(function () {
-            var option = $(this).val();
-            console.log("option", option)
+            var recovery = $("#recovery_form :input").serialize();
+            $("#Administrator_Email_validationMessage").empty();
+           
+            getOptions(recovery)
         })
 
     })
+
+
+
+
+
+    function getOptions(recovery) {
+        //hide and empty ul
+        $.ajax({
+            url: "/Recovery/adminDetails",
+            type: "POST",
+            dataType: "json",
+            //data: { option: $(this).val() },
+            data : recovery,
+            success: function (data) {
+                
+                //check for errors for admin email
+                if (typeof data['Administrator.Email'] == "object") {
+
+                    $.map(data, function (error, key) {
+                        if (key == "Administrator.Email") {
+                            $("#Administrator_Email_validationMessage").text(error)
+                        }
+
+                    })
+                }
+               
+                if (typeof data['mobile_guess'] == "string")
+                {
+                    console.log("data", data['mobile_guess'])
+                }
+               
+
+            }
+        });
+    }
+
 </script>
 
 
