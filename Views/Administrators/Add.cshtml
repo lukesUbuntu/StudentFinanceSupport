@@ -24,16 +24,7 @@
                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
             </div>
         </div>
-        add in password option to email link to set password instead of setting it
-        <div class="form-group">
-            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @type = "password", @autocomplete = "off"} })
-                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-            </div>
-            <div id="password_messages"></div>
-        </div>
-
+       
         <div class="form-group">
             @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -56,14 +47,15 @@
                 @Html.ValidationMessageFor(model => model.mobile, "", new { @class = "text-danger" })
             </div>
         </div>
-        add descriptions for roles soon
+      
         <div class="form-group">
-            @Html.LabelFor(model => model.Roles, "Roles", htmlAttributes: new { @class = "control-label col-md-8" })
+            
             <div class="col-md-10">
-                <div class="col-md-10">
+                @Html.LabelFor(model => model.Roles, "Additional Roles", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
                     @Html.ListBox(
-                "admin_roles",
-                ViewBag.Roles as MultiSelectList,
+                "Roles", 
+                 ViewBag.admin_roles as MultiSelectList,
                  new { @class = "form-control", data_placeholder = "Choose a Role..." }
                     )
                     @Html.ValidationMessageFor(model => model.Roles, "", new { @class = "text-danger" })
@@ -71,7 +63,33 @@
                 </div>
         </div>
 
-          
+        <!-- Start of password entries -->
+        <div class="form-group">
+            <div class="col-md-10">
+
+                <label class="control-label col-md-4" for="send_setup">Email user to set password ?</label>
+                <input id="send_setup" type="checkbox" value="false" name="send_setup" />
+            </div>
+        </div>
+        <div id="password_wrapper" class="form-group">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @type = "password", @autocomplete = "off" } })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+            <div id="password_messages"></div>
+
+
+        </div>
+        <div class="form-group">
+            <span class="control-label col-md-2">Retype Password</span>
+            <div class="col-md-10">
+
+                @Html.Password("password_match", (string)ViewBag.password_match, new { @class = "form-control", @value = ViewBag.password_match })
+
+            </div>
+        </div>
+        <!-- End of password entries -->
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
@@ -86,14 +104,14 @@
         var options = {};
         options.common = {
             onLoad: function () {
-                $('#password_messages').text('Start typing password');
+                //$('#password_messages').text('Start typing password');
             }
         };
         options.ui = {
             bootstrap2: false,
             showErrors: true
         };
-        $(':password').pwstrength(options);
+        $('#Password').pwstrength(options);
     })
 </script>
 

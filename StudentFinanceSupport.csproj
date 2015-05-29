@@ -149,6 +149,7 @@
     <Compile Include="Controllers\AdministratorsController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RecoveryController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\StudentRegistrationController.cs" />
     <Compile Include="Controllers\StudentVouchersController.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="Models\Campus.cs" />
     <Compile Include="Models\Courses.cs" />
     <Compile Include="Models\Faculty.cs" />
+    <Compile Include="Models\Recovery.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\RoleType.cs" />
     <Compile Include="Models\StudentRegistration.cs" />
@@ -741,6 +743,7 @@
     <Content Include="Views\Reports\Index.cshtml" />
     <Content Include="Views\Shared\NoAccess.cshtml" />
     <Content Include="Views\Administrators\Add.cshtml" />
+    <Content Include="Views\Recovery\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

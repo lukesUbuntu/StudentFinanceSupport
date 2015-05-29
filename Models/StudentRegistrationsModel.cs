@@ -23,10 +23,30 @@ namespace StudentFinanceSupport.Models
 
         public virtual DbSet<StudentVoucher> StudentVouchers { get; set; }
 
+        public virtual DbSet<Recovery> Recoveries { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
 
-        
+            modelBuilder.Entity<Administrator>()
+                    .Property(e => e.Email)
+                    .IsUnicode(false);
+
+            modelBuilder.Entity<Administrator>()
+                .Property(e => e.Password)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Administrator>()
+                .Property(e => e.FirstName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Administrator>()
+                .Property(e => e.LastName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Recovery>()
+                .Property(e => e.recovery_key)
+                .IsUnicode(false);
         }
 
 

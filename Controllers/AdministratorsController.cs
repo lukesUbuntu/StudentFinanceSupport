@@ -21,7 +21,7 @@ namespace StudentFinanceSupport.Controllers
         public AdministratorsController()
         {
             //list of Actions in this controller that we don't want to security check session on
-            bypassAdminCheck("ForgotPassword");
+            //bypassAdminCheck("ForgotPassword");
         }
 
         // GET: Administrators
@@ -47,20 +47,37 @@ namespace StudentFinanceSupport.Controllers
             var role_list = db.RoleTypes;
             //var model = new Administrator();
             //model.Roles = new SelectList(db.RoleTypes, "role_type_id", "role_name");
-            ViewBag.admin_roles = new SelectList(db.RoleTypes, "role_type_id", "role_description");
+            ViewBag.admin_roles = new MultiSelectList(db.RoleTypes, "role_type_id", "role_description");
+            ViewBag.password_match = String.Empty;
             return View(theAdmins);
         }
  
         [HttpPost]
         public ActionResult Add(Administrator newAdmin)
         {
-            ViewBag.admin_roles = new SelectList(db.RoleTypes, "role_type_id", "role_description");
+            //newAdmin.Roles = Request.Form["admin_roles"];
+           
+            ViewBag.admin_roles = new MultiSelectList(db.RoleTypes, "role_type_id", "role_description");
+            ViewBag.Roles = Request.Form["admin_roles"];
+            ViewBag.password_match = Request.Form["password_match"];
+           
             //check for unique email address
+            if (ModelState.ContainsKey("Roles"))
+                ModelState["Roles"].Errors.Clear();
 
             if (db.Administrators.Any(m => m.Email.ToLower() == newAdmin.Email.ToLower()))
             {
                 ModelState.AddModelError("Email", "Admin email already exists!");
+            
             }
+            //check password match
+            if (newAdmin.Password != Request.Form["password_match"])
+            {
+                //clear the viewbag password so they re-type
+                ViewBag.password_match = String.Empty;
+                ModelState.AddModelError("Password", "Passwords don't match");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(newAdmin);
@@ -74,37 +91,57 @@ namespace StudentFinanceSupport.Controllers
             db.SaveChanges();
 
             //we will now have admin id if saved
-            int theAdmin_id = newAdmin.UserId;
+            //int theAdmin_id = newAdmin.UserId;
             //check roles that need to be added
 
             //store roles into a string array
-            string[] AddRoles = Request.Form["admin_roles"].Split(new Char[] { ',' });
+            this.addRoles(newAdmin, Request.Form["admin_roles"]);
 
-            //add in 
-           
-            if (AddRoles.Count() > 0)
-            {
-                var theRoles = new Role();
-                theRoles.UserId = theAdmin_id;
-                foreach (var role_type in AddRoles)
-                {
-                    int role_id = Convert.ToInt32(role_type);
-                    theRoles.role_type_id = role_id;
-                    db.Roles.Add(theRoles);
-                }
-                db.SaveChanges();
-            }
+            
             return RedirectToAction("Index");
         }
 
-        // GET: Administrators/ForgotPassword
-        public ActionResult ForgotPassword()
-        {
-            //this.bypassAdminCheck();
-            return View();
-        }
+        
 
-       
+        /// <summary>
+        /// Updates or adds roles to an admin
+        /// </summary>
+        /// <param name="theAdmin">Administrator</param>
+        /// <param name="theRoles">Roles_ID from roletypes as comma delimited</param>
+        private void addRoles(Administrator theAdmin,String theRoles)
+        {
+            string[] AddRoles = theRoles.Split(new Char[] { ',' });
+            //incase we are updating lets remove previous roles
+            //lets check previous roles and remove them
+            var old_roles = from s in db.Roles
+                            where s.UserId == theAdmin.UserId
+                            select s.role_id;
+            //remove
+            if (old_roles.Count() > 0)
+            foreach (var role_type in old_roles)
+            {
+                int role_id = Convert.ToInt32(role_type);
+                Role rmvRole = db.Roles.Find(role_id);
+                db.Roles.Remove(rmvRole);
+            }           
+
+            //add in new roles
+            if (AddRoles.Count() > 0)
+            {
+                    
+
+
+                var roles = new Role();
+                roles.UserId = theAdmin.UserId;
+                foreach (var role_type in AddRoles)
+                {
+                    int role_id = Convert.ToInt32(role_type);
+                    roles.role_type_id = role_id;
+                    db.Roles.Add(roles);
+                }
+                db.SaveChanges();
+            }
+        }
   
         protected override void Dispose(bool disposing)
         {
@@ -142,8 +179,7 @@ namespace StudentFinanceSupport.Controllers
                 //http://stackoverflow.com/questions/23301445/formsauthentication-setauthcookie-vs-formsauthentication-encrypt
                 Session["logged_in"] = true;
                 //return RedirectToAction("Index", "Home");
-                //Request.QueryString["fromUrl"]
-                //Request.QueryString["[fromUrl]"] != "" && 
+
                 if (Request.QueryString["fromUrl"] != null)
                 {
 
@@ -191,6 +227,7 @@ namespace StudentFinanceSupport.Controllers
            
             return IsValid;
         }
+
 
 
         public void sendEmail()

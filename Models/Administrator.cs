@@ -5,9 +5,8 @@ namespace StudentFinanceSupport.Models
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
-    using System.Web.Mvc;
 
-     //just for loging in purposes
+    //just for loging in purposes
     public partial class AdministratorLogin
     {
         [Display(Name = "Email address")]
@@ -19,9 +18,9 @@ namespace StudentFinanceSupport.Models
     }
     public partial class Administrator
     {
-
         public Administrator()
         {
+            Recoveries = new HashSet<Recovery>();
             Roles = new HashSet<Role>();
         }
 
@@ -49,7 +48,6 @@ namespace StudentFinanceSupport.Models
 
         public virtual ICollection<Role> Roles { get; set; }
 
-
-      
+        public virtual ICollection<Recovery> Recoveries { get; set; }
     }
 }
