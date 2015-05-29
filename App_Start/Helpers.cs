@@ -93,6 +93,19 @@ public static class Helpers
         return GrantTypesList;
     }
 
+    public static List<SelectListItem> RecoveryOptions()
+    {
+        List<SelectListItem> RecoveryOptions = new List<SelectListItem>()
+                    {
+                         new SelectListItem { Text = "Mobile",    Value = "mobile" }, 
+                         new SelectListItem { Text = "Email",  Value = "email" }
+                        
+                    };
+
+        return RecoveryOptions;
+    }
+
+
     /// <summary>
     /// Outputs to the system local debug window help for checking strings when debug is not an option
     /// </summary>
@@ -102,6 +115,8 @@ public static class Helpers
     {
         System.Diagnostics.Debug.WriteLine(string.Format("Helper: {0} -> {1}",theMessage,theLocation));
     }
+
+
 
     public static bool UserLoggedIn()
     {

@@ -121,6 +121,7 @@ namespace StudentFinanceSupport.Controllers
         /*********AJAX ONLY TRIGGERS BELOW THIS POINT PUBLIC
          * @todo add token parsing for x-cross parsing security (cross site injections)
         /***********************************************************************************/
+
         /// <summary>
         /// Returns JSON response of all courses related to Faculty
         /// </summary>
@@ -128,21 +129,36 @@ namespace StudentFinanceSupport.Controllers
          /// <returns>JSON result of id_course & course_name</returns>
          //StudentRegistration/getCourses [GET]
          [HttpPost]
-         public JsonResult getCourses(int faculty)
+         public JsonResult getCourses(string faculty)
          {
+             
+             int faculty_id = -1;
+
+             //lets convert to int
+             int.TryParse(faculty, out faculty_id);
+
+             //if someone modified our ajax request call :)
+             if (String.IsNullOrEmpty(faculty) || faculty_id == 0)
+                 return Json("Error wrong data passed!", JsonRequestBehavior.AllowGet);
+
              //Get list of courses for a faculty
+             var result = (
+                 from course in db.Courses
+                 where course.id_faculty == faculty_id
+                 select new
+                 {
+                     id_course = course.id_courses,
+                     course_name = course.course_name
+                 }
+                 
+                 );
+             /*
              var result = db.Courses.Where(x => x.id_faculty == faculty).Select(x => new
                   {
                       id_course = x.id_courses,
                       course_name = x.course_name
                   });
-
-             //int count = result.Count();
-             
-             //create a response back
-             //var response = new List<object>();
-             //response.Add(new { exists = (result.Count() == 1) });
-
+             */
              
              
              return Json(result, JsonRequestBehavior.AllowGet);

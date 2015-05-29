@@ -1,53 +1,42 @@
 ﻿@model StudentFinanceSupport.Models.Recovery
+@using StudentFinanceSupport.Helpers
 
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
+    <h4>Recovery Wizard</h4>
     
-    <div class="form-horizontal">
-        <h4>Recovery</h4>
-        <hr />
-        <div class="form-group">
-            <span class="control-label col-md-2">Email / Username</span>
-            <div class="col-md-10">
-
-                @Html.TextBox("Email", (string)ViewBag.Email, new { @class = "form-control", @value = ViewBag.Email })
-
-            </div>
-        </div>
-
-        <div class="form-group">
-
-            <div class="col-md-10">
-
-            </div>
-        </div>
-
+    <h3>Student Details</h3>
+    <section id="account_details">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.UserId, "UserId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Administrator.Email, "Email", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Administrator.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Administrator.Email, "", new { @class = "text-danger" })
             </div>
         </div>
+     </section>
+    <h3>Recovery Options</h3>
+    <section id="student_entrollment">
 
         <div class="form-group">
-            @Html.LabelFor(model => model.recovery_key, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.recovery_option, htmlAttributes: new { @class = "control-label col-md-8" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.recovery_key, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.recovery_key, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(model =>  model.recovery_option, Helpers.RecoveryOptions(), Helpers.SelectOneSpacer, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model =>  model.recovery_option, "", new { @class = "text-danger" })
             </div>
         </div>
+    </section>
+        
+<script>
+    //recovery.js
+    $(document).ready(function () {
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-}
+        //selected options change
+        $("#recovery_option").change(function () {
+            var option = $(this).val();
+            console.log("option", option)
+        })
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+    })
+</script>
+
+
