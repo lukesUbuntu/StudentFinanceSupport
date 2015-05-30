@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using StudentFinanceSupport.Models;
+using StudentFinanceSupport.Models.functions;
 
 namespace StudentFinanceSupport.Controllers
 {
@@ -12,6 +13,11 @@ namespace StudentFinanceSupport.Controllers
         // GET: Recovery
         public ActionResult Index()
         {
+            
+           
+            //preset phone number digits
+            ViewBag.phone_number = String.Empty;
+
             return View();
         }
 
@@ -20,7 +26,36 @@ namespace StudentFinanceSupport.Controllers
         {
             return View();
         }
+        // GET: Recovery/Create
+        public ActionResult Code()
+        {
+           
+            return View();
+        }
 
+        // POST: Recovery/Create
+        [HttpPost]
+        public ActionResult Code(Recovery theRecovery)
+        {
+            var theAdmin = (from a in db.Administrators 
+                            join b in db.Recoveries on a.UserId equals b.UserId
+                            where b.recovery_key == theRecovery.recovery_key
+                            select a).SingleOrDefault();
+
+            if (theAdmin == null)
+            {
+                ModelState.AddModelError("recovery_key", "Incorrect Recovery KEY");
+                return View(theRecovery);
+
+            }
+            //secure to only pass some details in session
+           
+
+            Session["AdministratorRecovery"] = (Recovery)theRecovery;
+
+            return RedirectToAction("ChangePassword", "Administrators");
+            //return View();
+        }
         // GET: Recovery/Create
         public ActionResult Create()
         {
@@ -118,13 +153,18 @@ namespace StudentFinanceSupport.Controllers
                 return Json(errorList, JsonRequestBehavior.AllowGet);
             }
 
-
-
-
             string mobile = theRecovery.Administrator.mobile.ToString();
 
+            /*
+            
+            RecoveryComms theComms = new RecoveryComms();
+            if (theComms.sendSMS(ref theRecovery) == true)
+            {
+                db.Recoveries.Add(theRecovery);
+                db.SaveChanges();
+            }
             mobile = mobile.Remove(mobile.Length - 4, 4) + "****";
-
+            */
             var theResponse = Json(new     
                 {     
                     success = "true",     

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Helpers;
 using DevOne.Security.Cryptography.BCrypt;
 
-namespace StudentFinanceSupport.App_Start
+namespace StudentFinanceSupport.Models.functions
 {
     public class PasswordHashing
     {

@@ -7,10 +7,11 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using StudentFinanceSupport.Models;
+using StudentFinanceSupport.Models.functions;
 using System.Web.Security;
 using System.Net.Mail;
 using System.Net.Mime;
-using StudentFinanceSupport.App_Start;
+using System.Text.RegularExpressions;
 
 namespace StudentFinanceSupport.Controllers
 {
@@ -36,10 +37,57 @@ namespace StudentFinanceSupport.Controllers
 
         // GET: Administrators/Add
       
+       
+       // [HttpPost]
+        public ActionResult ChangePassword()
+        {
+            //@important don't pass the administor model for modifying ONLY the AdministratorLogin model for security as this is public
+
+            //check if we are coming from a recovery
+            if (Session["AdministratorRecovery"] != null)
+            {
+                //remove any logged in session
+                Session.Remove("AdministratorLogin");
+                Session.Remove("logged_in");
+                Recovery theRecovery = (Recovery)Session["AdministratorRecovery"];
+                var theAdmin = (from a in db.Administrators
+                                join b in db.Recoveries on a.UserId equals b.UserId
+                                where b.recovery_key == theRecovery.recovery_key
+                                select a).SingleOrDefault();
+                //clear the password field
+                theAdmin.Password = String.Empty;
+                return View(theAdmin.loginDetails());
+            }
+
+            AdministratorLogin CurrentAdmin = this.returnAdminSession();
+            //check if we are logged in
+            if (CurrentAdmin == null)
+            {
+
+                return RedirectToAction("Login");
+            }
+
+             
+             return View(CurrentAdmin);
+        }
+
+        [HttpPost]
+        public ActionResult ChangePassword(AdministratorLogin theAdmin)
+        {
+            //check password match
+            if (theAdmin.Password != Request.Form["password_match"])
+            {
+                //clear the viewbag password so they re-type
+                ViewBag.password_match = String.Empty;
+                ModelState.AddModelError("Password", "Passwords don't match");
+            }
+            return View(theAdmin);
+        }
+
         public ActionResult Add()
         {
             Administrator theAdmins = new Administrator();
-           
+
             //theAdmins = db.Administrators();
 
 
@@ -51,7 +99,7 @@ namespace StudentFinanceSupport.Controllers
             ViewBag.password_match = String.Empty;
             return View(theAdmins);
         }
- 
+
         [HttpPost]
         public ActionResult Add(Administrator newAdmin)
         {
@@ -60,6 +108,7 @@ namespace StudentFinanceSupport.Controllers
             ViewBag.admin_roles = new MultiSelectList(db.RoleTypes, "role_type_id", "role_description");
             ViewBag.Roles = Request.Form["admin_roles"];
             ViewBag.password_match = Request.Form["password_match"];
+            
            
             //check for unique email address
             if (ModelState.ContainsKey("Roles"))
@@ -78,6 +127,14 @@ namespace StudentFinanceSupport.Controllers
                 ModelState.AddModelError("Password", "Passwords don't match");
             }
 
+            //check mobile phone number if added
+            if (!String.IsNullOrEmpty(newAdmin.mobile)) { 
+                Regex mobileRegex = new Regex(@"^(?:\(?)(?:\+|0{2})([0-9]{3})\)? ([0-9]{2}) ([0-9]{7})$");
+                if (!mobileRegex.IsMatch(newAdmin.mobile))
+                {
+                    ModelState.AddModelError("mobile", "Incorect mobile format example : 02107770777 or (021)07770777");
+                }
+            }
             if (!ModelState.IsValid)
             {
                 return View(newAdmin);
@@ -95,7 +152,7 @@ namespace StudentFinanceSupport.Controllers
             //check roles that need to be added
 
             //store roles into a string array
-            this.addRoles(newAdmin, Request.Form["admin_roles"]);
+            this.addRoles(newAdmin, Request.Form["roles"]);
 
             
             return RedirectToAction("Index");
@@ -152,13 +209,7 @@ namespace StudentFinanceSupport.Controllers
             base.Dispose(disposing);
        }
 
-        [HttpGet]
-        public ActionResult LogOut()
-        {
-            Session.Abandon();
-            return RedirectToAction("Index", "Home");
-            //return View();
-        }
+       
         [HttpGet]
         public ActionResult Login()
         {
@@ -178,6 +229,8 @@ namespace StudentFinanceSupport.Controllers
                 FormsAuthentication.SetAuthCookie(user.Email, false);
                 //http://stackoverflow.com/questions/23301445/formsauthentication-setauthcookie-vs-formsauthentication-encrypt
                 Session["logged_in"] = true;
+                Session["AdministratorLogin"] = user;
+
                 //return RedirectToAction("Index", "Home");
 
                 if (Request.QueryString["fromUrl"] != null)

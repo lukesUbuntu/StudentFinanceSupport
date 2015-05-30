@@ -44,8 +44,18 @@ namespace StudentFinanceSupport.Models
         [StringLength(50)]
         public string LastName { get; set; }
 
-        public int? mobile { get; set; }
+        [Display(Name = "Mobile Phone Number")]
+        [StringLength(15)]
+        public string mobile { get; set; }
 
+        public AdministratorLogin loginDetails()
+        {
+            AdministratorLogin tmplogin = new AdministratorLogin();
+            tmplogin.Email = this.Email;
+            tmplogin.Password = this.Password;
+            tmplogin.UserId = this.UserId;
+            return tmplogin;
+        }
         public virtual ICollection<Role> Roles { get; set; }
 
         public virtual ICollection<Recovery> Recoveries { get; set; }

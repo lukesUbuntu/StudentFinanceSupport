@@ -144,7 +144,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\CustomViewEngine.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\PasswordHashing.cs" />
+    <Compile Include="Models\functions\PasswordHashing.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdministratorsController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -167,6 +167,7 @@
     <Compile Include="Models\Campus.cs" />
     <Compile Include="Models\Courses.cs" />
     <Compile Include="Models\Faculty.cs" />
+    <Compile Include="Models\functions\RecoveryComms.cs" />
     <Compile Include="Models\Recovery.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\RoleType.cs" />
@@ -737,13 +738,14 @@
     <Content Include="Views\StudentVouchers\Index.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Shared\_Login_Layout_.cshtml" />
-    <Content Include="Views\Administrators\ForgotPassword.cshtml" />
     <Content Include="Views\StudentRegistration\_student_details.cshtml" />
     <Content Include="Views\StudentRegistration\Edit.cshtml" />
     <Content Include="Views\Reports\Index.cshtml" />
     <Content Include="Views\Shared\NoAccess.cshtml" />
     <Content Include="Views\Administrators\Add.cshtml" />
     <Content Include="Views\Recovery\Index.cshtml" />
+    <Content Include="Views\Recovery\Code.cshtml" />
+    <Content Include="Views\Administrators\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

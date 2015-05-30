@@ -48,6 +48,13 @@ namespace StudentFinanceSupport.Controllers
             return false;
         }
 
+        [HttpGet]
+        public ActionResult LogOut()
+        {
+            Session.Abandon();
+            return RedirectToAction("Index", "Home");
+            //return View();
+        }
         //NoAcess   [GLOBAL] can be called from anywhere and will show user no access page
         public ActionResult NoAccess()
         {
@@ -84,6 +91,16 @@ namespace StudentFinanceSupport.Controllers
             
         }
 
+        public AdministratorLogin returnAdminSession(){
+
+            //return the AdministratorLogin from session
+            if (Session["AdministratorLogin"] != null)
+             return (AdministratorLogin)Session["AdministratorLogin"];
+
+            return null;
+        }
+
+        
         /// <summary>
         /// Returns if the user has a session that is logged in
         /// </summary>
