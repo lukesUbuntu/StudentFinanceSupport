@@ -48,7 +48,7 @@ namespace StudentFinanceSupport.Controllers
             {
                 //remove any logged in session
                 Session.Remove("AdministratorLogin");
-                Session.Remove("logged_in");
+                
                 Recovery theRecovery = (Recovery)Session["AdministratorRecovery"];
                 var theAdmin = (from a in db.Administrators
                                 join b in db.Recoveries on a.UserId equals b.UserId
@@ -56,10 +56,11 @@ namespace StudentFinanceSupport.Controllers
                                 select a).SingleOrDefault();
                 //clear the password field
                 theAdmin.Password = String.Empty;
+                Session["AdministratorLogin"] = theAdmin.loginDetails();
                 return View(theAdmin.loginDetails());
             }
 
-            AdministratorLogin CurrentAdmin = this.returnAdminSession();
+            AdministratorLogin CurrentAdmin = this.AdminSession();
             //check if we are logged in
             if (CurrentAdmin == null)
             {
@@ -74,6 +75,7 @@ namespace StudentFinanceSupport.Controllers
         [HttpPost]
         public ActionResult ChangePassword(AdministratorLogin theAdmin)
         {
+            ModelState.Clear();
             //check password match
             if (theAdmin.Password != Request.Form["password_match"])
             {
@@ -81,7 +83,35 @@ namespace StudentFinanceSupport.Controllers
                 ViewBag.password_match = String.Empty;
                 ModelState.AddModelError("Password", "Passwords don't match");
             }
-            return View(theAdmin);
+            if (!ModelState.IsValid)
+            {
+                return View(theAdmin);
+            }
+
+            //grab the current admin session and update password
+            //process the update
+            AdministratorLogin thisUser = this.AdminSession();
+
+            var change = (from a in db.Administrators
+                          where a.UserId == thisUser.UserId
+                            select a).SingleOrDefault();
+
+            change.Password = PasswordHashing.Encrypt(theAdmin.Password);
+
+            //clean up from recovery
+            if (Session["AdministratorRecovery"] != null)
+            {
+                Session.Remove("AdministratorRecovery");
+                //remove any recovery options that are set
+                var recovery = (from b in db.Recoveries where b.UserId == change.UserId select b);
+                foreach (var entry in recovery)
+                    db.Recoveries.Remove(entry);
+            }
+               
+
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
         public ActionResult Add()
@@ -140,8 +170,8 @@ namespace StudentFinanceSupport.Controllers
                 return View(newAdmin);
             }
 
-            PasswordHashing passwordHash = new PasswordHashing();
-            newAdmin.Password = passwordHash.Encrypt(newAdmin.Password);
+            //PasswordHashing passwordHash = new PasswordHashing();
+            newAdmin.Password = PasswordHashing.Encrypt(newAdmin.Password);
 
             //add the admin
             db.Administrators.Add(newAdmin);
@@ -267,12 +297,12 @@ namespace StudentFinanceSupport.Controllers
                 if (user != null)
                 {
 
-                    PasswordHashing thePassword = new PasswordHashing();
+                   // PasswordHashing thePassword = new PasswordHashing();
                     //string newPass = thePassword.Encrypt("123");
 
                     //check password match
-                   
-                    if (thePassword.passwordValid(password,user.Password))
+
+                    if (PasswordHashing.passwordValid(password, user.Password))
                     {
                         IsValid = true;
                     }

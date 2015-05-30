@@ -91,11 +91,11 @@ namespace StudentFinanceSupport.Controllers
             
         }
 
-        public AdministratorLogin returnAdminSession(){
+        public AdministratorLogin AdminSession(){
 
             //return the AdministratorLogin from session
             if (Session["AdministratorLogin"] != null)
-             return (AdministratorLogin)Session["AdministratorLogin"];
+                return (AdministratorLogin)Session["AdministratorLogin"];
 
             return null;
         }

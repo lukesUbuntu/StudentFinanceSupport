@@ -10,17 +10,17 @@ using DevOne.Security.Cryptography.BCrypt;
 
 namespace StudentFinanceSupport.Models.functions
 {
-    public class PasswordHashing
+    public static class  PasswordHashing
     {
-        private readonly int BCRYPT_WORK_FACTOR = 12;
-       
-        public string Encrypt(string password)
+        private static readonly int BCRYPT_WORK_FACTOR = 12;
+
+        public static string Encrypt(string password)
         {
 
             return DevOne.Security.Cryptography.BCrypt.BCryptHelper.HashPassword(password, DevOne.Security.Cryptography.BCrypt.BCryptHelper.GenerateSalt(BCRYPT_WORK_FACTOR));
         }
 
-        public bool passwordValid(string password,string dbasepassword)
+        public static bool passwordValid(string password, string dbasepassword)
         {
             try {
                 bool matched = DevOne.Security.Cryptography.BCrypt.BCryptHelper.CheckPassword(password, dbasepassword);
