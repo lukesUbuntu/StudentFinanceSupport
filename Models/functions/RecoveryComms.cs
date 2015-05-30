@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,6 +14,55 @@ namespace StudentFinanceSupport.Models.functions
     {
         public bool sendEmail(ref Recovery theRecovery)
         {
+            theRecovery.recovery_key = this.keyCode();
+            //retrieve settings from webconfig
+            string FromAddress = System.Configuration.ConfigurationManager.AppSettings.Get("FromAddress");
+            string SmtpServer = System.Configuration.ConfigurationManager.AppSettings.Get("SmtpServer");
+            string UserName = System.Configuration.ConfigurationManager.AppSettings.Get("UserName");
+            string Password = System.Configuration.ConfigurationManager.AppSettings.Get("Password");
+            string EnableSSL = System.Configuration.ConfigurationManager.AppSettings.Get("EnableSSL");
+            int SMTPPort = int.Parse(System.Configuration.ConfigurationManager.AppSettings.Get("SMTPPort"));
+            string ReplyTo = System.Configuration.ConfigurationManager.AppSettings.Get("ReplyTo");
+
+
+
+            var fromAddress = new MailAddress(FromAddress, "no-reply");
+            var toAddress = new MailAddress(theRecovery.Administrator.Email);
+            //const string fromPassword = Password;
+            string subject = "Password Recovery";
+            string body = String.Format("Your Reset password key is : {0}", theRecovery.recovery_key);
+
+            var smtp = new SmtpClient
+            {
+                Host = SmtpServer,
+                Port = SMTPPort,
+                EnableSsl = false,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(UserName, Password)
+
+            };
+            using (var message = new MailMessage(fromAddress, toAddress)
+
+            {
+                Subject = subject,
+                Body = body,
+                //Priority = MailPriority.High,
+                //IsBodyHtml = true,
+               
+                Headers =
+                {   
+                    
+                    //weird issues with gmail spamming added extra headers to solve spam issue and randome message id
+                    { "Message-ID", String.Format("<{0}@{1}>", Guid.NewGuid().ToString(), "lukes-server.com") },
+                    { "X-Sender" ,FromAddress},
+                    { "User-Agent" ,"ITxC# App"}
+                }
+
+            })
+            {
+                smtp.Send(message);
+            }
             return true;
         }
         public bool sendSMS(ref Recovery theRecovery)
@@ -21,24 +71,26 @@ namespace StudentFinanceSupport.Models.functions
             //021023517775
             //string mobileNumber = theRecovery.Administrator.mobile;
             //string keyCode = this.keyCode();
+            string api_key = System.Configuration.ConfigurationManager.AppSettings.Get("api_key");
+            string api_uri = System.Configuration.ConfigurationManager.AppSettings.Get("api_uri");
 
             theRecovery.recovery_key = this.keyCode();
 
             if (theRecovery.Administrator.mobile.Count() < 8 || theRecovery.Administrator.mobile.Count() > 13) return false;
 
-            string uriString = "http://home.lukes-server.com/sms/api.php";
-            //http://home.lukes-server.com/sms/api.php?user=testuser&pw=testpassword&text=%20Hi%20there%20your%20account%20code%20is%20...This%20is%20yet%20yet%20another%20test%20message%20text&dest=02102351775
+            //string uriString = "http://home.lukes-server.com/sms/api.php";
+           
             using (var client = new WebClient())
             {
                 var values = new NameValueCollection
                 {
-                    { "api_key", "a1O3k07N21" }, 
-                    { "text", "Your Reset password key is : " + theRecovery.recovery_key },
+                    { "api_key", api_key }, 
+                    { "text", String.Format("Your Reset password key is : {0} ", theRecovery.recovery_key) },
                     { "dest",   theRecovery.Administrator.mobile }
                 };
                 client.QueryString = values;
 
-                var response = client.UploadValues(uriString, values);
+                var response = client.UploadValues(api_uri, values);
                 string result = System.Text.Encoding.UTF8.GetString(response);
                 
                 //API key will expire in 1 month after school assignment hand in
