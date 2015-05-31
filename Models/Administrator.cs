@@ -12,9 +12,15 @@ namespace StudentFinanceSupport.Models
         [Display(Name = "Email address")]
         [Required(ErrorMessage = "The email address is required")]
         [EmailAddress(ErrorMessage = "The email address is not valid")]
+        [DataType(DataType.EmailAddress)]
+        [StringLength(100)]
         public string Email { get; set; }
-        public int UserId { get; set; }
+
+        [Required]
+        [StringLength(250, MinimumLength = 3)]
         public string Password { get; set; }
+        public int UserId { get; set; }
+      
     }
     public partial class Administrator
     {
@@ -30,11 +36,12 @@ namespace StudentFinanceSupport.Models
         [Display(Name = "Email address")]
         [Required(ErrorMessage = "The email address is required")]
         [EmailAddress(ErrorMessage = "The email address is not valid")]
+        [DataType(DataType.EmailAddress)]
         [StringLength(100)]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(250)]
+        [StringLength(250, MinimumLength = 3)]
         public string Password { get; set; }
 
         [Required]
@@ -45,6 +52,8 @@ namespace StudentFinanceSupport.Models
         public string LastName { get; set; }
 
         [Display(Name = "Mobile Phone Number")]
+        [DataType(DataType.PhoneNumber)]
+        [RegularExpression("^02[1-9]\\d{5,9}")]
         [StringLength(15)]
         public string mobile { get; set; }
 

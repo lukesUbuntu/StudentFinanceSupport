@@ -49,6 +49,10 @@ namespace StudentFinanceSupport.Controllers
                         value = newGroup.Sum(c => c.GrantValue)
                         
                     };
+
+
+
+
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         public JsonResult MainReport()

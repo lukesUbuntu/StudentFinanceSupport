@@ -44,7 +44,7 @@ namespace StudentFinanceSupport.Controllers
 
             if (theAdmin == null)
             {
-                ModelState.AddModelError("recovery_key", "Incorrect Recovery KEY");
+                ModelState.AddModelError("recovery_key", "Incorrect Recovery KEY Details");
                 return View(theRecovery);
 
             }
@@ -122,16 +122,24 @@ namespace StudentFinanceSupport.Controllers
             }
         }
 
+        private void clearErrorStates(List<string> theKeys)
+        {
+            foreach (var key in theKeys)
+            {
+                if (ModelState.ContainsKey(key))
+                    ModelState[key].Errors.Clear();
+            }
 
+        }
         public JsonResult adminDetails(Recovery theRecovery)
         {
             Administrator AdminAccount;
-
-            //following state errors need to be cleared as we are not casting here
-            ModelState["Administrator.FirstName"].Errors.Clear();
-            ModelState["Administrator.Password"].Errors.Clear();
-            ModelState["recovery_key"].Errors.Clear();
-
+            List<string> skipKeys = new List<string>();
+            skipKeys.Add("Administrator.FirstName");
+            skipKeys.Add("Administrator.Password");
+            skipKeys.Add("recovery_key");
+            clearErrorStates(skipKeys);
+       
             //only check if model state is okay
             if (ModelState.IsValid)
             {
@@ -152,19 +160,28 @@ namespace StudentFinanceSupport.Controllers
 
                 return Json(errorList, JsonRequestBehavior.AllowGet);
             }
-
-            string mobile = theRecovery.Administrator.mobile.ToString();
-
-            /*
+            //theRecovery.recovery_option
+            string mobile = theRecovery.Administrator.mobile.Remove(theRecovery.Administrator.mobile.Length - 4, 4) + "****";
             
+            /*
+            RecoveryComms theComms = new RecoveryComms();
+            if (theComms.sendSMS(ref theRecovery) == true)
+            {
+
+            }
+            else
+            {
+                
+            }
+            */
             RecoveryComms theComms = new RecoveryComms();
             if (theComms.sendSMS(ref theRecovery) == true)
             {
                 db.Recoveries.Add(theRecovery);
                 db.SaveChanges();
             }
-            mobile = mobile.Remove(mobile.Length - 4, 4) + "****";
-            */
+           
+            
             var theResponse = Json(new     
                 {     
                     success = "true",     

@@ -75,7 +75,13 @@ namespace StudentFinanceSupport.Controllers
         [HttpPost]
         public ActionResult ChangePassword(AdministratorLogin theAdmin)
         {
+            //passing back from session so no injection of userID or email can happen
+            theAdmin.Email = this.AdminSession().Email;
+            theAdmin.UserId = this.AdminSession().UserId;
             ModelState.Clear();
+            TryValidateModel(theAdmin);  
+
+            //ModelState.Clear();
             //check password match
             if (theAdmin.Password != Request.Form["password_match"])
             {
@@ -85,6 +91,13 @@ namespace StudentFinanceSupport.Controllers
             }
             if (!ModelState.IsValid)
             {
+                foreach (ModelState modelState in ViewData.ModelState.Values)
+                {
+                    foreach (ModelError error in modelState.Errors)
+                    {
+                        Console.Write(error);
+                    }
+                }
                 return View(theAdmin);
             }
 
@@ -248,18 +261,18 @@ namespace StudentFinanceSupport.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(Models.AdministratorLogin user)
+        public ActionResult Login(AdministratorLogin administrator)
         {
 
-            if (IsValid(user.Email, user.Password))
+            if (IsValid(ref administrator))
             
             {
                 
                 //FormsAuthenticationTicket with the supplied username & persistence options, serializes it,
-                FormsAuthentication.SetAuthCookie(user.Email, false);
+                FormsAuthentication.SetAuthCookie(administrator.Email, false);
                 //http://stackoverflow.com/questions/23301445/formsauthentication-setauthcookie-vs-formsauthentication-encrypt
                 Session["logged_in"] = true;
-                Session["AdministratorLogin"] = user;
+                Session["AdministratorLogin"] = administrator;
 
                 //return RedirectToAction("Index", "Home");
 
@@ -276,7 +289,7 @@ namespace StudentFinanceSupport.Controllers
                 ModelState.AddModelError("", "Login details are wrong.");
             }
 
-            return View(user);
+            return View(administrator);
         }
 
         
@@ -284,26 +297,22 @@ namespace StudentFinanceSupport.Controllers
         ///  IsValid checks a email and password against the database
         ///  @todo encrypt or salt password
         /// </summary>
-        /// <param name="email">email as username</param>
-        /// <param name="password">password</param>
+        /// <param name="AdministratorLogin">by ref pass AdministratorLogin details</param>
         /// <returns>returns true or false</returns>
-        private bool IsValid(string email, string password)
+        private bool IsValid(ref AdministratorLogin administrator)
         {
            
             bool IsValid = false;
-
+            string admin_email = administrator.Email;
             //grab the user
-            var user = db.Administrators.FirstOrDefault(theUser => theUser.Email == email);
+            var user = db.Administrators.FirstOrDefault(theUser => theUser.Email == admin_email);
+
                 if (user != null)
                 {
-
-                   // PasswordHashing thePassword = new PasswordHashing();
-                    //string newPass = thePassword.Encrypt("123");
-
-                    //check password match
-
-                    if (PasswordHashing.passwordValid(password, user.Password))
+                    if (PasswordHashing.passwordValid(administrator.Password, user.Password))
                     {
+                        //account is valid we need to update our admin account with the ID
+                        administrator.UserId = user.UserId;
                         IsValid = true;
                     }
                 }

@@ -23,6 +23,8 @@ namespace StudentFinanceSupport.Models
         [StringLength(20)]
         public string recovery_key { get; set; }
 
+
+        [Display(Name = "Recovery Options")]
         [StringLength(20)]
         public string recovery_option { get; set; }
         public virtual Administrator Administrator { get; set; }

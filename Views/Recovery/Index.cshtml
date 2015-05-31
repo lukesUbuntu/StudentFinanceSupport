@@ -1,65 +1,97 @@
 ﻿@model StudentFinanceSupport.Models.Recovery
 @using StudentFinanceSupport.Helpers
 
-    <h4></h4>
+
+    <h1>Reset Password</h1>
+
+
     
-    
-    @Html.ActionLink("Have recovery code already?", "Code")
-
-    <h3>Recover Account</h3>
-    <div id="recovery_form">
-        <section id="recovery_email" class="col-md-10">
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.Administrator.Email, "Email", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Administrator.Email, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Administrator.Email, "", new { @class = "text-danger" })
+<div id="recovery_form" class="col-lg-8">
+    <div class="panel panel-yellow">
+        <div class="panel-heading">
+            Recover Account
+        </div>
+        <div class="panel-body">
+            <section id="recovery_email" class="col-md-8">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Administrator.Email, "Email", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Administrator.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Administrator.Email, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
-        </section>
-    <h3>Recovery Options</h3>
-        <section id="recovery_details" class="col-md-10">
+            </section>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.recovery_option, htmlAttributes: new { @class = "control-label col-md-8" })
-                <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.recovery_option, Helpers.RecoveryOptions(), Helpers.SelectOneSpacer, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.recovery_option, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div id="recover_entry" class="form-group" style="display:none">
-                @Html.LabelFor(model => model.recovery_key, htmlAttributes: new { @class = "control-label col-md-8" })
-
-
-                <div id="mobile_number" class="col-md-10" style="display:none">
-                    <h3>Enter last 4 digits of this number <span id="mobile_number_guess"></span></h3>
-                    @Html.TextBox("phone_number", (string)ViewBag.phone_number, new { @class = "form-control", @value = ViewBag.phone_number })
+            <section id="recovery_details" class="col-md-8">
+              
+                <div class="form-group">
+                    @Html.LabelFor(model => model.recovery_option, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.recovery_option, Helpers.RecoveryOptions(), Helpers.SelectOneSpacer, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.recovery_option, "", new { @class = "text-danger" })
+                    </div>
                 </div>
 
+                <div id="recover_entry" class="form-group" style="display:none">
+                    @Html.LabelFor(model => model.recovery_key, htmlAttributes: new { @class = "control-label col-md-8" })
 
 
-            </div>
+                    <div id="mobile_number" class="col-md-10" style="display:none">
+                        <h3>Enter last 4 digits of this number <span id="mobile_number_guess"></span></h3>
+                        @Html.TextBox("phone_number", (string)ViewBag.phone_number, new { @class = "form-control", @value = ViewBag.phone_number })
+                    </div>
 
 
-        </section>
-       
-        <h3>Recovery Entry</h3>
-        <section id="recovery-try" class="col-md-10" style="display:none">
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.recovery_key, htmlAttributes: new { @class = "control-label col-md-8" })
-                <div class="col-md-10">
-                    @Html.TextBoxFor(model => model.recovery_key, null, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.recovery_key, "", new { @class = "text-danger" })
                 </div>
-            </div>
+            </section>
 
 
+            <section id="recovery-try" class="col-md-8" style="display:none">
+                <h3>Recovery Entry</h3>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.recovery_key, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.recovery_key, null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.recovery_key, "", new { @class = "text-danger" })
+                    </div>
+                </div>
 
-        </section>
+            </section>
+
+        </div>
+        <div class="panel-footer">
+            
+        </div>
+    </div>
+    <!-- /.col-lg-4 -->
 </div>
+
+   <div class="col-lg-2">
+    <div class="panel panel-green">
+        <div class="panel-heading">
+            Have recovery key
+        </div>
+        <div class="panel-body">
+            <p>Enter Recover Key</p>
+            @Html.EditorFor(model => model.recovery_key, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10 " style="padding-top:15px;">
+                    <button id="reset_password" class="btn btn-default pull-right">Reset Password</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            @Html.ValidationMessageFor(model => model.recovery_key, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+    
+        
+
+
  
 <script>
     //recovery.js
