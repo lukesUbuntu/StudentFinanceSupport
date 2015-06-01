@@ -46,7 +46,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.DateOfIssue, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBox(Html.NameFor(model => model.DateOfIssue).ToString(), @DateTime.Now.ToShortDateString())
+                @Html.TextBox(Html.NameFor(model => model.DateOfIssue).ToString(), @DateTime.Now.ToShortDateString(), htmlAttributes: new { @class = "datepicker" })
 
             </div>
         </div>
@@ -96,7 +96,8 @@
         
 
     }
-    
+    @Styles.Render("~/Content/Wizard")
+    @Scripts.Render("~/bundles/wizardSteps")
    <script type="text/javascript">
        $(document).ready(function () {
            //hide all the amount holders
@@ -211,6 +212,13 @@
 
 
        }
+
+           //date picker
+       $('.datepicker').datepicker({
+           format: "dd/mm/yyyy",
+           autoclose: true,
+           toggleActive: true
+       });
 
        });
    </script>

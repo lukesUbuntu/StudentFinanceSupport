@@ -1,37 +1,43 @@
-﻿@model IEnumerable<StudentFinanceSupport.Models.StudentVoucher>
+﻿@model IEnumerable<StudentFinanceSupport.Models.Courses>
 
 @{
+    ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Main_Layout_.cshtml";
 }
 
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
 @Styles.Render("~/Content/datatables")
 @Scripts.Render("~/bundles/datatables")
-<table class="table table-striped table-bordered table-hover col-md-8" id="grants-list-table">
+<table class="table table-striped table-bordered table-hover col-md-8" id="faculty-list-table">
     <thead>
         <tr>
-            <th class="col-lg-3>@Html.DisplayNameFor(model => model.StudentRegistration.FirstName)</th>
-            <th class="col-lg-3">@Html.DisplayNameFor(model => model.KuhaFunds)</th>
-
+            <th>@Html.DisplayNameFor(model => model.course_name)</th>
+            <th class="col-lg-3">@Html.DisplayNameFor(model => model.Faculty.faculty_name)</th>
+            
             <th class="col-lg-2"></th>
         </tr>
     </thead>
     <tbody>
 
 
-        @foreach (var grants in Model)
+        @foreach (var course in Model)
         {
             <tr class="odd gradeX">
                 <td>
-                    @Html.DisplayFor(modelItem => grants.StudentRegistration.FirstName)
+                    @Html.DisplayFor(modelItem => course.course_name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => grants.KuhaFunds)
+                    @Html.DisplayFor(modelItem => course.Faculty.faculty_name)
                 </td>
-
+               
                 <td class="center">
                     <div class="btn-group">
                         @Html.ActionLink("View Students", "Create", "Courses",
-              new { id = grants.student_ID },
+                     new { id = course.id_courses },
                             htmlAttributes: new { @class = "btn btn-default " }
                           )
 
@@ -40,10 +46,10 @@
                             <span class="sr-only"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                            <li>@Html.ActionLink("Edit Faculty", "Edit", new { id = grants.id_student_vouchers })</li>
-                            <li>@Html.ActionLink("Details", "Details", new { id = grants.id_student_vouchers })</li>
+                            <li>@Html.ActionLink("Edit Faculty", "Edit", new { id = course.id_courses })</li>
+                            <li>@Html.ActionLink("Details", "Details", new { id = course.id_courses })</li>
                             <li class="divider"></li>
-                            <li class=""> @Html.ActionLink("Delete", "Delete", new { id = grants.id_student_vouchers })</li>
+                            <li class=""> @Html.ActionLink("Delete", "Delete", new { id = course.id_courses })</li>
                         </ul>
                     </div>
 
@@ -57,9 +63,10 @@
 
 <script>
     $(document).ready(function () {
-        $('#grants-list-table').DataTable({
+        $('#faculty-list-table').DataTable({
             responsive: true
         });
     });
 </script>
+
 

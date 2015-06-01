@@ -22,18 +22,21 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Petrol Vouchers</td>
+                            <td>Hardship</td>
                             <td style="background-color:#FFE600"></td>
                         </tr>
                         <tr>
-                            <td>Food Vouchers</td>
+                            <td>Train Tickets</td>
                             <td style="background-color:#223EB2"></td>
                         </tr>
                         <tr>
-                            <td>Train Tickets</td>
+                            <td>Food</td>
                             <td style="background-color:#FF8000"></td>
                         </tr>
-                        
+                        <tr>
+                            <td>Petrol</td>
+                            <td style="background-color:#95D7BB"></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -45,64 +48,80 @@
         </div>
        
     
-    
+   
 </div>
-<div id="pie-report"></div>
+<div class="col-lg-9">
+    <div id="pie-report"></div>
+</div>
+
 <script>
   
     
-
-        $.ajax({
-            url: "/Reports/getBarReport",
-            type: "GET",
-            dataType: "json",
-            //data: { Student_ID: $(this).val() },
-
-            success: function (data) {
-                var report_data = [];
-                console.log("data", data)
-                var index = 0;
-                $.map(data, function (reportData) {
-
-                    report_data.push(reportData)
-                })
-                donutReport(report_data);
-            }
-        });
-
+    
         $.ajax({
             url: "/Reports/MainReport",
             type: "GET",
             dataType: "json",
             success: function (data) {
                 
-                var report_data = [];
-                console.log("data", data)
-                var index = 0;
-                $.map(data, function (reportData) {
-                    console.log("reportData", reportData.GrantType)
-                   
-                    //fix the date conversion by just parsing the date time
-                    var thedate = new Date(parseInt(reportData.DateOfIssue.substr(6)));
-                    //2012-02-24
-                    thedate = thedate.getFullYear() + "-" + (thedate.getMonth() + 1) + "-" + thedate.getDate();
-                   
-                    var data = {
-                        'date': thedate,
-                        'index': index++
-                    }
-                    //add the key as a type name to data object
-                    data[reportData.GrantType] = reportData.GrantValue;
-
-                    report_data.push(data)
-                })
-                reportMorris(report_data);
+                console.log("data.pie_chart_value", data)
+                if (data.success == true) {
+                    //check main report data
+                    if (typeof data.main_report != "undefined" && data.main_report != null)
+                        mainReport(data.main_report);
+                    
+                    if (typeof data.pie_chart_value != "undefined" &&  data.pie_chart_value != null)
+                        pieChartValue(data.pie_chart_value);
+                    
+                }
             }
         });
 
 
+        function mainReport(data) {
+            console.log("mainReport running", data)
+            var report_data = [];
+            var index = 0;
+           
+            $.map(data, function (reportData) {
+                //console.log("reportData", reportData.GrantType)
+                   
+               
 
-        function donutReport(report_data) {
+                //fix the date conversion by just parsing the date time
+                var thedate = new Date(parseInt(reportData.DateOfIssue.substr(6)));
+                //2012-02-24
+                thedate = thedate.getFullYear() + "-" + (thedate.getMonth() + 1) + "-" + thedate.getDate();
+                   
+                var data = {
+                    'date': thedate,
+                    'index': index++
+                }
+
+                //add the key as a type name to data object
+                data[reportData.GrantType] = reportData.GrantValue;
+               
+
+                   
+                
+                report_data.push(data)
+            })
+            
+          
+            reportMorris(report_data);
+        
+        }
+
+        function pieChartValue(data) {
+            console.log("pieChartValue running", data)
+            var report_data = [];
+           
+            var index = 0;
+            $.map(data, function (reportData) {
+
+                report_data.push(reportData)
+            })
+            //donutReport(report_data);
             Morris.Donut({
                 element: 'pie-report',
                 data: report_data,
@@ -115,8 +134,25 @@
                 formatter: function (x) { return "$" + x }
             });
         }
+
         function reportMorris(report_data) {
-            console.log("report_data", report_data)
+            //cammel case words regex
+            /*
+            var rex = /([A-Z])([A-Z])([a-z])|([a-z])([A-Z])/g;
+           
+            var ykeys = [];
+            var labels = [];
+
+            for (key in key_store) {
+                ykeys.push(key)
+                var label = key.replace(rex, "$1$4 $2$3$5");
+                labels.push(label);
+                
+            }
+            */
+   
+            //report_data
+           
             Morris.Area({
                 element: 'main-report',
                 data: report_data,
@@ -124,13 +160,20 @@
                 xLabels: 'day',
                 parseTime: false,
                 smooth : false,
-                ykeys: ['Hardship', 'Food', 'TrainTickets'],
-                labels: ['Petrol Vouchers', 'Food Vouchers', 'Train Tickets'],
+                ykeys: ["Hardship", "TrainTickets", "Food", "PetrolVouchers"],
+                    //['Hardship', 'Food', 'TrainTickets'],
+                labels:["Hardship", "Train Tickets", "Food", "Petrol Vouchers"],
+                    //['Hardship', 'Food Vouchers', 'Train Tickets'],
                 ymax : 'auto',
                 pointSize: 2,
                 hideHover: 'auto',
                 resize: true,
-                lineColors: ['#FFE600', "#223EB2", "#FF8000"],
+                lineColors: [
+               '#FFE600',
+               '#223EB2',
+               '#FF8000',
+               '#95D7BB'
+                ],
                 pointFillColors: ['#00ff00']
             });
         }

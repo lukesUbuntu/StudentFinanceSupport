@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StudentFinanceSupport.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,6 +13,8 @@ namespace StudentFinanceSupport.Controllers
         // GET: Reports
         public ActionResult Index()
         {
+
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             var result =
             from s in db.StudentVouchers.Take(10)
              group s by s.DateOfIssue into g
@@ -36,27 +39,23 @@ namespace StudentFinanceSupport.Controllers
         /// <param name="faculty">Faculity by ID</param>
         /// <returns>JSON result of id_course & course_name</returns>
         //StudentRegistration/getCourses [GET]
-        public JsonResult getBarReport()
+        public JsonResult getReport()
         {
-            var result =
-                    from voucher in db.StudentVouchers.ToList()
-                    group voucher by voucher.GrantType into newGroup
-                    
-                    select new
-                    {
-
-                        label = newGroup.Key,
-                        value = newGroup.Sum(c => c.GrantValue)
-                        
-                    };
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
 
 
 
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+
+            return Json(new
+            {
+                success = false
+
+            }, JsonRequestBehavior.AllowGet);
         }
         public JsonResult MainReport()
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             //Get list of courses for a faculty
 
             //https://msdn.microsoft.com/en-us/library/bb545971.aspx
@@ -65,16 +64,47 @@ namespace StudentFinanceSupport.Controllers
                          group voucher by voucher.DateOfIssue into newGroup
                          select newGroup;
             
-            */
-           var result = db.StudentVouchers.ToList()
+           
+            var main_report1 = db.StudentVouchers.ToList() 
             .Select(grants =>
              new
              {
                  GrantType = grants.GrantType,
                  GrantValue = grants.GrantValue,
                  DateOfIssue = grants.DateOfIssue
+                
              });
-           
+             */
+            var main_report = 
+                from grant in db.StudentVouchers.ToList() where grant.GrantType.ToLower() != "advice"
+                select new 
+             {
+                 GrantType = grant.GrantType,
+                 GrantValue = grant.GrantValue,
+                 DateOfIssue = grant.DateOfIssue
+
+             };
+
+            var pie_chart_value =
+                   from voucher in db.StudentVouchers.ToList() where voucher.GrantType.ToLower() != "advice"
+                   group voucher by voucher.GrantType into newGroup
+
+                   select new
+                   {
+
+                       label = newGroup.Key,
+                       value = newGroup.Sum(c => c.GrantValue)
+
+                   };
+
+
+            //pie_chart_value = null;
+           return Json(new
+           {
+               success = true,
+               main_report = main_report,
+               pie_chart_value = pie_chart_value
+           }, JsonRequestBehavior.AllowGet);
 
             /*
              * x => new
@@ -90,7 +120,12 @@ namespace StudentFinanceSupport.Controllers
 
 
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+           return Json(new
+           {
+               success = false
+             
+           }, JsonRequestBehavior.AllowGet);
+
 
         }
     }

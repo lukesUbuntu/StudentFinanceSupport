@@ -144,6 +144,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\CustomViewEngine.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="Controllers\CoursesController.cs" />
+    <Compile Include="Controllers\FacultiesController.cs" />
     <Compile Include="Models\functions\PasswordHashing.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdministratorsController.cs" />
@@ -728,7 +730,7 @@
     <Content Include="Views\Shared\_Main_Layout_.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Administrators\Index.cshtml" />
+    <Content Include="Views\Administrators\Admins.cshtml" />
     <Content Include="Views\Administrators\Login.cshtml" />
     <Content Include="Views\StudentRegistration\List.cshtml" />
     <Content Include="Views\StudentRegistration\Create.cshtml" />
@@ -746,6 +748,17 @@
     <Content Include="Views\Recovery\Index.cshtml" />
     <Content Include="Views\Recovery\Code.cshtml" />
     <Content Include="Views\Administrators\ChangePassword.cshtml" />
+    <Content Include="Views\Administrators\Index.cshtml" />
+    <Content Include="Views\Faculties\Create.cshtml" />
+    <Content Include="Views\Faculties\Delete.cshtml" />
+    <Content Include="Views\Faculties\Details.cshtml" />
+    <Content Include="Views\Faculties\Edit.cshtml" />
+    <Content Include="Views\Faculties\Index.cshtml" />
+    <Content Include="Views\Courses\Create.cshtml" />
+    <Content Include="Views\Courses\Delete.cshtml" />
+    <Content Include="Views\Courses\Details.cshtml" />
+    <Content Include="Views\Courses\Edit.cshtml" />
+    <Content Include="Views\Courses\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

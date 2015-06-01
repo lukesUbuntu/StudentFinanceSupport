@@ -16,6 +16,7 @@ namespace StudentFinanceSupport.Controllers
         // GET: StudentRegistration/List
         public ActionResult List()
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             return View(db.StudentRegistrations.ToList());
         }
 
@@ -32,6 +33,7 @@ namespace StudentFinanceSupport.Controllers
         /// <returns>View</returns>
          public ActionResult Edit(String id)
          {
+             StudentRegistrationsModel db = new StudentRegistrationsModel();
              //if id == return
              //StudentRegistration theStudent = (StudentRegistration)db.StudentRegistrations.Where(m => m.Student_ID == id);
              StudentRegistration theStudent = db.StudentRegistrations.Find(id);
@@ -43,7 +45,8 @@ namespace StudentFinanceSupport.Controllers
 
          //StudentRegistration/Create 
          public ActionResult Create()
-         {      
+         {
+             StudentRegistrationsModel db = new StudentRegistrationsModel();
              ViewBag.id_courses = new SelectList(String.Empty, "id_courses", "course_name");
              ViewBag.id_faculty = new SelectList(db.Faculties, "id_faculty", "faculty_name");
              ViewBag.id_campus = new SelectList(db.Campus, "id_campus", "campus_name");
@@ -55,6 +58,7 @@ namespace StudentFinanceSupport.Controllers
          public ActionResult Create([Bind(Include =
              "Student_ID,FirstName,LastName,Gender,DOB,Address1,Accomodition_Type,Phone,Mobile,Email,Marital_Status,Contact,Main_Ethnicity,id_faculty,id_courses,Detailed_Ethnicity,id_campus")] StudentRegistration studentRegistration)
          {
+             StudentRegistrationsModel db = new StudentRegistrationsModel();
              //error checking goes here
 
              //lets make sure we don't already have this Student_ID
@@ -131,7 +135,7 @@ namespace StudentFinanceSupport.Controllers
          [HttpPost]
          public JsonResult getCourses(string faculty)
          {
-             
+             StudentRegistrationsModel db = new StudentRegistrationsModel();
              int faculty_id = -1;
 
              //lets convert to int

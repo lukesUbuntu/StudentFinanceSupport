@@ -13,7 +13,9 @@ namespace StudentFinanceSupport.Controllers
     /// </summary>
     public abstract class BaseController : Controller
     {
-        public StudentRegistrationsModel db = new StudentRegistrationsModel();
+        // singleton
+       
+       
 
         private bool debug = true;
         //Our predfined login route where to send non admin users needs to be set in route config
@@ -120,9 +122,12 @@ namespace StudentFinanceSupport.Controllers
         /// <returns>true or false if exists</returns>
         public bool studentExists(string theStudentID)
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             //lets make sure we don't already have this Student_ID .Any(). will return a boolean if the entity was found
             return (db.StudentRegistrations.Any(m => m.Student_ID.ToLower() == theStudentID.ToLower()));
         }
+
+        
     }
 
 

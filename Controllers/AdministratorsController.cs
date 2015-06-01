@@ -32,15 +32,21 @@ namespace StudentFinanceSupport.Controllers
             //Administrator theAdmins = new Administrator();
             //theAdmins = db.Administrators();
             
-            return View(db.Administrators.ToList());
+            return View();
         }
 
         // GET: Administrators/Add
-      
-       
+
+        public ActionResult Admins()
+        {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
+            
+            return View(db.Administrators.ToList());
+        }
        // [HttpPost]
         public ActionResult ChangePassword()
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             //@important don't pass the administor model for modifying ONLY the AdministratorLogin model for security as this is public
 
             //check if we are coming from a recovery
@@ -75,10 +81,11 @@ namespace StudentFinanceSupport.Controllers
         [HttpPost]
         public ActionResult ChangePassword(AdministratorLogin theAdmin)
         {
-            //passing back from session so no injection of userID or email can happen
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
+            //passing back from session so no injection of userID or email can happen we also need to clear the model state and re-validate
+            ModelState.Clear();
             theAdmin.Email = this.AdminSession().Email;
             theAdmin.UserId = this.AdminSession().UserId;
-            ModelState.Clear();
             TryValidateModel(theAdmin);  
 
             //ModelState.Clear();
@@ -129,6 +136,7 @@ namespace StudentFinanceSupport.Controllers
 
         public ActionResult Add()
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             Administrator theAdmins = new Administrator();
 
             //theAdmins = db.Administrators();
@@ -146,6 +154,7 @@ namespace StudentFinanceSupport.Controllers
         [HttpPost]
         public ActionResult Add(Administrator newAdmin)
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             //newAdmin.Roles = Request.Form["admin_roles"];
            
             ViewBag.admin_roles = new MultiSelectList(db.RoleTypes, "role_type_id", "role_description");
@@ -210,6 +219,7 @@ namespace StudentFinanceSupport.Controllers
         /// <param name="theRoles">Roles_ID from roletypes as comma delimited</param>
         private void addRoles(Administrator theAdmin,String theRoles)
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             string[] AddRoles = theRoles.Split(new Char[] { ',' });
             //incase we are updating lets remove previous roles
             //lets check previous roles and remove them
@@ -243,14 +253,7 @@ namespace StudentFinanceSupport.Controllers
             }
         }
   
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-       }
+      
 
        
         [HttpGet]
@@ -301,7 +304,7 @@ namespace StudentFinanceSupport.Controllers
         /// <returns>returns true or false</returns>
         private bool IsValid(ref AdministratorLogin administrator)
         {
-           
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             bool IsValid = false;
             string admin_email = administrator.Email;
             //grab the user

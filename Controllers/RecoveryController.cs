@@ -37,7 +37,8 @@ namespace StudentFinanceSupport.Controllers
         [HttpPost]
         public ActionResult Code(Recovery theRecovery)
         {
-            var theAdmin = (from a in db.Administrators 
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
+            var theAdmin = (from a in db.Administrators
                             join b in db.Recoveries on a.UserId equals b.UserId
                             where b.recovery_key == theRecovery.recovery_key
                             select a).SingleOrDefault();
@@ -133,6 +134,7 @@ namespace StudentFinanceSupport.Controllers
         }
         public JsonResult adminDetails(Recovery theRecovery)
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             Administrator AdminAccount;
             List<string> skipKeys = new List<string>();
             skipKeys.Add("Administrator.FirstName");
@@ -148,8 +150,10 @@ namespace StudentFinanceSupport.Controllers
                     ModelState.AddModelError("Administrator.Email", "Account does not exist.");
                 else
                     theRecovery.Administrator = AdminAccount;
+ 
             }
-                
+            theRecovery.UserId = theRecovery.Administrator.UserId;
+
             //check the rest of the model state
             if (!ModelState.IsValid)
             {
@@ -160,45 +164,120 @@ namespace StudentFinanceSupport.Controllers
 
                 return Json(errorList, JsonRequestBehavior.AllowGet);
             }
-            //theRecovery.recovery_option
-            string mobile = theRecovery.Administrator.mobile.Remove(theRecovery.Administrator.mobile.Length - 4, 4) + "****";
-            
-            /*
-            RecoveryComms theComms = new RecoveryComms();
-            if (theComms.sendSMS(ref theRecovery) == true)
+
+            Session["AdministratorRecovery"] = theRecovery;
+
+            if (theRecovery.recovery_option == "mobile")
             {
+              
+                string mobile = theRecovery.Administrator.mobile.Remove(theRecovery.Administrator.mobile.Length - 4, 4) + "****";
+                return Json(new
+                {
+                    success = "true",
+                    mobile_guess = mobile
+                }, JsonRequestBehavior.AllowGet);
 
             }
-            else
-            {
-                
-            }
-            */
-            RecoveryComms theComms = new RecoveryComms();
-            if (theComms.sendSMS(ref theRecovery) == true)
-            {
-                db.Recoveries.Add(theRecovery);
-                db.SaveChanges();
-            }
+
+
+
            
-            
-            var theResponse = Json(new     
-                {     
-                    success = "true",     
-                    id = "s",
-                    mobile_guess = mobile     
-                });
-          
 
-          
-
-            //we end here with a correct recovery
-           
-            //no errors lets check 
-            //str = str.Remove(str.Length - 3);
-            //string response = theRecovery.Administrator.Email;
-
-            return Json(theResponse.Data, JsonRequestBehavior.AllowGet);
+            return Json("", JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult sendRecoveryCode(Recovery theRecovery)
+        {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
+
+                //session has been removed
+                if (Session["AdministratorRecovery"] == null)
+                {
+                    return Json(new
+                    {
+                        success = "false",
+                        message = "Invalid State"
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
+
+                Recovery sessRecovery = (Recovery)Session["AdministratorRecovery"];
+                theRecovery.Administrator.FirstName = sessRecovery.Administrator.FirstName;
+                theRecovery.Administrator.Password = sessRecovery.Administrator.Password;
+                theRecovery.UserId = sessRecovery.Administrator.UserId;
+                //ModelState.Clear();
+
+                if (theRecovery.recovery_option == "email")
+                {
+                    RecoveryComms theComms = new RecoveryComms();
+                    if (theComms.sendEmail(ref theRecovery) == true)
+                    {
+
+
+                       
+
+                        return Json(new
+                        {
+                            success = "true",
+                            message = "Sent email request"
+
+                        }, JsonRequestBehavior.AllowGet);
+                       
+                    }
+                }
+
+                
+                //requesting for recovery code
+                if (theRecovery.recovery_option == "mobile")
+                {
+               
+                    string attemptGuess = theRecovery.Administrator.mobile;
+                    //int.TryParse(theRecovery.Administrator.mobile,out guessNumber);
+
+
+
+                    string correctAttempt = new String(sessRecovery.Administrator.mobile.
+                                Where(x => Char.IsDigit(x)).Reverse().Take(4).Reverse().ToArray());
+
+                    //success here if correct number
+                    if (theRecovery.Administrator.mobile == correctAttempt)
+                    {
+                        //passover the correct mobile details
+                        //theRecovery.Administrator.mobile = sessRecovery.Administrator.mobile;
+                        //theRecovery.UserId = sessRecovery.Administrator.UserId;
+
+                        RecoveryComms theComms = new RecoveryComms();
+                        if (theComms.sendSMS(ref sessRecovery) == true)
+                        {
+                            db.Recoveries.Add(sessRecovery);
+                            db.SaveChanges();
+                            return Json(new
+                            {
+                                success = "true",
+                                message = "sent SMS to mobile"
+
+                            }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        return Json(new
+                        {
+                            success = "false",
+                            message = "Failed incorrect last digits"
+
+                        }, JsonRequestBehavior.AllowGet);
+                    }
+            }
+           
+                    
+            
+           
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+
+       
+
     }
 }
