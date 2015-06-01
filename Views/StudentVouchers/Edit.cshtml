@@ -10,7 +10,8 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-
+    @Html.HiddenFor(model => model.id_student_vouchers)
+    
     <div id="add-student-form" class="form-horizontal">
         <h4>StudentVoucher</h4>
         <hr />
@@ -53,9 +54,11 @@
             @Html.LabelFor(model => model.GrantType, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
 
-                @Html.DropDownList("GrantType", null, Helpers.SelectOneSpacer, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.GrantType, "", new { @class = "text-danger" })
-            </div>
+               @Html.DropDownList("GrantType", Helpers.GrantTypes(), Helpers.SelectOneSpacer, htmlAttributes: new { @class = "form-control" })
+                    
+                      
+                  @Html.ValidationMessageFor(model => model.GrantType, "", new { @class = "text-danger" })
+</div>
         </div>
 
         <div id="GrantDescription_Holder" style="display:none" class="form-group amount_holders">

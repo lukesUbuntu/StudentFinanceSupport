@@ -13,11 +13,12 @@ namespace StudentFinanceSupport.Controllers
 {
     public class StudentVouchersController : BaseController
     {
-        private StudentRegistrationsModel db = new StudentRegistrationsModel();
+        
 
         // GET: StudentVouchers
         public ActionResult Index()
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             var studentVouchers = db.StudentVouchers.Include(s => s.StudentRegistration);
             return View(studentVouchers.ToList());
         }
@@ -25,6 +26,7 @@ namespace StudentFinanceSupport.Controllers
         // GET: StudentVouchers/Details/5
         public ActionResult Details(string id)
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -53,6 +55,7 @@ namespace StudentFinanceSupport.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Add([Bind(Include = "student_ID,GrantType,GrantDescription,GrantValue,DateOfIssue,KuhaFunds")] StudentVoucher studentVoucher)
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             //lets make sure student exists
             if (this.studentExists(studentVoucher.student_ID) == false)
             {
@@ -87,6 +90,7 @@ namespace StudentFinanceSupport.Controllers
         }
         public JsonResult studentSearch(string query)
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
 
             var result_id = db.StudentRegistrations.Where(x => x.Student_ID.Contains(query.ToString())).Select(x => new
             {
@@ -113,17 +117,23 @@ namespace StudentFinanceSupport.Controllers
         // GET: StudentVouchers/Edit/5
         public ActionResult Edit(string id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            StudentVoucher studentVoucher = db.StudentVouchers.Find(id);
-            if (studentVoucher == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.student_ID = new SelectList(db.StudentRegistrations, "Student_ID", "FirstName", studentVoucher.student_ID);
-            return View(studentVoucher);
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
+           
+            
+            int id_student_vouchers;
+            int.TryParse(id, out id_student_vouchers);
+            //var theStudent = (from student in db.StudentVouchers where student.id_student_vouchers == id_student_vouchers select student);
+            StudentVoucher theStudent = db.StudentVouchers.Find(id_student_vouchers);
+            
+            if (theStudent == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            ViewBag.student_ID = theStudent.student_ID;
+            //ViewBag.GrantType = Helpers.Helpers.GrantTypes();
+            //ViewBag.GrantType = new SelectList(Helpers.Helpers.GrantTypes(), "Value", "Text", theStudent.GrantType);
+            ViewBag.GrantType = theStudent.GrantType;
+                //new SelectList(db.StudentRegistrations, "Student_ID", "FirstName", studentVoucher.student_ID);
+            return View(theStudent);
         }
 
         // POST: StudentVouchers/Edit/5
@@ -133,9 +143,16 @@ namespace StudentFinanceSupport.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "student_ID,GrantType,GrantDescription,GrantValue,DateOfIssue,id_student_vouchers,KuhaFunds")] StudentVoucher studentVoucher)
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             if (ModelState.IsValid)
             {
-                db.Entry(studentVoucher).State = EntityState.Modified;
+                StudentVoucher theVoucher = db.StudentVouchers.Find(studentVoucher.id_student_vouchers);
+                theVoucher.KuhaFunds = studentVoucher.KuhaFunds;
+                theVoucher.GrantType = studentVoucher.GrantType;
+                theVoucher.GrantValue = studentVoucher.GrantValue;
+                theVoucher.GrantDescription = studentVoucher.GrantDescription;
+
+               // db.StudentVouchers.Add(theVoucher);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -146,6 +163,7 @@ namespace StudentFinanceSupport.Controllers
         // GET: StudentVouchers/Delete/5
         public ActionResult Delete(string id)
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -163,19 +181,13 @@ namespace StudentFinanceSupport.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             StudentVoucher studentVoucher = db.StudentVouchers.Find(id);
             db.StudentVouchers.Remove(studentVoucher);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+       
     }
 }
