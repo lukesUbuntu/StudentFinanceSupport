@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Main_Layout_.cshtml";
 }
@@ -15,21 +16,13 @@
         position: relative;
     }
 </style>
-<div id="search_report">
 
-    <div id="stat_view_by">
-        <select class="form-control">
-            <option>Day</option>
-            <option>Week</option>
-            <option>Month</option>
-            <option>Year</option>
-        </select>
-    </div>
-</div>
+
+
+
+@Html.Partial("~/Views/Reports/ReportFilter.cshtml");
 <div class="panel panel-default">
-    <div class="panel-heading">
-        <h2>Reports</h2>
-    </div>
+    
     <!-- /.panel-heading -->
     <div class="panel-body">
         <!-- Nav tabs -->
@@ -151,7 +144,7 @@
             </div>
             <div class="tab-pane fade" id="student_report">
                 <h4>Record Views</h4>
-                @Html.Partial("~/Views/Reports/ViewReport.cshtml")
+                @Html.Partial("~/Views/Reports/ViewReport.cshtml");
             </div>
             
             
@@ -241,7 +234,7 @@
                 //colors = ['#FFE600'];
             }
 
-            console.log("data_display", data_display)
+            //console.log("data_display", data_display)
 
 
 
@@ -334,4 +327,6 @@
         $("#pie_grant_chart").click(pieChartValue);
         $("#pie_faculty_chart").click(pieChartValue);
         getMainOveriew();
+
+        
     </script>

@@ -1,0 +1,136 @@
+﻿@using StudentFinanceSupport.Helpers;
+@Styles.Render("~/Content/Wizard")
+@Scripts.Render("~/bundles/wizardSteps")
+<div id="search_report_form" class="">
+    <div class="panel panel-yellow">
+        <div class="panel-heading">
+            Recover Account
+        </div>
+        <div class="panel-body">
+            <section id="view_by" class="">
+                <div class="form-group">
+                    <div class="col-md-8">
+                        <div id="select_date">
+
+                            Date
+                            @Html.TextBox("start_date", @DateTime.Now.ToShortDateString(), htmlAttributes: new { @class = "datepicker" })
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-8">
+                        <div id="select_date_type">
+                            Report Type
+                            @Html.DropDownList(
+                                   "date_type",
+                                    Helpers.DayWeekMonthYearSelect(), Helpers.SelectOneSpacer,
+                                new { @class = "form-control", data_placeholder = "Choose a View..." })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+
+
+                    <div class="col-md-8">
+                        <div class="form-group">
+                        
+                            <div class="col-md-10">
+                                <div class="col-md-6">
+                                    Gender
+                                    @Html.DropDownList(
+                                                        "gender",
+                                                         Helpers.DropDownGender(), Helpers.SelectOneSpacer,
+                                new { @class = "form-control", data_placeholder = "Choose a Gender..." })
+                                   
+                                </div>
+
+
+                               
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                
+            </section>
+
+
+            <div class="form-group">
+
+                <div class="col-md-offset-2 col-md-8 " style="padding-top:15px;">
+                    <button id="search_report_btn" class="btn btn-success">Generate Report</button>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <!-- /.col-lg-4 -->
+</div>
+<script>
+    //generate report
+
+    $(document).ready(function () {     //Specify our form area as this is partial view don't want any document clashes
+
+    var $search_report_form = $("#search_report_form");
+
+    $("#search_report_btn", $search_report_form).click(function () {
+        var report_details = $(":input", $search_report_form).serialize();
+        console.log("report_details", report_details)
+       
+        console.log("report_details", report_details)
+        $.ajax({
+            url: "/Reports/getFilterReports",
+            type: "POST",
+            dataType: "json",
+            data: report_details,
+            //data: recovery,
+            success: function (data) {
+                console.log("test", test)
+            }
+        });
+    })
+
+    var calander_selections = {
+        day: {
+            format: "dd/mm/yyyy",
+            autoclose: true,
+        },
+        week: {
+            format: "dd/mm/yyyy",
+            minViewMode: "weeks",
+            viewMode: "weeks",
+            autoclose: true,
+        },
+        month: {
+            format: "mm/yyyy",
+            minViewMode: "months",
+            viewMode: "months",
+            autoclose: true,
+        },
+        year: {
+            format: " yyyy",
+            viewMode: "years",
+            minViewMode: "years",
+            autoclose: true,
+        }
+    }
+   
+     //date picker
+    $('.datepicker').datepicker(calander_selections.day);
+    
+    //report selection has changed
+    $("#date_type").change(function () {
+        var selection = $(this).val()
+        console.log("selection", selection)
+        console.log("bin", calander_selections[selection]);
+        var options = calander_selections[selection];
+        $('.datepicker').datepicker('remove');
+        $('.datepicker').datepicker(options);
+       
+    })
+    })
+
+</script>

@@ -105,7 +105,20 @@ public static class Helpers
         return RecoveryOptions;
     }
 
+    public static List<SelectListItem> DayWeekMonthYearSelect()
+    {
+        List<SelectListItem> DayWeekMonthYearSelect = new List<SelectListItem>()
+                    {
+                         new SelectListItem { Text = "Day",    Value = "day" }, 
+                         new SelectListItem { Text = "Week",    Value = "week" },
+                         new SelectListItem { Text = "Month",    Value = "month" },
+                         new SelectListItem { Text = "Year",    Value = "year" }
+                    };
 
+        return DayWeekMonthYearSelect;
+    }
+
+        
     /// <summary>
     /// Outputs to the system local debug window help for checking strings when debug is not an option
     /// </summary>
@@ -129,6 +142,7 @@ public static class Helpers
     
     
 }
+
 
 
 }

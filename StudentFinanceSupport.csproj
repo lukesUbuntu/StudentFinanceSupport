@@ -170,6 +170,7 @@
     <Compile Include="Models\Courses.cs" />
     <Compile Include="Models\Faculty.cs" />
     <Compile Include="Models\functions\RecoveryComms.cs" />
+    <Compile Include="Models\functions\Reports.cs" />
     <Compile Include="Models\Recovery.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\RoleType.cs" />
@@ -761,6 +762,7 @@
     <Content Include="Views\Courses\Index.cshtml" />
     <Content Include="Views\Reports\ViewReport.cshtml" />
     <Content Include="Views\StudentVouchers\Edit.cshtml" />
+    <Content Include="Views\Reports\ReportFilter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

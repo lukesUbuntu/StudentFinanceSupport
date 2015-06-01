@@ -151,6 +151,7 @@ namespace StudentFinanceSupport.Controllers
                 theVoucher.GrantType = studentVoucher.GrantType;
                 theVoucher.GrantValue = studentVoucher.GrantValue;
                 theVoucher.GrantDescription = studentVoucher.GrantDescription;
+                theVoucher.DateOfIssue = studentVoucher.DateOfIssue;
 
                // db.StudentVouchers.Add(theVoucher);
                 db.SaveChanges();

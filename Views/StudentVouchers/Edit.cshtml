@@ -28,7 +28,7 @@
 
                         <span class="input-group-btn">
                             <i class="fa fa-search"></i>
-                            @Html.TextBox("student_ID", (string)ViewBag.student_ID, new { @class = "form-control suggest-prompt", @placeholder = "Search Student ID Or Name...", @autofocus = "", @autocomplete = "off" })
+                            @Html.TextBox("student_ID", (string)ViewBag.student_ID, new { @class = "form-control suggest-prompt", @disabled = "", @autofocus = "", @autocomplete = "off" })
                         </span>
 
                         <ul></ul>
