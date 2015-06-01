@@ -1,12 +1,22 @@
 ﻿@using StudentFinanceSupport.Helpers;
 @Styles.Render("~/Content/Wizard")
 @Scripts.Render("~/bundles/wizardSteps")
-<div id="search_report_form" class="">
-    <div class="panel panel-yellow">
+<style>
+    .wizard > .content > .body {
+        height: 300px;
+    }
+    .tabcontrol > .content {
+        height: 12em;
+        padding-top: 5px; 
+    }
+</style>
+<div id="search_report_form" class="" style="height:350px">
+    <div class="panel panel-primary">
         <div class="panel-heading">
-            Recover Account
+            Report Filters
         </div>
-        <div class="panel-body">
+        <div id="filter_wizard" class="panel-body">
+            <h3>Report Dates</h3>
             <section id="view_by" class="">
                 <div class="form-group">
                     <div class="col-md-8">
@@ -29,108 +39,194 @@
                         </div>
                     </div>
                 </div>
+       
+                </section>
+                
+            <h3>Campus Filters</h3>
+                <section>
                 <div class="form-group">
 
 
                     <div class="col-md-8">
                         <div class="form-group">
-                        
+
                             <div class="col-md-10">
                                 <div class="col-md-6">
-                                    Gender
+                                    Campus
                                     @Html.DropDownList(
-                                                        "gender",
-                                                         Helpers.DropDownGender(), Helpers.SelectOneSpacer,
-                                new { @class = "form-control", data_placeholder = "Choose a Gender..." })
-                                   
+                                                        "Campus",
+                                                   (IEnumerable<SelectListItem>)ViewBag.Campus, Helpers.SelectOneSpacer,
+                                new { @class = "form-control", data_placeholder = "Choose a Grant..." })
+
                                 </div>
 
 
-                               
+
                             </div>
                         </div>
                     </div>
 
                 </div>
-                
+
+                <div class="form-group">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <div class="col-md-6">
+                                    Faculity
+                                    @Html.DropDownList(
+                                    "Faculity",
+                                 (IEnumerable<SelectListItem>)ViewBag.Faculity, Helpers.SelectOneSpacer,
+                                new { @class = "form-control", data_placeholder = "Select a Faculity..." })
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
+            <h3>Grant Types Filters</h3>
+            <section>
+                <div class="form-group">
 
-            <div class="form-group">
 
-                <div class="col-md-offset-2 col-md-8 " style="padding-top:15px;">
-                    <button id="search_report_btn" class="btn btn-success">Generate Report</button>
+                    <div class="col-md-8">
+                        <div class="form-group">
+
+                            <div class="col-md-10">
+                                <div class="col-md-6">
+                                    GrantType
+                                    @Html.DropDownList(
+                                                        "GrantType",
+                                                         Helpers.GrantTypes(), Helpers.SelectOneSpacer,
+                                new { @class = "form-control", data_placeholder = "Choose a Grant..." })
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
+            </section>
+            <h3>Student Filters</h3>
+            <section>
+                <div class="form-group">
+
+
+                    <div class="col-md-8">
+                        <div class="form-group">
+
+                            <div class="col-md-10">
+                                <div class="col-md-6">
+                                    Gender
+                                    @Html.DropDownList(
+                                                        "Faculty",
+                                                         Helpers.DropDownGender(), Helpers.SelectOneSpacer,
+                                new { @class = "form-control", data_placeholder = "Choose a Gender..." })
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+            
+        </div>
+        <div class="form-group pull-right">
+
+            <div class="col-md-offset-2 col-md-8 " style="padding-top:15px;">
+                <button id="search_report_btn" class="btn btn-success">Generate Report</button>
+
             </div>
         </div>
-
-
     </div>
     <!-- /.col-lg-4 -->
+    
 </div>
+
 <script>
     //generate report
 
     $(document).ready(function () {     //Specify our form area as this is partial view don't want any document clashes
 
-    var $search_report_form = $("#search_report_form");
+        var $search_report_form = $("#filter_wizard");
 
-    $("#search_report_btn", $search_report_form).click(function () {
-        var report_details = $(":input", $search_report_form).serialize();
-        console.log("report_details", report_details)
-       
-        console.log("report_details", report_details)
-        $.ajax({
-            url: "/Reports/getFilterReports",
-            type: "POST",
-            dataType: "json",
-            data: report_details,
-            //data: recovery,
-            success: function (data) {
-                console.log("test", test)
+        $("#search_report_btn").click(function () {
+            var report_details = $(":input", $search_report_form).serialize();
+            console.log("report_details", report_details)
+
+            console.log("report_details", report_details)
+            $.ajax({
+                url: "/Reports/getFilterReports",
+                type: "POST",
+                dataType: "json",
+                data: report_details,
+                //data: recovery,
+                success: function (data) {
+                   
+                }
+            });
+        })
+
+        var calander_selections = {
+            day: {
+                format: "dd/mm/yyyy",
+                autoclose: true,
+            },
+            week: {
+                format: "dd/mm/yyyy",
+                minViewMode: "weeks",
+                viewMode: "weeks",
+                autoclose: true,
+            },
+            month: {
+                format: "mm/yyyy",
+                minViewMode: "months",
+                viewMode: "months",
+                autoclose: true,
+            },
+            year: {
+                format: " yyyy",
+                viewMode: "years",
+                minViewMode: "years",
+                autoclose: true,
             }
-        });
-    })
-
-    var calander_selections = {
-        day: {
-            format: "dd/mm/yyyy",
-            autoclose: true,
-        },
-        week: {
-            format: "dd/mm/yyyy",
-            minViewMode: "weeks",
-            viewMode: "weeks",
-            autoclose: true,
-        },
-        month: {
-            format: "mm/yyyy",
-            minViewMode: "months",
-            viewMode: "months",
-            autoclose: true,
-        },
-        year: {
-            format: " yyyy",
-            viewMode: "years",
-            minViewMode: "years",
-            autoclose: true,
         }
-    }
-   
-     //date picker
-    $('.datepicker').datepicker(calander_selections.day);
-    
-    //report selection has changed
-    $("#date_type").change(function () {
-        var selection = $(this).val()
-        console.log("selection", selection)
-        console.log("bin", calander_selections[selection]);
-        var options = calander_selections[selection];
-        $('.datepicker').datepicker('remove');
-        $('.datepicker').datepicker(options);
-       
-    })
+
+  
+
+
+        $("#filter_wizard").steps({
+            headerTag: "h3",
+            bodyTag: "section",
+            transitionEffect: "slideLeft",
+            enableFinishButton: false,
+            enablePagination: false,
+            enableAllSteps: true,
+            titleTemplate: "#title#",
+            cssClass: "tabcontrol"
+
+        });
+
+        //date picker
+        $('.datepicker').datepicker(calander_selections.day);
+
+        //report selection has changed
+        $("#date_type").change(function () {
+            var selection = $(this).val()
+            console.log("selection", selection)
+            console.log("bin", calander_selections[selection]);
+            var options = calander_selections[selection];
+            $('.datepicker').datepicker('remove');
+            $('.datepicker').datepicker(options);
+
+        })
+      
     })
 
 </script>

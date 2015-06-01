@@ -14,6 +14,10 @@ namespace StudentFinanceSupport.Models.functions
 
         public string start_date { get; set; }
 
+        public int? Faculity { get; set; }
+
+        public int? Campus { get; set; }
+        public string GrantType { get; set; }
         public DateTime getDate()
         {
             string theFormat = "dd/MM/yyyy";
@@ -23,7 +27,7 @@ namespace StudentFinanceSupport.Models.functions
                     theFormat = "MM/yyyy";
                     break;
                 case "year":
-                    theFormat = "yyyy";
+                    theFormat = " yyyy";
                     break;
             }
             DateTime theDate;

@@ -16,6 +16,8 @@ namespace StudentFinanceSupport.Controllers
         {
             StudentRegistrationsModel db = new StudentRegistrationsModel();
 
+            ViewBag.Faculity = new MultiSelectList(db.Faculties, "id_faculty", "faculty_name");
+            ViewBag.Campus = new MultiSelectList(db.Campus, "id_campus", "campus_name");
             return View(db.StudentVouchers);
         }
         // GET: Reports
@@ -35,7 +37,8 @@ namespace StudentFinanceSupport.Controllers
                  GrantValue = g.Sum(x => x.GrantValue),
                  T2 = g.Select(x => x.GrantType),
              };
-            
+
+           
             return View(db.StudentVouchers.Take(10));
         }
         public ActionResult ReportFilter()
@@ -54,7 +57,10 @@ namespace StudentFinanceSupport.Controllers
                 GrantValue = g.Sum(x => x.GrantValue),
                 T2 = g.Select(x => x.GrantType),
             };
-
+            ViewBag.Faculity = new MultiSelectList(db.Faculties, "id_faculty", "faculty_name");
+            ViewBag.Campus = new MultiSelectList(db.Campus, "id_campus", "campus_name");
+           
+            
             return View(db.StudentVouchers.Take(10));
         }
 
@@ -88,6 +94,9 @@ namespace StudentFinanceSupport.Controllers
                                      LastName = grants.StudentRegistration.LastName,
                                      Gender = grants.StudentRegistration.Gender,
                                      faculty_name = grants.StudentRegistration.Faculty.faculty_name,
+                                     faculty_id = grants.StudentRegistration.Faculty.id_faculty,
+                                     campus_id = grants.StudentRegistration.Campus.id_campus,
+                                     campus_name = grants.StudentRegistration.Campus.campus_name
                                  };
             //apply our filters
             if (theReport.gender != null)
@@ -124,9 +133,21 @@ namespace StudentFinanceSupport.Controllers
                 }
                    
             }
-               
-            
 
+            if (theReport.Faculity != null)
+            {
+                student_grants = from a in student_grants where a.faculty_id == theReport.Faculity select a;
+            }
+
+            if (theReport.GrantType != null)
+            {
+                student_grants = from a in student_grants where a.GrantyType == theReport.GrantType select a;
+            }
+
+            if (theReport.Campus != null)
+            {
+                student_grants = from a in student_grants where a.campus_id == theReport.Campus select a;
+            }
             //finally grab the count of actually students
             var student_count = from a in student_grants group a by a.Student_ID into c select c; 
 
