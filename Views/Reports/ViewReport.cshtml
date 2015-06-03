@@ -6,9 +6,11 @@
         <tr>
             <th>@Html.DisplayNameFor(model => model.DateOfIssue)</th>
             <th>@Html.DisplayNameFor(model => model.StudentRegistration.FirstName)</th>
-            <th>@Html.DisplayNameFor(model => model.StudentRegistration.LastName)</th>
+            
             <th>@Html.DisplayNameFor(model => model.GrantType)</th>
-            <th>@Html.DisplayNameFor(model => model.StudentRegistration.Faculty.faculty_name)</th>
+            <th>@Html.DisplayNameFor(model => model.StudentRegistration.Campus.campus_name)</th>
+            <th>@Html.DisplayNameFor(model => model.GrantValue)</th>
+            <th>@Html.DisplayNameFor(model => model.KuhaFunds)</th>
             <th></th>
         </tr>
     </thead>
@@ -19,28 +21,23 @@
         {
             <tr class="odd gradeX">
                 <td>@Html.DisplayFor(modelItem => student.DateOfIssue)</td>
-                <td>@Html.DisplayFor(modelItem => student.StudentRegistration.FirstName)</td>
-                <td>@Html.DisplayFor(modelItem => student.StudentRegistration.LastName)</td>
+                <td>
+                @Html.DisplayFor(modelItem => student.StudentRegistration.FirstName)
+                @Html.DisplayFor(modelItem => student.StudentRegistration.LastName)
+                </td>
+               
                 <td>@Html.DisplayFor(modelItem => student.GrantType)</td>
-                <td>@Html.DisplayFor(modelItem => student.StudentRegistration.Faculty.faculty_name)</td>
+                <td>@Html.DisplayFor(modelItem => student.StudentRegistration.Campus.campus_name)</td>
+                <td>@Html.DisplayFor(modelItem => student.GrantValue)</td>
+                <td>@Html.DisplayFor(modelItem => student.KuhaFunds)</td>
                 <td class="center">
-                    <div class="btn-group">
+                    
                         @Html.ActionLink("Edit Grant", "Edit", "StudentVouchers",
                      new { id = student.id_student_vouchers },
                             htmlAttributes: new { @class = "btn btn-default " }
                           )
 
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <span class="caret"></span>
-                            <span class="sr-only"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>@Html.ActionLink("View Details", "Edit", new { id = student.id_student_vouchers })</li>
-                            <li><a href="#">Another action</a></li>
-                            <li class="divider"></li>
-                            <li class="">@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })</li>
-                        </ul>
-                    </div>
+
 
                 </td>
 

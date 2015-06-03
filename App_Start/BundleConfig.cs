@@ -48,9 +48,13 @@ namespace StudentFinanceSupport
             //bundles/morris (js)
             bundles.Add(new ScriptBundle("~/bundles/morris").Include(
                       "~/Content/Plugins/raphael/raphael.js",
-                      "~/Content/Plugins/morrisjs/morris.js"
-                     
-                      
+                      "~/Content/Plugins/morrisjs/morris.js",
+                      "~/Content/Plugins/plot/js/jquery.flot.js",
+                      "~/Content/Plugins/plot/js/excanvas.min.js",
+                       "~/Content/Plugins/plot/js/jquery.flot.pie.js",
+                      "~/Content/Plugins/plot/js/jquery.flot.resize.js",
+                      "~/Content/Plugins/plot/js/jquery.flot.time.js",
+                      "~/Content/Plugins/plot/js/jquery.flot.tooltip.min.js"
                       ));
 
 

@@ -66,14 +66,25 @@ public static class Helpers
     {
         List<SelectListItem> MaritalStatusList = new List<SelectListItem>()
                     {
-                         new SelectListItem { Text = "NZ Citizen",    Value = "NZ_Citizen" }, 
-                         new SelectListItem { Text = "NZ Residency",  Value = "NZ_Residency" },
-                         new SelectListItem { Text = "International Student",  Value = "International_Student" }
+                         new SelectListItem { Text = "Single",    Value = "single" }, 
+                         new SelectListItem { Text = "Married",  Value = "married" },
+                         new SelectListItem { Text = "Divorce",  Value = "divorce" }
                     };
 
         return MaritalStatusList;
     }
 
+    public static List<SelectListItem> Ethnicity()
+    {
+        List<SelectListItem> Ethnicity = new List<SelectListItem>()
+                    {
+                         new SelectListItem { Text = "NZ Citizen",    Value = "NZ_Citizen" }, 
+                         new SelectListItem { Text = "NZ Residency",  Value = "NZ_Residency" },
+                         new SelectListItem { Text = "International Student",  Value = "International_Student" }
+                    };
+
+        return Ethnicity;
+    }
     /// <summary>
     ///  Generate dropdown for GrantTypes
     ///  @todo make this into a dynamic and editable list

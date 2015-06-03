@@ -10,11 +10,15 @@ namespace StudentFinanceSupport.Controllers
 {
     public class RecoveryController : BaseController
     {
+        public RecoveryController()
+        {
+            bypassControllerCheck("Recovery");
+        }
         // GET: Recovery
         public ActionResult Index()
         {
+
             
-           
             //preset phone number digits
             ViewBag.phone_number = String.Empty;
 
@@ -57,71 +61,14 @@ namespace StudentFinanceSupport.Controllers
             return RedirectToAction("ChangePassword", "Administrators");
             //return View();
         }
-        // GET: Recovery/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
 
-        // POST: Recovery/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: Recovery/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
 
-        // POST: Recovery/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: Recovery/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
-        // POST: Recovery/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+  
 
         private void clearErrorStates(List<string> theKeys)
         {

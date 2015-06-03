@@ -186,6 +186,29 @@
     <Content Include="App_Data\studentFinance_log.ldf">
       <DependentUpon>studentFinance.mdf</DependentUpon>
     </Content>
+    <Content Include="Content\Plugins\plot\js\.gitignore" />
+    <Content Include="Content\Plugins\plot\js\excanvas.js" />
+    <Content Include="Content\Plugins\plot\js\excanvas.min.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.colorhelpers.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.canvas.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.categories.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.crosshair.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.errorbars.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.fillbetween.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.image.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.navigate.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.pie.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.resize.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.selection.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.stack.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.symbol.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.threshold.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.time.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.tooltip.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.tooltip.min.js" />
+    <Content Include="Content\Plugins\plot\js\jquery.flot.tooltip.source.js" />
     <Content Include="Content\Plugins\datatables\license.txt" />
     <Content Include="Content\Plugins\datatables\media\css\jquery.dataTables.css" />
     <Content Include="Content\Plugins\datatables\media\css\jquery.dataTables.min.css" />
@@ -399,6 +422,7 @@
     <Content Include="Content\Plugins\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\Plugins\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\Plugins\password\pwstrength.js" />
+    <Content Include="Content\Plugins\plot\js\LICENSE.txt" />
     <Content Include="Content\Plugins\raphael\dev\amdDev.js" />
     <Content Include="Content\Plugins\raphael\dev\index.js" />
     <Content Include="Content\Plugins\raphael\dev\require.js" />
@@ -699,6 +723,19 @@
     <Content Include="Content\Plugins\datatables\Contributing.md" />
     <Content Include="Content\Plugins\datatables\media\images\Sorting icons.psd" />
     <Content Include="Content\Plugins\datatables\Readme.md" />
+    <Content Include="Content\Plugins\plot\js\.bower.json" />
+    <Content Include="Content\Plugins\plot\js\bower.json" />
+    <Content Include="Content\Plugins\plot\js\.travis.yml" />
+    <Content Include="Content\Plugins\plot\js\API.md" />
+    <Content Include="Content\Plugins\plot\js\component.json" />
+    <Content Include="Content\Plugins\plot\js\CONTRIBUTING.md" />
+    <Content Include="Content\Plugins\plot\js\FAQ.md" />
+    <Content Include="Content\Plugins\plot\js\flot.jquery.json" />
+    <Content Include="Content\Plugins\plot\js\Makefile" />
+    <Content Include="Content\Plugins\plot\js\NEWS.md" />
+    <Content Include="Content\Plugins\plot\js\package.json" />
+    <Content Include="Content\Plugins\plot\js\PLUGINS.md" />
+    <Content Include="Content\Plugins\plot\js\README.md" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\flot-data.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

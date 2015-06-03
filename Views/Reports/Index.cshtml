@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Main_Layout_.cshtml";
 }
@@ -11,9 +10,12 @@
 
 
 <style>
-    #pie-report{
-        top: -50px; 
+    #pie-report {
+        top: -50px;
         position: relative;
+    }
+    .list-group-item {
+        height : 50px;
     }
 </style>
 
@@ -22,7 +24,7 @@
 
 @Html.Partial("~/Views/Reports/ReportFilter.cshtml");
 <div class="panel panel-default">
-    
+
     <!-- /.panel-heading -->
     <div class="panel-body">
         <!-- Nav tabs -->
@@ -33,113 +35,125 @@
             <li>
                 <a href="#student_report" data-toggle="tab">Student Report</a>
             </li>
-            
+
         </ul>
 
         <!-- Tab panes -->
         <div class="tab-content">
             <div class="tab-pane fade in active" id="graph_stats">
-               
+
                 <!--<div id="graph_view">  <h4>Graph View</h4>-->
-                    <div class="">
+                <div class="">
 
-                        <div class="col-lg-3">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th style="width:150px">Grant Type</th>
-                                            <th style="width:50px">Color</th>
+                    <div class="col-lg-3">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="width:150px">Grant Type</th>
+                                        <th style="width:50px">Color</th>
 
 
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Hardship</td>
-                                            <td style="background-color:#FFE600"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Train Tickets</td>
-                                            <td style="background-color:#223EB2"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Food</td>
-                                            <td style="background-color:#FF8000"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Petrol</td>
-                                            <td style="background-color:#95D7BB"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.table-responsive -->
-                            <div class="btn-group" style="z-index: 100;">
-                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                    Other Graphs
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu pull-right" role="menu">
-                                    <li>
-                                        <a id="pie_faculty_chart" href="#">Faculty Chart</a>
-                                    </li>
-                                    <li>
-                                        <a id="pie_grant_chart" href="#">Grant Chart</a>
-                                    </li>
-
-                                    <li class="divider"></li>
-                                    <li>
-                                        <a id="" href="#">Reload</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div id="pie-report"></div>
-
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Hardship</td>
+                                        <td style="background-color:#FFE600"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Train Tickets</td>
+                                        <td style="background-color:#223EB2"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Food</td>
+                                        <td style="background-color:#FF8000"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Petrol</td>
+                                        <td style="background-color:#95D7BB"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <i class="fa fa-bar-chart-o fa-fw"></i> Graph Overview
-                                    <div class="pull-right">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                                Other Graphs
-                                                <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu pull-right" role="menu">
-                                                <li>
-                                                    <a id="bar_graph_switch" href="#">Bar Graph</a>
-                                                </li>
-                                                <li>
-                                                    <a id="area_graph_switch" href="#">Area Graph</a>
-                                                </li>
-
-                                                <li class="divider"></li>
-                                                <li>
-                                                    <a id="reload_graph_over" href="#">Reload</a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                        <!-- /.table-responsive -->
+                        <div class="other-stats" style="z-index: 100;">
+                            <div class="list-group">
+                                <div class="list-group-item">
+                                    <i class="fa fa-comment fa-fw"></i> Students With Grants
+                                    <div class="pull-right text-muted small">
+                                        <div id="student_count"></div>
                                     </div>
                                 </div>
-                                <!-- /.panel-heading -->
-                                <div class="panel-body">
-                                    <div id="main-report" class=""></div>
-                                </div>
 
-                                <!-- /.panel-body -->
+                                <div class="list-group-item">
+                                    <i class="fa fa-comment fa-fw"></i> Students With Advice
+                                    <div class="pull-right text-muted small">
+                                        <div id="advice_count"></div>
+                                    </div>
+                                </div>
+                                <div class="list-group-item">
+                                    <i class="fa fa-comment fa-fw"></i> Total Grant Cost
+                                    <div class="pull-right text-muted small">
+                                        <div>$<span id="total_cost"></span></div>
+                                    </div>
+                                </div>
+                                <div class="list-group-item">
+                                    <i class="fa fa-comment fa-fw"></i> Total Koha Cost
+                                    <div class="pull-right text-muted small">
+                                        <div>$<span id="total_koha"></span></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-
+                     
                     </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <i class="fa fa-bar-chart-o fa-fw"></i> Graph Overview
+                                <div class="pull-right">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                            Other Graphs
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu pull-right" role="menu">
+                                            <li>
+                                                <a id="bar_graph_switch" href="#">Bar Graph</a>
+                                            </li>
+                                            <li>
+                                                <a id="area_graph_switch" href="#">Area Graph</a>
+                                            </li>
+
+                                            <li class="divider"></li>
+                                            <li>
+                                                <a id="reload_graph_over" href="#">Reload</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div id="main-report" class=""></div>
+                            </div>
+
+                            <!-- /.panel-body -->
+                        </div>
+                    </div>
+
+
+                </div>
                 <!--</div>-->
 
-
+                <div id="pie_charts">
+                    <div id="grant_pie_report" class="pull-left" style="width: 300px; height:300px"></div>
+                    <div id="faculty_pie_report" class="pull-right" style="width: 300px; height:300px" "></div>
+                </div>
 
             </div>
             <div class="tab-pane fade" id="student_report">
@@ -147,186 +161,319 @@
                 @Html.Partial("~/Views/Reports/ViewReport.cshtml");
             </div>
             
-            
+          
         </div>
+        
     </div>
 </div>
 
+<script>
+    var graph_data = [];
+    var grant_pie_report = [];
+    var pie_chart_faculty = [];
+    var student_report_view = [];
 
-    <script>
-        var graph_data = [];
-        var pie_chart_value = [];
-        var pie_chart_faculty = [];
+    //for our pie graph reports
+    var pie_reports = [];
 
-        function getMainOveriew() {
-            $.ajax({
-                url: "/Reports/MainReport",
-                type: "GET",
-                dataType: "json",
-                success: function (data) {
+    function getMainOveriew() {
+        $.ajax({
+            url: "/Reports/getFilterReports",
+            type: "GET",
+            dataType: "json",
+            success: processDataReports
+        });
+    }
 
-                    console.log("data.pie_chart_value", data)
-                    if (data.success == true) {
-                        //check main report data
-                        if (typeof data.main_report != "undefined" && data.main_report != null)
-                            mainReport(data.main_report);
 
-                        if (typeof data.pie_chart_value != "undefined" && data.pie_chart_value != null) {
-                            pieChartValue(data.pie_chart_value);
-                            pie_chart_value = data.pie_chart_value;
-                        }
 
-                        if (typeof data.pie_chart_value != "undefined" && data.pie_chart_faculty != null) {
-                            pie_chart_faculty = data.pie_chart_faculty;
-                            //pieChartValue(data.pie_chart_faculty);
-                        }
+    function mainReport(data) {
+        //console.log("mainReport running", data)
+        var report_data = [];
+        var index = 0;
 
-                        if (typeof data.student_grants != "undefined" && data.student_grants != null) {
-                            console.log("student_grants", data.student_grants)
-                            //pieChartValue(data.pie_chart_faculty);
-                        }
+        $.map(data, function (reportData) {
+            //console.log("reportData", reportData.GrantType)
+            //fix the date conversion by just parsing the date time
+            var thedate = new Date(parseInt(reportData.DateOfIssue.substr(6)));
+            //2012-02-24
+            thedate = thedate.getFullYear() + "-" + (thedate.getMonth() + 1) + "-" + thedate.getDate();
 
-                    }
+            var data = {
+                'date': thedate,
+                'index': index++
+            }
+            //add the key as a type name to data object
+            data[reportData.GrantType] = reportData.GrantValue;
+            report_data.push(data)
+        })
+
+        //store graph data for switching from bar graph
+        graph_data = report_data;
+        areaGraphOverview();
+
+
+    }
+
+
+
+    function barGraphOverview() {
+        console.log("running barGraphOverview");
+        $("#main-report").empty();
+
+        if (graph_data.length < 1) {
+            $("#main-report").text("not enought data to show graph")
+            return;
+        }
+            
+
+        Morris.Bar({
+            element: 'main-report',
+            data: graph_data,
+            xkey: 'date',
+            xLabels: 'day',
+            parseTime: false,
+            smooth: false,
+            ykeys: ["Hardship", "TrainTickets", "Food", "PetrolVouchers"],
+            //['Hardship', 'Food', 'TrainTickets'],
+            labels: ["Hardship", "Train Tickets", "Food", "Petrol Vouchers"],
+            //['Hardship', 'Food Vouchers', 'Train Tickets'],
+            ymax: 'auto',
+            pointSize: 2,
+            hideHover: 'auto',
+            resize: true,
+            lineColors: [
+           '#FFE600',
+           '#223EB2',
+           '#FF8000',
+           '#95D7BB'
+            ],
+            pointFillColors: ['#00ff00']
+        });
+    }
+    function areaGraphOverview() {
+        //cammel case words regex
+        /*
+        var rex = /([A-Z])([A-Z])([a-z])|([a-z])([A-Z])/g;
+
+        var ykeys = [];
+        var labels = [];
+
+        for (key in key_store) {
+            ykeys.push(key)
+            var label = key.replace(rex, "$1$4 $2$3$5");
+            labels.push(label);
+
+        }
+        */
+        console.log("running areaGraphOverview");
+        //report_data
+        $("#main-report").empty();
+
+        if (graph_data.length < 1) {
+            $("#main-report").text("not enought data to show graph")
+            return;
+        }
+        Morris.Area({
+            element: 'main-report',
+            data: graph_data,
+            xkey: 'date',
+            xLabels: 'day',
+            parseTime: false,
+            smooth: false,
+            ykeys: ["Hardship", "TrainTickets", "Food", "PetrolVouchers"],
+            //['Hardship', 'Food', 'TrainTickets'],
+            labels: ["Hardship", "Train Tickets", "Food", "Petrol Vouchers"],
+            //['Hardship', 'Food Vouchers', 'Train Tickets'],
+            ymax: 'auto',
+            pointSize: 2,
+            hideHover: 'auto',
+            resize: true,
+            lineColors: [
+           '#FFE600',
+           '#223EB2',
+           '#FF8000',
+           '#95D7BB'
+            ],
+            pointFillColors: ['#00ff00']
+        });
+    }
+    //switch graphs binding click event
+
+    $("#bar_graph_switch").click(barGraphOverview);
+    $("#area_graph_switch").click(areaGraphOverview);
+    $("#reload_graph_over").click(getMainOveriew);
+    /*
+    $("#pie_grant_chart").click(pieChartValue);
+    $("#pie_faculty_chart").click(pieChartValue);*/
+    getMainOveriew();
+
+    var $search_report_form = $("#filter_wizard");
+    //code from our report filter
+    $("#search_report_btn").click(function () {
+        var report_details = $(":input", $search_report_form).serialize();
+
+        console.log("report_details", report_details)
+        $.ajax({
+            url: "/Reports/getFilterReports",
+            type: "POST",
+            dataType: "json",
+            data: report_details,
+            //data: recovery,
+            success: processDataReports
+        });
+    })
+
+    function updateReportTable() {
+
+        $('#voucher-report-table').DataTable({
+            responsive: true,
+            "data": student_report_view,
+            "bDestroy": true,
+
+            "aoColumnDefs": [
+            {
+                "aTargets": [6],
+                "mData": null,
+                "mRender": function (data, type, full) {
+                   
+                    return '<a class="btn btn-default " href="/StudentVouchers/Edit/' + full[6] + '">Edit Grant</a>';
+
+
                 }
-            });
+            }
+            ]
+        });
+
+    }
+    function returnDate(theDate) {
+        var parsedDate = new Date(parseInt(theDate.substr(6)));
+        var jsDate = new Date(parsedDate); //Date object
+        //var jsDate = new Date();
+        var dd = jsDate.getDate();
+        var mm = jsDate.getMonth() + 1; //January is 0!
+
+        var yyyy = jsDate.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+        return formated_date = dd + '/' + mm + '/' + yyyy;
+    }
+
+    function updatePieCharts() {
+
+        if (pie_reports["grant_pie_report"].length < 1)
+            $("#grant_pie_report").text("Not enought grants to show pie chart")
+        else
+            $("#grant_pie_report").empty();
+
+
+        if (pie_reports["faculty_pie_report"].length < 1)
+            $("#faculty_pie_report").text("Not enought faculty to show pie chart")
+        else
+            $("#faculty_pie_report").empty();
+
+        if (pie_reports["grant_pie_report"].length > 0)
+        $.plot($("#grant_pie_report"), pie_reports["grant_pie_report"], {
+            series: {
+                pie: {
+                    show: true
+                }
+            },
+            grid: {
+                hoverable: true
+            },
+            tooltip: true,
+            tooltipOpts: {
+                content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
+                shifts: {
+                    x: 20,
+                    y: 0
+                },
+                defaultTheme: false
+            }
+        });
+
+        if (pie_reports["faculty_pie_report"].length > 0)
+        $.plot($("#faculty_pie_report"), pie_reports["faculty_pie_report"], {
+            series: {
+                pie: {
+                    show: true
+                }
+            },
+            grid: {
+                hoverable: true
+            },
+            tooltip: true,
+            tooltipOpts: {
+                content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
+                shifts: {
+                    x: 20,
+                    y: 0
+                },
+                defaultTheme: false
+            }
+        });
+    }
+
+
+    function processDataReports(data) {
+        //clear student student_report_view
+        student_report_view = [];
+        if (typeof data.student_count == "number") {
+            $("#student_count").text(data.student_count)
         }
 
-
-
-        function mainReport(data) {
-            console.log("mainReport running", data)
-            var report_data = [];
-            var index = 0;
-
-            $.map(data, function (reportData) {
-                //console.log("reportData", reportData.GrantType)
-                //fix the date conversion by just parsing the date time
-                var thedate = new Date(parseInt(reportData.DateOfIssue.substr(6)));
-                //2012-02-24
-                thedate = thedate.getFullYear() + "-" + (thedate.getMonth() + 1) + "-" + thedate.getDate();
-
-                var data = {
-                    'date': thedate,
-                    'index': index++
-                }
-                //add the key as a type name to data object
-                data[reportData.GrantType] = reportData.GrantValue;
-                report_data.push(data)
-            })
-
-            //store graph data for switching from bar graph
-            graph_data = report_data;
-            areaGraphOverview();
-
-
+        if (typeof data.advice_count == "number") {
+            $("#advice_count").text(data.advice_count)
+        }
+        if (typeof data.total_cost == "number") {
+            $("#total_cost").text(data.total_cost)
         }
 
-        function pieChartValue(data) {
-            console.log("pieChartValue running", data)
-            $("#pie-report").empty();
-            var report_data = [];
-            var data_display = $(this).attr("id");
-            var colors = ['#FFE600', '#223EB2', '#FF8000', '#95D7BB']
+        if (typeof data.total_koha == "number") {
+            $("#total_koha").text(data.total_koha)
+        }
 
-            if (typeof data_display != "undefined") {
-                //change the data to process
-                data = (data_display == "pie_faculty_chart") ? pie_chart_faculty : pie_chart_value;
-                //colors = ['#FFE600'];
+        if (data.success == true) {
+
+            //check main report data
+            if (typeof data.main_report != "undefined" && data.main_report != null)
+                mainReport(data.main_report);
+
+            if (typeof data.grant_pie_report != "undefined" && data.grant_pie_report != null) {
+                pie_reports["grant_pie_report"] = data.grant_pie_report;
+                //processPieChart("grant_pie_report");
+
             }
 
-            //console.log("data_display", data_display)
+            if (typeof data.faculty_pie_report != "undefined" && data.faculty_pie_report != null) {
+                pie_reports["faculty_pie_report"] = data.faculty_pie_report;
 
 
-
-            var index = 0;
-            $.map(data, function (reportData) {
-
-                report_data.push(reportData)
-            })
-            //donutReport(report_data);
-            Morris.Donut({
-                element: 'pie-report',
-                data: report_data,
-                colors: colors,
-                formatter: function (x) { return "$" + x }
-            });
-        }
-        function barGraphOverview() {
-            console.log("running barGraphOverview");
-            $("#main-report").empty();
-            Morris.Bar({
-                element: 'main-report',
-                data: graph_data,
-                xkey: 'date',
-                xLabels: 'day',
-                parseTime: false,
-                smooth: false,
-                ykeys: ["Hardship", "TrainTickets", "Food", "PetrolVouchers"],
-                //['Hardship', 'Food', 'TrainTickets'],
-                labels: ["Hardship", "Train Tickets", "Food", "Petrol Vouchers"],
-                //['Hardship', 'Food Vouchers', 'Train Tickets'],
-                ymax: 'auto',
-                pointSize: 2,
-                hideHover: 'auto',
-                resize: true,
-                lineColors: [
-               '#FFE600',
-               '#223EB2',
-               '#FF8000',
-               '#95D7BB'
-                ],
-                pointFillColors: ['#00ff00']
-            });
-        }
-        function areaGraphOverview() {
-            //cammel case words regex
-            /*
-            var rex = /([A-Z])([A-Z])([a-z])|([a-z])([A-Z])/g;
-
-            var ykeys = [];
-            var labels = [];
-
-            for (key in key_store) {
-                ykeys.push(key)
-                var label = key.replace(rex, "$1$4 $2$3$5");
-                labels.push(label);
 
             }
-            */
-            console.log("running areaGraphOverview");
-            //report_data
-            $("#main-report").empty();
-            Morris.Area({
-                element: 'main-report',
-                data: graph_data,
-                xkey: 'date',
-                xLabels: 'day',
-                parseTime: false,
-                smooth: false,
-                ykeys: ["Hardship", "TrainTickets", "Food", "PetrolVouchers"],
-                //['Hardship', 'Food', 'TrainTickets'],
-                labels: ["Hardship", "Train Tickets", "Food", "Petrol Vouchers"],
-                //['Hardship', 'Food Vouchers', 'Train Tickets'],
-                ymax: 'auto',
-                pointSize: 2,
-                hideHover: 'auto',
-                resize: true,
-                lineColors: [
-               '#FFE600',
-               '#223EB2',
-               '#FF8000',
-               '#95D7BB'
-                ],
-                pointFillColors: ['#00ff00']
-            });
-        }
-        //switch graphs binding click event
-        $("#bar_graph_switch").click(barGraphOverview);
-        $("#area_graph_switch").click(areaGraphOverview)
-        $("#reload_graph_over").click(getMainOveriew)
-        $("#pie_grant_chart").click(pieChartValue);
-        $("#pie_faculty_chart").click(pieChartValue);
-        getMainOveriew();
 
-        
-    </script>
+            if (typeof data.student_grants != "undefined" && data.student_grants != null) {
+                $.each(data.student_grants, function (index, grant) {
+                    var new_col = []
+                    new_col.push(returnDate(grant.DateOfIssue));
+                    new_col.push((typeof grant.LastName == "string") ? grant.FirstName + " " + grant.LastName : grant.FirstName)
+                    new_col.push(grant.GrantyType);
+                    new_col.push(grant.campus_name);
+                    new_col.push(grant.GrantValue);
+                    new_col.push((typeof grant.KohaFund == "null") ? 0 : grant.KohaFund)
+                    new_col.push(grant.Grant_ID);
+                    student_report_view.push(new_col);
+                })
+
+            }
+
+            updateReportTable();
+            updatePieCharts();
+        }
+    }
+</script>

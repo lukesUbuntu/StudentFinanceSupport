@@ -106,7 +106,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Main_Ethnicity, htmlAttributes: new { @class = "control-label col-md-8" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Main_Ethnicity, Helpers.MaritalStatus(), Helpers.SelectOneSpacer, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.Main_Ethnicity, Helpers.Ethnicity(), Helpers.SelectOneSpacer, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Main_Ethnicity, "", new { @class = "text-danger" })
             </div>
         </div>

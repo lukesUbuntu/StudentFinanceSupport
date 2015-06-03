@@ -86,6 +86,7 @@ namespace StudentFinanceSupport.Controllers
                                  {
                                      //define all our returns we require
                                      Student_ID = grants.student_ID,
+                                     Grant_ID = grants.id_student_vouchers,
                                      GrantyType = grants.GrantType,
                                      GrantValue = grants.GrantValue,
                                      KohaFund = grants.KuhaFunds,
@@ -100,7 +101,7 @@ namespace StudentFinanceSupport.Controllers
                                  };
             //apply our filters
             if (theReport.gender != null)
-                student_grants = from a in student_grants where a.Gender == theReport.gender select a;
+                student_grants = from a in student_grants where a.Gender.ToLower() == theReport.gender.ToLower() select a;
 
             if (theReport.date_type != null && theReport.start_date != null)
             {
@@ -141,126 +142,171 @@ namespace StudentFinanceSupport.Controllers
 
             if (theReport.GrantType != null)
             {
-                student_grants = from a in student_grants where a.GrantyType == theReport.GrantType select a;
+                student_grants = from a in student_grants where a.GrantyType.ToLower() == theReport.GrantType.ToLower() select a;
             }
 
             if (theReport.Campus != null)
             {
                 student_grants = from a in student_grants where a.campus_id == theReport.Campus select a;
             }
-            //finally grab the count of actually students
-            var student_count = from a in student_grants group a by a.Student_ID into c select c; 
+
+            //finally grab the count of actually students for other chart
+            var student_count = from a in student_grants group a by a.Student_ID into c select c;
 
 
+            var grant_pie_report =
+                  from voucher in student_grants.ToList()
+                  where voucher.GrantyType.ToLower() != "advice"
+                  group voucher by voucher.GrantyType into newGroup
+                  select new
+                  {
 
+                      label = newGroup.Key,
+                      data = newGroup.Sum(c => c.GrantValue)
+
+                  };
+
+            var faculty_pie_report =
+                   from students in student_grants.ToList()
+                   where students.GrantyType.ToLower() != "advice"
+                   group students by students.faculty_name into newGroup
+
+                   select new
+                   {
+
+                       label = newGroup.Select(c => c.faculty_name).Distinct(),
+                       data = newGroup.Sum(c => c.GrantValue)
+
+                   };
+
+            
+            var main_report =
+                from grant in student_grants
+                where grant.GrantyType.ToLower() != "advice"
+                select new
+                {
+                    GrantType = grant.GrantyType,
+                    GrantValue = grant.GrantValue,
+                    DateOfIssue = grant.DateOfIssue
+
+                };
+            
             return Json(new
             {
-                success = student_grants,
-                student_count = student_count.Count()
-
+                success = true,
+                student_grants = student_grants,
+                student_count = student_count.Count(),
+                advice_count = student_grants.Where(c => c.GrantyType.ToLower() == "advice").Count(),
+                grant_pie_report = grant_pie_report,
+                //value = newGroup.Sum(c => c.GrantValue)
+                total_cost = student_grants.GroupBy(c => c.GrantValue).Select(c => c.Key).Sum(),
+                total_koha = student_grants.GroupBy(c => c.KohaFund).Select(c => c.Key).Sum(),
+                faculty_pie_report = faculty_pie_report,
+                main_report = main_report,
+                
             }, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult MainReport()
-        {
-            StudentRegistrationsModel db = new StudentRegistrationsModel();
-            //Get list of courses for a faculty
+        //public JsonResult MainReport()
+        //{
+        //    StudentRegistrationsModel db = new StudentRegistrationsModel();
+        //    //Get list of courses for a faculty
 
-            //https://msdn.microsoft.com/en-us/library/bb545971.aspx
-            /*
-            var result = from voucher in db.StudentVouchers
-                         group voucher by voucher.DateOfIssue into newGroup
-                         select newGroup;
+        //    //https://msdn.microsoft.com/en-us/library/bb545971.aspx
+        //    /*
+        //    var result = from voucher in db.StudentVouchers
+        //                 group voucher by voucher.DateOfIssue into newGroup
+        //                 select newGroup;
             
            
-            var main_report1 = db.StudentVouchers.ToList() 
-            .Select(grants =>
-             new
-             {
-                 GrantType = grants.GrantType,
-                 GrantValue = grants.GrantValue,
-                 DateOfIssue = grants.DateOfIssue
+        //    var main_report1 = db.StudentVouchers.ToList() 
+        //    .Select(grants =>
+        //     new
+        //     {
+        //         GrantType = grants.GrantType,
+        //         GrantValue = grants.GrantValue,
+        //         DateOfIssue = grants.DateOfIssue
                 
-             });
-             */
-            var main_report = 
-                from grant in db.StudentVouchers.ToList() where grant.GrantType.ToLower() != "advice"
-                select new 
-             {
-                 GrantType = grant.GrantType,
-                 GrantValue = grant.GrantValue,
-                 DateOfIssue = grant.DateOfIssue
+        //     });
+        //     */
+        //    var main_report = 
+        //        from grant in db.StudentVouchers.ToList() where grant.GrantType.ToLower() != "advice"
+        //        select new 
+        //     {
+        //         GrantType = grant.GrantType,
+        //         GrantValue = grant.GrantValue,
+        //         DateOfIssue = grant.DateOfIssue
 
-             };
+        //     };
 
-            var pie_chart_value =
-                   from voucher in db.StudentVouchers.ToList() where voucher.GrantType.ToLower() != "advice"
-                   group voucher by voucher.GrantType into newGroup
+        //    var pie_chart_value =
+        //           from voucher in db.StudentVouchers.ToList() where voucher.GrantType.ToLower() != "advice"
+        //           group voucher by voucher.GrantType into newGroup
 
-                   select new
-                   {
+        //           select new
+        //           {
 
-                       label = newGroup.Key,
-                       value = newGroup.Sum(c => c.GrantValue)
+        //               label = newGroup.Key,
+        //               value = newGroup.Sum(c => c.GrantValue)
 
-                   };
+        //           };
 
-            var pie_chart_faculty =
-                   from voucher in db.StudentVouchers.ToList()
-                   where voucher.GrantType.ToLower() != "advice"
-                   group voucher by voucher.StudentRegistration.Faculty into newGroup
+        //    var pie_chart_faculty =
+        //           from voucher in db.StudentVouchers.ToList()
+        //           where voucher.GrantType.ToLower() != "advice"
+        //           group voucher by voucher.StudentRegistration.Faculty into newGroup
 
-                   select new
-                   {
+        //           select new
+        //           {
 
-                       label = newGroup.Key.faculty_name,
-                       value = newGroup.Sum(c => c.GrantValue)
+        //               label = newGroup.Key.faculty_name,
+        //               value = newGroup.Sum(c => c.GrantValue)
 
-                   };
+        //           };
 
-            var student_grants = from student in db.StudentRegistrations
-                                 join grants in db.StudentVouchers on student.Student_ID equals grants.student_ID
-                                 select new
-                                 {
-                                     Student_ID = grants.student_ID,
-                                     GrantyType = grants.GrantType,
-                                     GrantValue = grants.GrantValue,
-                                     DateOfIssue = grants.DateOfIssue,
-                                     FirstName = grants.StudentRegistration.FirstName,
-                                     LastName = grants.StudentRegistration.LastName,
-                                     Gender = grants.StudentRegistration.Gender,
-                                     faculty_name = grants.StudentRegistration.Faculty.faculty_name,
-                                 };
-            //pie_chart_value = null;
-           return Json(new
-           {
-               success = true,
-               main_report = main_report,
-               pie_chart_value = pie_chart_value,
-               pie_chart_faculty = pie_chart_faculty,
-               student_grants = student_grants
-           }, JsonRequestBehavior.AllowGet);
+        //    var student_grants = from student in db.StudentRegistrations
+        //                         join grants in db.StudentVouchers on student.Student_ID equals grants.student_ID
+        //                         select new
+        //                         {
+        //                             Student_ID = grants.student_ID,
+        //                             GrantyType = grants.GrantType,
+        //                             GrantValue = grants.GrantValue,
+        //                             DateOfIssue = grants.DateOfIssue,
+        //                             FirstName = grants.StudentRegistration.FirstName,
+        //                             LastName = grants.StudentRegistration.LastName,
+        //                             Gender = grants.StudentRegistration.Gender,
+        //                             faculty_name = grants.StudentRegistration.Faculty.faculty_name,
+        //                         };
+        //    //pie_chart_value = null;
+        //   return Json(new
+        //   {
+        //       success = true,
+        //       main_report = main_report,
+        //       pie_chart_value = pie_chart_value,
+        //       pie_chart_faculty = pie_chart_faculty,
+        //       student_grants = student_grants
+        //   }, JsonRequestBehavior.AllowGet);
 
-            /*
-             * x => new
-                  {
-                      id_course = x.id_courses,
-                      course_name = x.course_name
-                  });*/
-            //int count = result.Count();
+        //    /*
+        //     * x => new
+        //          {
+        //              id_course = x.id_courses,
+        //              course_name = x.course_name
+        //          });*/
+        //    //int count = result.Count();
 
-            //create a response back
-            //var response = new List<object>();
-            //response.Add(new { exists = (result.Count() == 1) });
+        //    //create a response back
+        //    //var response = new List<object>();
+        //    //response.Add(new { exists = (result.Count() == 1) });
 
 
 
-           return Json(new
-           {
-               success = false
+        //   return Json(new
+        //   {
+        //       success = false
              
-           }, JsonRequestBehavior.AllowGet);
+        //   }, JsonRequestBehavior.AllowGet);
 
 
-        }
+        //}
     }
 }

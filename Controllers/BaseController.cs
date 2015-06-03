@@ -17,13 +17,14 @@ namespace StudentFinanceSupport.Controllers
        
        
 
-        private bool debug = true;
+        private bool debug = false;
         //Our predfined login route where to send non admin users needs to be set in route config
         private string LoginRoute = "Login";
 
         //set to allow a action set to by pass our checking
         private List<string> _actionsBypass = new List<string>();
-
+        private string _controllerBypass = "";
+        
       
         public BaseController()
         {
@@ -36,14 +37,22 @@ namespace StudentFinanceSupport.Controllers
             //add our own login to bypass our logged in check
             this._actionsBypass.Add(theAction);
         }
-       
+        public void bypassControllerCheck(string theController)
+        {
+            //add our own login to bypass our logged in check
+            this._controllerBypass = theController;
+        }
 
         private bool bypassAdminCheck(ActionExecutingContext filterContext)
         {
             //if the action is not in our list we will return -1
-            int theCount = Array.FindIndex(_actionsBypass.ToArray(), x => x == filterContext.ActionDescriptor.ActionName.ToString());
+            int theACtion = Array.FindIndex(_actionsBypass.ToArray(), x => x == filterContext.ActionDescriptor.ControllerDescriptor.ControllerName.ToString() +"/"+ filterContext.ActionDescriptor.ActionName.ToString());
+            bool theController = _controllerBypass != null && (_controllerBypass.ToLower() == filterContext.ActionDescriptor.ControllerDescriptor.ControllerName.ToString().ToLower());
+
+            
+            //int theCount = Array.FindIndex(_actionsBypass.ToArray(), x => x == filterContext.ActionDescriptor.ActionName.ToString());
             //filterContext.ActionDescriptor.ActionName.ToString().ToLower() == "login"
-            if (UserLoggedIn() == true || theCount > -1)
+            if (UserLoggedIn() == true || theACtion > -1 || theController == true)
             {
                 return true;
             }

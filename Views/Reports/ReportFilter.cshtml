@@ -9,6 +9,12 @@
         height: 12em;
         padding-top: 5px; 
     }
+    #report-btn-group btn {
+        display: inline-block;
+    }
+    #report-btn-group {
+        width :350px;
+    }
 </style>
 <div id="search_report_form" class="" style="height:350px">
     <div class="panel panel-primary">
@@ -124,7 +130,7 @@
                                 <div class="col-md-6">
                                     Gender
                                     @Html.DropDownList(
-                                                        "Faculty",
+                                                         "gender",
                                                          Helpers.DropDownGender(), Helpers.SelectOneSpacer,
                                 new { @class = "form-control", data_placeholder = "Choose a Gender..." })
 
@@ -137,11 +143,13 @@
             </section>
             
         </div>
-        <div class="form-group pull-right">
+        <div class="form-group pull-left">
 
             <div class="col-md-offset-2 col-md-8 " style="padding-top:15px;">
-                <button id="search_report_btn" class="btn btn-success">Generate Report</button>
-
+                <span id="report-btn-group" class="pull-left">
+                    <button id="search_report_reset_btn" class="btn btn-warning">Reset Filters</button>
+                    <button id="search_report_btn" class="btn btn-success">Generate Report</button>
+                </span>
             </div>
         </div>
     </div>
@@ -154,24 +162,9 @@
 
     $(document).ready(function () {     //Specify our form area as this is partial view don't want any document clashes
 
-        var $search_report_form = $("#filter_wizard");
+      
 
-        $("#search_report_btn").click(function () {
-            var report_details = $(":input", $search_report_form).serialize();
-            console.log("report_details", report_details)
-
-            console.log("report_details", report_details)
-            $.ajax({
-                url: "/Reports/getFilterReports",
-                type: "POST",
-                dataType: "json",
-                data: report_details,
-                //data: recovery,
-                success: function (data) {
-                   
-                }
-            });
-        })
+       
 
         var calander_selections = {
             day: {
@@ -219,8 +212,8 @@
         //report selection has changed
         $("#date_type").change(function () {
             var selection = $(this).val()
-            console.log("selection", selection)
-            console.log("bin", calander_selections[selection]);
+            //console.log("selection", selection)
+            //console.log("bin", calander_selections[selection]);
             var options = calander_selections[selection];
             $('.datepicker').datepicker('remove');
             $('.datepicker').datepicker(options);
