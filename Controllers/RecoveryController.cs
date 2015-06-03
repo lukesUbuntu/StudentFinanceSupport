@@ -99,6 +99,8 @@ namespace StudentFinanceSupport.Controllers
                     theRecovery.Administrator = AdminAccount;
  
             }
+            //dispose as no longer needed
+            db.Dispose();
             theRecovery.UserId = theRecovery.Administrator.UserId;
 
             //check the rest of the model state
@@ -120,7 +122,7 @@ namespace StudentFinanceSupport.Controllers
                 string mobile = theRecovery.Administrator.mobile.Remove(theRecovery.Administrator.mobile.Length - 4, 4) + "****";
                 return Json(new
                 {
-                    success = "true",
+                    success = true,
                     mobile_guess = mobile
                 }, JsonRequestBehavior.AllowGet);
 
@@ -135,7 +137,7 @@ namespace StudentFinanceSupport.Controllers
 
         public JsonResult sendRecoveryCode(Recovery theRecovery)
         {
-            StudentRegistrationsModel db = new StudentRegistrationsModel();
+            
 
                 //session has been removed
                 if (Session["AdministratorRecovery"] == null)
@@ -147,8 +149,10 @@ namespace StudentFinanceSupport.Controllers
                     }, JsonRequestBehavior.AllowGet);
                 }
 
+                StudentRegistrationsModel db = new StudentRegistrationsModel();
 
                 Recovery sessRecovery = (Recovery)Session["AdministratorRecovery"];
+
                 theRecovery.Administrator.FirstName = sessRecovery.Administrator.FirstName;
                 theRecovery.Administrator.Password = sessRecovery.Administrator.Password;
                 theRecovery.UserId = sessRecovery.Administrator.UserId;
@@ -157,15 +161,17 @@ namespace StudentFinanceSupport.Controllers
                 if (theRecovery.recovery_option == "email")
                 {
                     RecoveryComms theComms = new RecoveryComms();
-                    if (theComms.sendEmail(ref theRecovery) == true)
+                    if (theComms.sendEmail(ref sessRecovery) == true)
                     {
 
 
-                       
+                        //db.Recoveries.Attach(theRecovery);
+                        db.Recoveries.Add(sessRecovery);
+                        db.SaveChanges();
 
                         return Json(new
                         {
-                            success = "true",
+                            success = true,
                             message = "Sent email request"
 
                         }, JsonRequestBehavior.AllowGet);
@@ -196,8 +202,10 @@ namespace StudentFinanceSupport.Controllers
                         RecoveryComms theComms = new RecoveryComms();
                         if (theComms.sendSMS(ref sessRecovery) == true)
                         {
+                            //db.Recoveries.Attach(theRecovery);
                             db.Recoveries.Add(sessRecovery);
                             db.SaveChanges();
+                           
                             return Json(new
                             {
                                 success = "true",

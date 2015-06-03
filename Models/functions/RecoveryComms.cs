@@ -14,6 +14,7 @@ namespace StudentFinanceSupport.Models.functions
     {
         public bool sendEmail(ref Recovery theRecovery)
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             theRecovery.recovery_key = this.keyCode();
             //retrieve settings from webconfig
             string FromAddress = System.Configuration.ConfigurationManager.AppSettings.Get("FromAddress");
@@ -63,10 +64,15 @@ namespace StudentFinanceSupport.Models.functions
             {
                 smtp.Send(message);
             }
+            //we end here if success
+            //db.Recoveries.Attach(theRecovery);
+            //db.Recoveries.Attach(theRecovery);
+            //db.SaveChanges();
             return true;
         }
         public bool sendSMS(ref Recovery theRecovery)
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             //021023517
             //021023517775
             //string mobileNumber = theRecovery.Administrator.mobile;
@@ -97,12 +103,15 @@ namespace StudentFinanceSupport.Models.functions
                 if (result == "incorrect api key")
                     return false;
 
+                //we end here if success
+
                 return (result == "received");
                 
 
                
             }
         }
+
 
         private string keyCode()
         {

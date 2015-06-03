@@ -25,6 +25,7 @@ namespace StudentFinanceSupport.Models
 
         public virtual DbSet<Recovery> Recoveries { get; set; }
 
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
 
