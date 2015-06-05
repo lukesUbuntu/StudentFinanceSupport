@@ -103,7 +103,7 @@ namespace StudentFinanceSupport.Controllers
             db.Dispose();
             theRecovery.UserId = theRecovery.Administrator.UserId;
 
-            //check the rest of the model state
+            //check the rest of the model state and send back the errors to client
             if (!ModelState.IsValid)
             {
                 var errorList = ModelState.ToDictionary(
@@ -129,10 +129,15 @@ namespace StudentFinanceSupport.Controllers
             }
 
 
+            return Json(new
+            {
+                success = true,
+            }, JsonRequestBehavior.AllowGet);
+
 
            
 
-            return Json("", JsonRequestBehavior.AllowGet);
+           
         }
 
         public JsonResult sendRecoveryCode(Recovery theRecovery)
@@ -144,7 +149,7 @@ namespace StudentFinanceSupport.Controllers
                 {
                     return Json(new
                     {
-                        success = "false",
+                        success = false,
                         message = "Invalid State"
                     }, JsonRequestBehavior.AllowGet);
                 }
@@ -172,7 +177,7 @@ namespace StudentFinanceSupport.Controllers
                         return Json(new
                         {
                             success = true,
-                            message = "Sent email request"
+                            message = "Sent an email with recovery code"
 
                         }, JsonRequestBehavior.AllowGet);
                        
@@ -208,8 +213,18 @@ namespace StudentFinanceSupport.Controllers
                            
                             return Json(new
                             {
-                                success = "true",
-                                message = "sent SMS to mobile"
+                                success = true,
+                                message = "sent a SMS message to mobile with recovery code"
+
+                            }, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+
+                            return Json(new
+                            {
+                                success = false,
+                                message = "Something bad happend"
 
                             }, JsonRequestBehavior.AllowGet);
                         }
@@ -218,7 +233,7 @@ namespace StudentFinanceSupport.Controllers
                     {
                         return Json(new
                         {
-                            success = "false",
+                            success = false,
                             message = "Failed incorrect last digits"
 
                         }, JsonRequestBehavior.AllowGet);

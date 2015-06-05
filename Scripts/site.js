@@ -3,7 +3,18 @@ $(function() {
     $('#side-menu').metisMenu();
 
 });
-
+(function ($) {
+    //jquery plugin by luke hardiman
+    $.fn.alertBox = function (message, success) {
+        return (
+        success = (typeof success == "boolean" && success == true) ? "success" : success,
+        success = (typeof success == "string") ? "alert-" + success : "alert-danger",
+        this.text(message),
+        this.removeClass("alert-danger alert-success"),
+        this.addClass(success),
+        this.show())
+    }
+}(jQuery));
 //Loads the correct sidebar on window load,
 //collapses the sidebar on window resize.
 // Sets the min-height of #page-wrapper to window size

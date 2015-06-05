@@ -89,6 +89,15 @@ namespace StudentFinanceSupport
             //password strength metor
             bundles.Add(new ScriptBundle("~/bundles/pwstrength").Include(
                    "~/Content/Plugins/password/pwstrength.js"));
+
+
+            //css style for ajax querys
+            bundles.Add(new ScriptBundle("~/bundles/spinner").Include(
+                   "~/Content/Plugins/spinner/jquery.isloading.min.js"));
+
+  
+           
+
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
             BundleTable.EnableOptimizations = false;

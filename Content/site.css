@@ -1,3 +1,48 @@
+/*.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('http://i.stack.imgur.com/FhHRx.gif') 
+                50% 50% 
+                no-repeat;
+}
+body.loading {
+    overflow: hidden;   
+}
+
+body.loading .modal {
+    display: block;
+}*/
+
+.isloading-wrapper.isloading-right{
+    margin-left:10px;
+
+}
+.isloading-overlay{
+    position:relative;
+    text-align:center;
+
+}.isloading-overlay .isloading-wrapper{
+     background:#FFFFFF;
+     -webkit-border-radius:7px;
+     -webkit-background-clip:padding-box;
+     -moz-border-radius:7px;
+     -moz-background-clip:padding;
+     border-radius:7px;
+     background-clip:padding-box;
+     display:inline-block;
+     margin:0 auto;
+     padding:10px 20px;
+     top:10%;
+     z-index:9000;
+
+ }
+
 
 
 /*Suggestion Box for student voucher add*/

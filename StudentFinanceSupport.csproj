@@ -158,7 +158,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="App_Start\Helpers.cs" />
+    <Compile Include="Helpers\Helpers.cs" />
     <Compile Include="Migrations\201505210154369_InitialMigrations.cs" />
     <Compile Include="Migrations\201505210154369_InitialMigrations.Designer.cs">
       <DependentUpon>201505210154369_InitialMigrations.cs</DependentUpon>
@@ -180,6 +180,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTesting\HelperTest.cs" />
     <Compile Include="UnitTesting\HomeControllerTest.cs" />
+    <Compile Include="UnitTesting\StudentVoucherTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\studentFinance.mdf" />
@@ -429,6 +430,7 @@
     <Content Include="Content\Plugins\raphael\license.txt" />
     <Content Include="Content\Plugins\raphael\raphael-min.js" />
     <Content Include="Content\Plugins\raphael\raphael.js" />
+    <Content Include="Content\Plugins\spinner\jquery.isloading.min.js" />
     <Content Include="Content\site.css" />
     <Content Include="Content\Wizard.css" />
     <Content Include="favicon.ico" />
@@ -736,6 +738,8 @@
     <Content Include="Content\Plugins\plot\js\package.json" />
     <Content Include="Content\Plugins\plot\js\PLUGINS.md" />
     <Content Include="Content\Plugins\plot\js\README.md" />
+    <None Include="Properties\PublishProfiles\assignment3app.pubxml" />
+    <None Include="Properties\PublishProfiles\website.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\flot-data.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
