@@ -13,15 +13,18 @@ namespace StudentFinanceSupport.Controllers
     /// </summary>
     public abstract class BaseController : Controller
     {
-        public StudentRegistrationsModel db = new StudentRegistrationsModel();
+        // singleton
+       
+       
 
-        private bool debug = true;
+        private bool debug = false;
         //Our predfined login route where to send non admin users needs to be set in route config
         private string LoginRoute = "Login";
 
         //set to allow a action set to by pass our checking
         private List<string> _actionsBypass = new List<string>();
-
+        private string _controllerBypass = "";
+        
       
         public BaseController()
         {
@@ -34,20 +37,35 @@ namespace StudentFinanceSupport.Controllers
             //add our own login to bypass our logged in check
             this._actionsBypass.Add(theAction);
         }
-       
+        public void bypassControllerCheck(string theController)
+        {
+            //add our own login to bypass our logged in check
+            this._controllerBypass = theController;
+        }
 
         private bool bypassAdminCheck(ActionExecutingContext filterContext)
         {
             //if the action is not in our list we will return -1
-            int theCount = Array.FindIndex(_actionsBypass.ToArray(), x => x == filterContext.ActionDescriptor.ActionName.ToString());
+            int theACtion = Array.FindIndex(_actionsBypass.ToArray(), x => x == filterContext.ActionDescriptor.ControllerDescriptor.ControllerName.ToString() +"/"+ filterContext.ActionDescriptor.ActionName.ToString());
+            bool theController = _controllerBypass != null && (_controllerBypass.ToLower() == filterContext.ActionDescriptor.ControllerDescriptor.ControllerName.ToString().ToLower());
+
+            
+            //int theCount = Array.FindIndex(_actionsBypass.ToArray(), x => x == filterContext.ActionDescriptor.ActionName.ToString());
             //filterContext.ActionDescriptor.ActionName.ToString().ToLower() == "login"
-            if (UserLoggedIn() == true || theCount > -1)
+            if (UserLoggedIn() == true || theACtion > -1 || theController == true)
             {
                 return true;
             }
             return false;
         }
 
+        [HttpGet]
+        public ActionResult LogOut()
+        {
+            Session.Abandon();
+            return RedirectToAction("Index", "Home");
+            //return View();
+        }
         //NoAcess   [GLOBAL] can be called from anywhere and will show user no access page
         public ActionResult NoAccess()
         {
@@ -84,6 +102,16 @@ namespace StudentFinanceSupport.Controllers
             
         }
 
+        public AdministratorLogin AdminSession(){
+
+            //return the AdministratorLogin from session
+            if (Session["AdministratorLogin"] != null)
+                return (AdministratorLogin)Session["AdministratorLogin"];
+
+            return null;
+        }
+
+        
         /// <summary>
         /// Returns if the user has a session that is logged in
         /// </summary>
@@ -103,9 +131,12 @@ namespace StudentFinanceSupport.Controllers
         /// <returns>true or false if exists</returns>
         public bool studentExists(string theStudentID)
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             //lets make sure we don't already have this Student_ID .Any(). will return a boolean if the entity was found
             return (db.StudentRegistrations.Any(m => m.Student_ID.ToLower() == theStudentID.ToLower()));
         }
+
+        
     }
 
 

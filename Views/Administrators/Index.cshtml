@@ -1,48 +1,175 @@
-﻿@model IEnumerable<StudentFinanceSupport.Models.Administrator>
-
+﻿
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Main_Layout_.cshtml";
 }
 
-<h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastName)
-        </th>
-        
-        <th></th>
-    </tr>
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Admin Menus</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div id="dashboard_panel" class="row">
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <a href="@Url.Action("Add", "Administrators")">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-table fa-4x"></i>
+                        </div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastName)
-        </td>
-        
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.UserId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.UserId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.UserId })
-        </td>
-    </tr>
-}
+                        <div class="col-xs-9 text-right">
+                            <div class="h3">Add Admin</div>
+                            <div class="small">Adds an admin to ssytem</div>
+                        </div>
 
-</table>
+                    </div>
+                </a>
+            </div>
+
+            <div class="panel-footer">
+                <span class="pull-left">View Details</span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading ">
+                <a href="@Url.Action("Admins", "Administrators")">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-graduation-cap fa-4x"></i>
+                        </div>
+
+                        <div class="col-xs-9 text-right">
+                            <div class="h3">List Current Admin's</div>
+                            
+                        </div>
+
+                    </div>
+                </a>
+            </div>
+
+            <div class="panel-footer">
+                <span class="pull-left">View Details</span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <a href="@Url.Action("Add", "Faculties")">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-edit fa-4x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="h3">Add Facuilty</div>
+                            <div class="small">Add a Facultyr</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!--
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>-->
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                <a href="@Url.Action("Index", "Reports")">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-bar-chart-o fa-4x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="h3">View Reports</div>
+                            <div class="small">Section of system reports</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Brief Overview-->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i> Basic Overview
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                            Actions
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                            <li>
+                                <a href="#">Action</a>
+                            </li>
+                            <li>
+                                <a href="#">Another action</a>
+                            </li>
+                            <li>
+                                <a href="#">Something else here</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">Separated link</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="table-responsive">
+                            Table goes here @@todo
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.col-lg-4 (nested) -->
+                    <div class="col-lg-8">
+                        <div id="morris-bar-chart"></div>
+                    </div>
+                    <!-- /.col-lg-8 (nested) -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+
+    </div>
+
+</div>
+<!-- /.row -->

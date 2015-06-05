@@ -16,6 +16,7 @@ namespace StudentFinanceSupport.Controllers
         // GET: StudentRegistration/List
         public ActionResult List()
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
             return View(db.StudentRegistrations.ToList());
         }
 
@@ -32,6 +33,7 @@ namespace StudentFinanceSupport.Controllers
         /// <returns>View</returns>
          public ActionResult Edit(String id)
          {
+             StudentRegistrationsModel db = new StudentRegistrationsModel();
              //if id == return
              //StudentRegistration theStudent = (StudentRegistration)db.StudentRegistrations.Where(m => m.Student_ID == id);
              StudentRegistration theStudent = db.StudentRegistrations.Find(id);
@@ -43,7 +45,8 @@ namespace StudentFinanceSupport.Controllers
 
          //StudentRegistration/Create 
          public ActionResult Create()
-         {      
+         {
+             StudentRegistrationsModel db = new StudentRegistrationsModel();
              ViewBag.id_courses = new SelectList(String.Empty, "id_courses", "course_name");
              ViewBag.id_faculty = new SelectList(db.Faculties, "id_faculty", "faculty_name");
              ViewBag.id_campus = new SelectList(db.Campus, "id_campus", "campus_name");
@@ -55,6 +58,7 @@ namespace StudentFinanceSupport.Controllers
          public ActionResult Create([Bind(Include =
              "Student_ID,FirstName,LastName,Gender,DOB,Address1,Accomodition_Type,Phone,Mobile,Email,Marital_Status,Contact,Main_Ethnicity,id_faculty,id_courses,Detailed_Ethnicity,id_campus")] StudentRegistration studentRegistration)
          {
+             StudentRegistrationsModel db = new StudentRegistrationsModel();
              //error checking goes here
 
              //lets make sure we don't already have this Student_ID
@@ -121,6 +125,7 @@ namespace StudentFinanceSupport.Controllers
         /*********AJAX ONLY TRIGGERS BELOW THIS POINT PUBLIC
          * @todo add token parsing for x-cross parsing security (cross site injections)
         /***********************************************************************************/
+
         /// <summary>
         /// Returns JSON response of all courses related to Faculty
         /// </summary>
@@ -128,21 +133,36 @@ namespace StudentFinanceSupport.Controllers
          /// <returns>JSON result of id_course & course_name</returns>
          //StudentRegistration/getCourses [GET]
          [HttpPost]
-         public JsonResult getCourses(int faculty)
+         public JsonResult getCourses(string faculty)
          {
+             StudentRegistrationsModel db = new StudentRegistrationsModel();
+             int faculty_id = -1;
+
+             //lets convert to int
+             int.TryParse(faculty, out faculty_id);
+
+             //if someone modified our ajax request call :)
+             if (String.IsNullOrEmpty(faculty) || faculty_id == 0)
+                 return Json("Error wrong data passed!", JsonRequestBehavior.AllowGet);
+
              //Get list of courses for a faculty
+             var result = (
+                 from course in db.Courses
+                 where course.id_faculty == faculty_id
+                 select new
+                 {
+                     id_course = course.id_courses,
+                     course_name = course.course_name
+                 }
+                 
+                 );
+             /*
              var result = db.Courses.Where(x => x.id_faculty == faculty).Select(x => new
                   {
                       id_course = x.id_courses,
                       course_name = x.course_name
                   });
-
-             //int count = result.Count();
-             
-             //create a response back
-             //var response = new List<object>();
-             //response.Add(new { exists = (result.Count() == 1) });
-
+             */
              
              
              return Json(result, JsonRequestBehavior.AllowGet);

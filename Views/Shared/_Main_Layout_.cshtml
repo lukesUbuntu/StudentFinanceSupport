@@ -30,8 +30,26 @@
   
     <!-- This is to remove the internal validation css been adding as im using custom alert boxes-->
     <script>
-        //$(".validation-summary-errors").removeClass("validation-summary-errors");
-        //$(".input-validation-error").removeClass("input-validation-error").parent().addClass("has-error");
-    </script>
+
+        $("#nav_search").keyup(function(){
+
+            var valThis = $(this).val();
+           
+            $('#side-menu li.search').each(function () {
+                var text = $(this).text().toLowerCase();
+                
+                //console.log("text", text);
+                var theSearch = new RegExp(valThis);
+                if (theSearch.test(text)) {
+                    $(this).show();
+                } else {
+                    $(this).hide()
+                }
+              
+            });
+        })
+        
+    
+     </script>
 </body>
 </html>

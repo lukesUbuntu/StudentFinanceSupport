@@ -48,9 +48,13 @@ namespace StudentFinanceSupport
             //bundles/morris (js)
             bundles.Add(new ScriptBundle("~/bundles/morris").Include(
                       "~/Content/Plugins/raphael/raphael.js",
-                      "~/Content/Plugins/morrisjs/morris.js"
-                     
-                      
+                      "~/Content/Plugins/morrisjs/morris.js",
+                      "~/Content/Plugins/plot/js/jquery.flot.js",
+                      "~/Content/Plugins/plot/js/excanvas.min.js",
+                       "~/Content/Plugins/plot/js/jquery.flot.pie.js",
+                      "~/Content/Plugins/plot/js/jquery.flot.resize.js",
+                      "~/Content/Plugins/plot/js/jquery.flot.time.js",
+                      "~/Content/Plugins/plot/js/jquery.flot.tooltip.min.js"
                       ));
 
 
@@ -82,6 +86,9 @@ namespace StudentFinanceSupport
                     "~/Content/Plugins/datatables/media/js/jquery.dataTables.min.js",
                     "~/Content/Plugins/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"));
 
+            //password strength metor
+            bundles.Add(new ScriptBundle("~/bundles/pwstrength").Include(
+                   "~/Content/Plugins/password/pwstrength.js"));
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
             BundleTable.EnableOptimizations = false;

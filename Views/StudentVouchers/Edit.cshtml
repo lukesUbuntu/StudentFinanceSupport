@@ -1,0 +1,227 @@
+﻿@model StudentFinanceSupport.Models.StudentVoucher
+@using StudentFinanceSupport.Helpers
+
+@{
+    Layout = "~/Views/Shared/_Main_Layout_.cshtml";
+}
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.id_student_vouchers)
+    
+    <div id="add-student-form" class="form-horizontal">
+        <h4>StudentVoucher</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.student_ID, "student_ID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="input-group custom-search-form">
+
+
+
+                    <div class='suggest-holder'>
+
+
+                        <span class="input-group-btn">
+                            <i class="fa fa-search"></i>
+                            @Html.TextBox("student_ID", (string)ViewBag.student_ID, new { @class = "form-control suggest-prompt", @disabled = "", @autofocus = "", @autocomplete = "off" })
+                        </span>
+
+                        <ul></ul>
+                    </div>
+
+
+
+
+                </div>
+
+
+                @Html.ValidationMessageFor(model => model.student_ID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateOfIssue, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox(Html.NameFor(model => model.DateOfIssue).ToString(), @DateTime.Now.ToShortDateString(), htmlAttributes: new { @class = "datepicker" })
+
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.GrantType, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+               @Html.DropDownList("GrantType", Helpers.GrantTypes(), Helpers.SelectOneSpacer, htmlAttributes: new { @class = "form-control" })
+                    
+                      
+                  @Html.ValidationMessageFor(model => model.GrantType, "", new { @class = "text-danger" })
+</div>
+        </div>
+
+        <div id="GrantDescription_Holder" style="display:none" class="form-group amount_holders">
+            @Html.LabelFor(model => model.GrantDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.GrantDescription, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.GrantDescription, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div id="GrantValue_Holder" class="form-group amount_holders">
+            @Html.LabelFor(model => model.GrantValue, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.GrantValue, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.GrantValue, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+
+
+        <div id="KuhaFunds_Holder" class="form-group amount_holders">
+            @Html.LabelFor(model => model.KuhaFunds, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.KuhaFunds, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.KuhaFunds, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+
+
+}
+@Styles.Render("~/Content/Wizard")
+@Scripts.Render("~/bundles/wizardSteps")
+<script type="text/javascript">
+    $(document).ready(function () {
+        //hide all the amount holders
+        $(".amount_holders").hide();
+
+        //display grantvalue description if advice was selected on a reload
+        selectionChange("#GrantType")
+        /*
+        if ($("#GrantType").val().toLowerCase() == "advice")
+            adviceSelected()
+       */
+        //if grantype changed lets update other information
+        $("#GrantType").change(selectionChange);
+
+        //set our suggestion selected
+        var $suggest_holder = $('.suggest-holder ul');
+        //set where the textbox entry is
+        //var $suggest_holder = $('.suggest-holder ul');
+
+        $('#add-student-form').on('keyup', "input#student_ID", studentSuggestion);
+
+
+        //returns the value details of the suggest box
+        $('body').on('click', ".suggested-student", function (e) {
+            var student_id = $(this).attr("student_id");
+            console.log("student_id", student_id);
+            $('#student_ID').val(student_id);
+            $suggest_holder.hide();
+            //$suggest_holder.empty();
+        });
+
+        function emptySearch() {
+            if ($.trim($('#student_ID').val()) == "") {
+                $suggest_holder.hide();
+            }
+            console.log("Empting search div");
+            $suggest_holder.empty();
+        }
+        /*
+         @@name  : studentSuggestion
+         @@description : creates <li> based on json search results
+        */
+        function studentSuggestion(response) {
+            //hide and empty ul
+            $.ajax({
+                url: "/StudentVouchers/studentSearch",
+                type: "POST",
+                dataType: "json",
+                data: { query: $(this).val() },
+                success: function (data) {
+                    console.log("studentSuggestion data", data);
+
+                    if (data.length < 1) {
+                        $suggest_holder.hide();
+                        //emptySearch();
+                        console.log("Just hiding the div");
+                        return false;
+                    }
+                    emptySearch();
+                    $.map(data, function (student) {
+                        console.log("map students ->", student)
+
+                        //append to our ul
+                        $suggest_holder.append($("<li class='suggested-student' student_id='" + student.student_id + "'>" +
+                            "<span class='student-name'>" + student.student_name + "</span>" +
+                            "<span class='student-id'>" + student.student_id + "</span>" +
+                            "</li>")
+                            );
+
+
+                    })
+                    $suggest_holder.show();
+
+                }
+            });
+        }
+
+
+        function selectionChange(element) {
+            var selection_element = (typeof element == "string") ? $(element) : $(this)
+            console.log("typeof element", typeof element)
+
+            switch (selection_element.val().toLowerCase()) {
+                case "advice":
+                    adviceSelected();
+                    break;
+                case "hardship":
+                    grantDefault("#GrantValue_Holder,#KuhaFunds_Holder,#GrantDescription_Holder");
+                    break;
+                default:
+                    grantDefault();
+                    break;
+            }
+        }
+        //what elements to show and hide on advice selected
+        function adviceSelected() {
+            console.log("running adviceSelected")
+            $(".amount_holders").hide();
+            $("#GrantDescription_Holder").show();
+        }
+
+        //what elements to show and hide on advice selected
+        function grantDefault(GrantValue) {
+            console.log("running grantDefault")
+            $("#GrantDescription_Holder").hide();
+            var GrantValue = (typeof GrantValue == "undefined") ? "#GrantValue_Holder" : GrantValue;
+
+
+            $(".amount_holders").hide();
+
+            $(GrantValue).show();
+
+
+        }
+
+        //date picker
+        $('.datepicker').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            toggleActive: true
+        });
+
+    });
+</script>
+

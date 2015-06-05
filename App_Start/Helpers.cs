@@ -66,14 +66,25 @@ public static class Helpers
     {
         List<SelectListItem> MaritalStatusList = new List<SelectListItem>()
                     {
-                         new SelectListItem { Text = "NZ Citizen",    Value = "NZ_Citizen" }, 
-                         new SelectListItem { Text = "NZ Residency",  Value = "NZ_Residency" },
-                         new SelectListItem { Text = "International Student",  Value = "International_Student" }
+                         new SelectListItem { Text = "Single",    Value = "single" }, 
+                         new SelectListItem { Text = "Married",  Value = "married" },
+                         new SelectListItem { Text = "Divorce",  Value = "divorce" }
                     };
 
         return MaritalStatusList;
     }
 
+    public static List<SelectListItem> Ethnicity()
+    {
+        List<SelectListItem> Ethnicity = new List<SelectListItem>()
+                    {
+                         new SelectListItem { Text = "NZ Citizen",    Value = "NZ_Citizen" }, 
+                         new SelectListItem { Text = "NZ Residency",  Value = "NZ_Residency" },
+                         new SelectListItem { Text = "International Student",  Value = "International_Student" }
+                    };
+
+        return Ethnicity;
+    }
     /// <summary>
     ///  Generate dropdown for GrantTypes
     ///  @todo make this into a dynamic and editable list
@@ -93,6 +104,32 @@ public static class Helpers
         return GrantTypesList;
     }
 
+    public static List<SelectListItem> RecoveryOptions()
+    {
+        List<SelectListItem> RecoveryOptions = new List<SelectListItem>()
+                    {
+                         new SelectListItem { Text = "Mobile",    Value = "mobile" }, 
+                         new SelectListItem { Text = "Email",  Value = "email" }
+                        
+                    };
+
+        return RecoveryOptions;
+    }
+
+    public static List<SelectListItem> DayWeekMonthYearSelect()
+    {
+        List<SelectListItem> DayWeekMonthYearSelect = new List<SelectListItem>()
+                    {
+                         new SelectListItem { Text = "Day",    Value = "day" }, 
+                         new SelectListItem { Text = "Week",    Value = "week" },
+                         new SelectListItem { Text = "Month",    Value = "month" },
+                         new SelectListItem { Text = "Year",    Value = "year" }
+                    };
+
+        return DayWeekMonthYearSelect;
+    }
+
+        
     /// <summary>
     /// Outputs to the system local debug window help for checking strings when debug is not an option
     /// </summary>
@@ -102,6 +139,8 @@ public static class Helpers
     {
         System.Diagnostics.Debug.WriteLine(string.Format("Helper: {0} -> {1}",theMessage,theLocation));
     }
+
+
 
     public static bool UserLoggedIn()
     {
@@ -114,6 +153,7 @@ public static class Helpers
     
     
 }
+
 
 
 }
