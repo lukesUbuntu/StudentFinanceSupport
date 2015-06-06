@@ -19,7 +19,7 @@ namespace StudentFinanceSupport.Models
         [StringLength(20)]
         public string role_name { get; set; }
 
-        [StringLength(50)]
+        [StringLength(200)]
         public string role_description { get; set; }
 
         public virtual ICollection<Role> Roles { get; set; }

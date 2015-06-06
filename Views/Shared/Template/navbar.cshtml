@@ -57,7 +57,8 @@
                         </div>
                         <!-- /input-group -->
                     </li>
-
+                    if (Context.User.IsInRole("Admin") || Context.User.IsInRole("Advisor"))
+                    { 
                     <li class="search">
                         <a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                     </li>
@@ -73,7 +74,7 @@
                         <a href="@Url.Action("Add", "StudentVouchers")"><i class="fa fa-edit fa-fw"></i> Add Voucher</a>
 
                     </li>
-
+                    }
 
 
                     <li class="search">
@@ -81,7 +82,7 @@
                     </li>
 
 
-               if (Context.User.IsInRole("Adminfff"))
+               if (Context.User.IsInRole("Admin"))
                 {
                     <li class="search">
                         <a href="#"><i class="fa fa-eye-slash fa-fw"></i> Admin Menu <span class="fa arrow"></span></a>
