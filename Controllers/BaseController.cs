@@ -136,6 +136,9 @@ namespace StudentFinanceSupport.Controllers
             return (db.StudentRegistrations.Any(m => m.Student_ID.ToLower() == theStudentID.ToLower()));
         }
 
+
+    
+
         
     }
 

@@ -81,7 +81,8 @@
                     </li>
 
 
-
+               if (Context.User.IsInRole("Adminfff"))
+                {
                     <li class="search">
                         <a href="#"><i class="fa fa-eye-slash fa-fw"></i> Admin Menu <span class="fa arrow"></span></a>
                         
@@ -103,7 +104,7 @@
                         </ul>
                         <!-- end sub menu -->
                     </li>
-
+                }
 
                     <li>
                         <a href="@Url.Action("LogOut", "Administrators")"><i class="fa fa-sign-out fa-fw"></i> Logout</a>

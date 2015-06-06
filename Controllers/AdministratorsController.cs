@@ -262,7 +262,6 @@ namespace StudentFinanceSupport.Controllers
         [HttpGet]
         public ActionResult Login()
         {
-            //this.bypassAdminCheck();
             return View();
         }
 
@@ -273,12 +272,22 @@ namespace StudentFinanceSupport.Controllers
             if (IsValid(ref administrator))
             
             {
+
+               
+                
+                
                 
                 //FormsAuthenticationTicket with the supplied username & persistence options, serializes it,
+                
+                
+                
                 FormsAuthentication.SetAuthCookie(administrator.Email, false);
+                //Roles.AddUserToRole(administrator.Email, "Admin");
                 //http://stackoverflow.com/questions/23301445/formsauthentication-setauthcookie-vs-formsauthentication-encrypt
                 Session["logged_in"] = true;
                 Session["AdministratorLogin"] = administrator;
+                //set users roles
+
 
                 //return RedirectToAction("Index", "Home");
 
@@ -320,6 +329,7 @@ namespace StudentFinanceSupport.Controllers
                         //account is valid we need to update our admin account with the ID
                         administrator.UserId = user.UserId;
                         IsValid = true;
+                       
                     }
                 }
            

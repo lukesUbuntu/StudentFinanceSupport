@@ -6,6 +6,7 @@ namespace StudentFinanceSupport.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
+
     //just for loging in purposes
     public partial class AdministratorLogin
     {
@@ -68,5 +69,7 @@ namespace StudentFinanceSupport.Models
         public virtual ICollection<Role> Roles { get; set; }
 
         public virtual ICollection<Recovery> Recoveries { get; set; }
+
+        
     }
 }
