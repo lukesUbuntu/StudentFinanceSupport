@@ -18,7 +18,14 @@ body.loading {
 body.loading .modal {
     display: block;
 }*/
-
+/*pie chart header fixing*/
+ #pie-report {
+        top: -50px;
+        position: relative;
+    }
+    .list-group-item {
+        height : 50px;
+    }
 .isloading-wrapper.isloading-right{
     margin-left:10px;
 
@@ -92,7 +99,7 @@ body.loading .modal {
 .suggest-holder li:hover {
     cursor: pointer;
 }
-.suggest-holder li:hover, li.active {
+.suggest-holder li:hover, .suggest-holder li.active {
     background: rgba(0,120,0, .2);
 }
 .suggest-holder .student-name {

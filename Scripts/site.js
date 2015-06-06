@@ -6,10 +6,11 @@ $(function() {
 (function ($) {
     //jquery plugin by luke hardiman
     $.fn.alertBox = function (message, success) {
+        if (typeof message == "undefined") return this.hide().empty();
         return (
         success = (typeof success == "boolean" && success == true) ? "success" : success,
         success = (typeof success == "string") ? "alert-" + success : "alert-danger",
-        this.text(message),
+        this.html(message),
         this.removeClass("alert-danger alert-success"),
         this.addClass(success),
         this.show())

@@ -39,26 +39,56 @@ namespace StudentFinanceSupport.Controllers
 
         // POST: Recovery/Create
         [HttpPost]
-        public ActionResult Code(Recovery theRecovery)
+        public ActionResult Code(String recovery_key)
         {
+            if (String.IsNullOrEmpty(recovery_key))
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Please eter a recovery key"
+                }, JsonRequestBehavior.AllowGet);
+            }
+
             StudentRegistrationsModel db = new StudentRegistrationsModel();
-            var theAdmin = (from a in db.Administrators
+            /*var theAdmin = (from a in db.Administrators
                             join b in db.Recoveries on a.UserId equals b.UserId
-                            where b.recovery_key == theRecovery.recovery_key
+                            where b.recovery_key == theRecoverCodey
+                            select a).SingleOrDefault();*/
+            var theAdmin = (from a in db.Recoveries
+                            where a.recovery_key == recovery_key
+                            join b in db.Administrators on a.UserId equals b.UserId
+                            //where b.recovery_key == theRecoverCodey
                             select a).SingleOrDefault();
 
             if (theAdmin == null)
             {
-                ModelState.AddModelError("recovery_key", "Incorrect Recovery KEY Details");
-                return View(theRecovery);
+              
+                return Json(new
+                {
+                    success = false,
+                    message = "Incorrect Recovery KEY Details"
+                }, JsonRequestBehavior.AllowGet);
 
             }
+            else
+            {
+                //set session the sesion
+                Session["AdministratorRecovery"] = (Recovery)theAdmin;
+                return Json(new
+                {
+                    success = true,
+                    message = "<b>Success</b> Redirecting you now...",
+                    url = "/Administrators/ChangePassword"
+
+                }, JsonRequestBehavior.AllowGet);
+            }
             //secure to only pass some details in session
+
+
            
 
-            Session["AdministratorRecovery"] = (Recovery)theRecovery;
-
-            return RedirectToAction("ChangePassword", "Administrators");
+            //return RedirectToAction("ChangePassword", "Administrators");
             //return View();
         }
 
@@ -111,7 +141,12 @@ namespace StudentFinanceSupport.Controllers
                      kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
                  );
 
-                return Json(errorList, JsonRequestBehavior.AllowGet);
+                return Json(new
+                {
+                    success = false,
+                    errors = errorList
+                }, JsonRequestBehavior.AllowGet);
+                
             }
 
             Session["AdministratorRecovery"] = theRecovery;
@@ -132,10 +167,11 @@ namespace StudentFinanceSupport.Controllers
             return Json(new
             {
                 success = true,
+                message = "You can now request a reset a recovery code.."
             }, JsonRequestBehavior.AllowGet);
 
 
-           
+            //return sendRecoveryCode(theRecovery);
 
            
         }
@@ -150,7 +186,7 @@ namespace StudentFinanceSupport.Controllers
                     return Json(new
                     {
                         success = false,
-                        message = "Invalid State"
+                        message = "Invalid Session please refresh the browser"
                     }, JsonRequestBehavior.AllowGet);
                 }
 
@@ -177,10 +213,19 @@ namespace StudentFinanceSupport.Controllers
                         return Json(new
                         {
                             success = true,
-                            message = "Sent an email with recovery code"
+                            message = String.Format("<b>Great!</b>, we have sent your recovery code to <b>{0}</b>", sessRecovery.Administrator.Email)
 
                         }, JsonRequestBehavior.AllowGet);
-                       
+
+                    }
+                    else
+                    {
+                        return Json(new
+                        {
+                            success = false,
+                            message = "Something bad happend"
+
+                        }, JsonRequestBehavior.AllowGet);
                     }
                 }
 
@@ -214,7 +259,7 @@ namespace StudentFinanceSupport.Controllers
                             return Json(new
                             {
                                 success = true,
-                                message = "sent a SMS message to mobile with recovery code"
+                                message =  String.Format("Great we have sent you a TEXT Message with recovery code to <b>{0}</b>", sessRecovery.Administrator.mobile)
 
                             }, JsonRequestBehavior.AllowGet);
                         }

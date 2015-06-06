@@ -25,7 +25,7 @@
     @if (Helpers.UserLoggedIn())
     {
         <!-- Admin Scripts Charts JavaScript -->
-        @Scripts.Render("~/bundles/adminScripts")
+       
     }
   
     <div class="modal"><!-- Place at bottom of page --></div>
@@ -38,12 +38,17 @@
            
             $('#side-menu li.search').each(function () {
                 var text = $(this).text().toLowerCase();
-                
+                var sub_menu = $(this).parent().hasClass("nav-second-level");
                 //console.log("text", text);
                 var theSearch = new RegExp(valThis);
+
                 if (theSearch.test(text)) {
-                    $(this).show();
+                    
+                    if (sub_menu) $(this).parent().removeClass("collapse ")
+                   
+                    $(this).show()
                 } else {
+                    if (sub_menu) $(this).parent().addClass("collapse ")
                     $(this).hide()
                 }
               

@@ -23,6 +23,8 @@ namespace StudentFinanceSupport.Controllers
         {
             //list of Actions in this controller that we don't want to security check session on
             bypassAdminCheck("Administrators/Login");
+            bypassAdminCheck("Administrators/ChangePassword");
+            
             //bypassAdminCheck("Administrators/Login");
         }
 

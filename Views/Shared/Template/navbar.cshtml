@@ -9,19 +9,7 @@
             <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="#">@Helpers.SystemName()</a>
-        <!--
-        <ul class="nav navbar-nav members">
-            <li style="padding-right:5px;">
-                <button class="btn btn-info " id="webMail"><span class="fa fa-envelope-o"></span> Webmail</button>
-            </li>
-            <li style="padding-right:5px;">
-                <button class="btn btn-success  " id="hostingPanel"><span class="fa  fa-cloud-upload"></span> Hosting Panel</button>
-            </li>
-            <li style="padding-right:5px;">
-                <button class="btn btn-warning  " id="membersLogin"><span class="fa  fa-cog"></span> Billing Login</button>
-            </li>
-        </ul>
-        -->
+
     </div>
     @if (Helpers.UserLoggedIn())
     {
@@ -95,10 +83,31 @@
 
 
                     <li class="search">
-                        <a href="@Url.Action("Index", "Administrators")"><i class="fa fa-eye-slash fa-fw"></i> Admin Menu</a>
+                        <a href="#"><i class="fa fa-eye-slash fa-fw"></i> Admin Menu <span class="fa arrow"></span></a>
+                        
+                        <!-- second sub menu start -->
+                        <!--
+                            @Url.Action("Index", "Administrators")
+                        -->
+                        <ul class="nav nav-second-level">
+                            <li class="search">
+                                <a href="@Url.Action("Add", "Administrators")">Add Administrators</a>
+                            </li>
+                            <li class="search">
+                                <a href="@Url.Action("Admins", "Administrators")">List Administrators</a>
+                            </li>
+                            <li class="search">
+                                <a href="@Url.Action("Admins", "Administrators")">Add Faculty</a>
+                            </li>
+                            
+                        </ul>
+                        <!-- end sub menu -->
                     </li>
 
 
+                    <li>
+                        <a href="@Url.Action("LogOut", "Administrators")"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                    </li>
                 }
                 else
                 {
