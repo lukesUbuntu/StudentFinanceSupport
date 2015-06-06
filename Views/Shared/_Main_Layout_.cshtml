@@ -35,7 +35,11 @@
         $("#nav_search").keyup(function(){
 
             var valThis = $(this).val();
-           
+            if (valThis.length <= 0) {
+                //clean up no search
+               
+            }
+
             $('#side-menu li.search').each(function () {
                 var text = $(this).text().toLowerCase();
                 var sub_menu = $(this).parent().hasClass("nav-second-level");

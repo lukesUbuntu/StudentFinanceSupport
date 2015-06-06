@@ -142,7 +142,7 @@ namespace StudentFinanceSupport.Controllers
 
             if (theReport.GrantType != null)
             {
-                student_grants = from a in student_grants where a.GrantyType.ToLower() == theReport.GrantType.ToLower() select a;
+                student_grants = from a in student_grants where a.GrantyType.grant_name.ToLower() == theReport.GrantType.ToLower() select a;
             }
 
             if (theReport.Campus != null)
@@ -156,7 +156,7 @@ namespace StudentFinanceSupport.Controllers
 
             var grant_pie_report =
                   from voucher in student_grants.ToList()
-                  where voucher.GrantyType.ToLower() != "advice"
+                  where voucher.GrantyType.grant_name.ToLower() != "advice"
                   group voucher by voucher.GrantyType into newGroup
                   select new
                   {
@@ -168,7 +168,7 @@ namespace StudentFinanceSupport.Controllers
 
             var faculty_pie_report =
                    from students in student_grants.ToList()
-                   where students.GrantyType.ToLower() != "advice"
+                   where students.GrantyType.grant_name.ToLower() != "advice"
                    group students by students.faculty_name into newGroup
 
                    select new
@@ -182,7 +182,7 @@ namespace StudentFinanceSupport.Controllers
             
             var main_report =
                 from grant in student_grants
-                where grant.GrantyType.ToLower() != "advice"
+                where grant.GrantyType.grant_name.ToLower() != "advice"
                 select new
                 {
                     GrantType = grant.GrantyType,
@@ -196,7 +196,7 @@ namespace StudentFinanceSupport.Controllers
                 success = true,
                 student_grants = student_grants,
                 student_count = student_count.Count(),
-                advice_count = student_grants.Where(c => c.GrantyType.ToLower() == "advice").Count(),
+                advice_count = student_grants.Where(c => c.GrantyType.grant_name.ToLower() == "advice").Count(),
                 grant_pie_report = grant_pie_report,
                 //value = newGroup.Sum(c => c.GrantValue)
                 total_cost = student_grants.GroupBy(c => c.GrantValue).Select(c => c.Key).Sum(),

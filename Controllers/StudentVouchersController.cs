@@ -42,18 +42,26 @@ namespace StudentFinanceSupport.Controllers
         // GET: StudentVouchers/Add
         public ActionResult Add(String id)
         {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
+            StudentVoucher studentVoucher = new StudentVoucher();
+            //voucher.GrantType = db.GrantTypes.ToList();
             //parsing to the view
-            ViewBag.GrantType = Helpers.Helpers.GrantTypes();
+            //ViewBag.GrantType = Helpers.Helpers.GrantTypes();
+            ViewBag.grant_type_id = db.GrantTypes;
+            
+            // new SelectList(db.GrantTypes, "grant_type_id", "grant_name");
+            //ViewBag.grant_type_id = new SelectList(db.GrantTypes, "grant_type_id", "grant_name");
             ViewBag.student_ID = (id != null) ? id : String.Empty;
-           
-            return View();
+            studentVoucher.grant_type_id = 0;
+            return View(studentVoucher);
         }
+
         // POST: StudentVouchers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add([Bind(Include = "student_ID,GrantType,GrantDescription,GrantValue,DateOfIssue,KuhaFunds")] StudentVoucher studentVoucher)
+        public ActionResult Add([Bind(Include = "student_ID,GrantDescription,GrantValue,DateOfIssue,KuhaFunds,grant_type_id")] StudentVoucher studentVoucher)
         {
             StudentRegistrationsModel db = new StudentRegistrationsModel();
             //lets make sure student exists
@@ -62,30 +70,29 @@ namespace StudentFinanceSupport.Controllers
                 ModelState.AddModelError("Student_ID", "Student ID Does Not Exist");
                 //return View(StudentRegistration);
             }
-            //description field is only required value if grant advice selected
 
-            if (studentVoucher.GrantType != null && studentVoucher.GrantType.Contains("Advice")) 
-            {
-                //Clear the GrantValue error as will be triggered otherwise
-                //ModelState["GrantValue"].Errors.Clear();
-                ModelState.Remove("GrantValue");
-                if (String.IsNullOrEmpty(studentVoucher.GrantDescription))
-                {
-                    ModelState.AddModelError("GrantDescription", "Grant description must contain details on advice");
-                }
-                
-                
-            }
+            //check the required grant requirements have been meet
+            GrantType GrantType = db.GrantTypes.Find(studentVoucher.grant_type_id);
 
+           if (GrantType.grant_description == true && (String.IsNullOrEmpty(studentVoucher.GrantDescription)))
+               ModelState.AddModelError("GrantDescription", "Grant description must contain details it is required");
+
+
+           if (GrantType.grant_value == true && studentVoucher.GrantValue <= 0)
+               ModelState.AddModelError("GrantValue", "GrantValue needs to be greater than 0");
+
+            
             if (ModelState.IsValid)
             {
                 db.StudentVouchers.Add(studentVoucher);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.GrantType = Helpers.Helpers.GrantTypes();
+            
+            //pass back our data
+            ViewBag.grant_type_id = db.GrantTypes;
             ViewBag.student_ID = (studentVoucher.student_ID != null) ? studentVoucher.student_ID : String.Empty;
-            // ViewBag.student_ID = new SelectList(db.StudentRegistrations, "Student_ID", "FirstName", studentVoucher.student_ID);
+
             return View(studentVoucher);
         }
         public JsonResult studentSearch(string query)

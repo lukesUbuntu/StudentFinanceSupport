@@ -25,6 +25,7 @@ namespace StudentFinanceSupport.Models
 
         public virtual DbSet<Recovery> Recoveries { get; set; }
 
+        public virtual DbSet<GrantType> GrantTypes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -47,6 +48,23 @@ namespace StudentFinanceSupport.Models
 
             modelBuilder.Entity<Recovery>()
                 .Property(e => e.recovery_key)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<GrantType>()
+              .Property(e => e.grant_name)
+              .IsUnicode(false);
+
+            modelBuilder.Entity<GrantType>()
+                .HasMany(e => e.StudentVouchers)
+                .WithRequired(e => e.GrantType)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<StudentVoucher>()
+                .Property(e => e.student_ID)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<StudentVoucher>()
+                .Property(e => e.GrantDescription)
                 .IsUnicode(false);
         }
 

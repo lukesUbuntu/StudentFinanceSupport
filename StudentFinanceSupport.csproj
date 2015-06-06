@@ -146,6 +146,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\FacultiesController.cs" />
+    <Compile Include="Controllers\GrantTypesController.cs" />
     <Compile Include="Models\functions\PasswordHashing.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdministratorsController.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="Models\Faculty.cs" />
     <Compile Include="Models\functions\RecoveryComms.cs" />
     <Compile Include="Models\functions\Reports.cs" />
+    <Compile Include="Models\GrantType.cs" />
     <Compile Include="Models\Recovery.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\RoleType.cs" />
@@ -804,6 +806,11 @@
     <Content Include="Views\Reports\ViewReport.cshtml" />
     <Content Include="Views\StudentVouchers\Edit.cshtml" />
     <Content Include="Views\Reports\ReportFilter.cshtml" />
+    <Content Include="Views\GrantTypes\Create.cshtml" />
+    <Content Include="Views\GrantTypes\Delete.cshtml" />
+    <Content Include="Views\GrantTypes\Details.cshtml" />
+    <Content Include="Views\GrantTypes\Edit.cshtml" />
+    <Content Include="Views\GrantTypes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

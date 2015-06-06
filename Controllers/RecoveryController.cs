@@ -12,6 +12,7 @@ namespace StudentFinanceSupport.Controllers
     {
         public RecoveryController()
         {
+            //bypass the complete controller no need for session checking
             bypassControllerCheck("Recovery");
         }
         // GET: Recovery
@@ -30,14 +31,15 @@ namespace StudentFinanceSupport.Controllers
         {
             return View();
         }
-        // GET: Recovery/Create
-        public ActionResult Code()
-        {
-           
-            return View();
-        }
+
+       
 
         // POST: Recovery/Create
+        /// <summary>
+        ///  Checks and verifyies a recovery key code 
+        /// </summary>
+        /// <param name="recovery_key">JSON response</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Code(String recovery_key)
         {
@@ -94,12 +96,6 @@ namespace StudentFinanceSupport.Controllers
 
 
 
-
-
-
-
-  
-
         private void clearErrorStates(List<string> theKeys)
         {
             foreach (var key in theKeys)
@@ -109,6 +105,7 @@ namespace StudentFinanceSupport.Controllers
             }
 
         }
+
         public JsonResult adminDetails(Recovery theRecovery)
         {
             StudentRegistrationsModel db = new StudentRegistrationsModel();
@@ -176,6 +173,11 @@ namespace StudentFinanceSupport.Controllers
            
         }
 
+        /// <summary>
+        ///  Sends the recovery code to the user via email or sms
+        /// </summary>
+        /// <param name="theRecovery">Recovery details</param>
+        /// <returns>JSON if has passed Recovery checks</returns>
         public JsonResult sendRecoveryCode(Recovery theRecovery)
         {
             
