@@ -119,8 +119,13 @@ namespace StudentFinanceSupport.Controllers
                         student_grants = from a in student_grants where a.DateOfIssue.Day == theDate.Day select a;
                         break;
                     case "week":
+                        //calc between days
+                        DateTime endDate = theDate;
+                        endDate = endDate.AddDays(6);
+
                         student_grants = from a in student_grants 
-                                         where a.DateOfIssue.DayOfWeek == theDate.DayOfWeek 
+                                         where a.DateOfIssue >= theDate
+                                         && a.DateOfIssue < endDate
                                          select a;
                         break;
                     case "month":

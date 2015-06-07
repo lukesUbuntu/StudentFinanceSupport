@@ -178,6 +178,11 @@
                 minViewMode: "weeks",
                 viewMode: "weeks",
                 autoclose: true,
+                beforeShowDay: function (date) {
+                    //console.log("date", date.getDay())
+                    
+                    return date.getDay() == 1
+                }
             },
             month: {
                 format: "mm/yyyy",
