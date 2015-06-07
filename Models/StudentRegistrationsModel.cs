@@ -18,7 +18,7 @@ namespace StudentFinanceSupport.Models
 
         //admin and admin roles
         public virtual DbSet<Administrator> Administrators { get; set; }
-        public virtual DbSet<Role> Roles { get; set; }
+        //public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<RoleType> RoleTypes { get; set; }
 
         public virtual DbSet<StudentVoucher> StudentVouchers { get; set; }
@@ -65,6 +65,44 @@ namespace StudentFinanceSupport.Models
 
             modelBuilder.Entity<StudentVoucher>()
                 .Property(e => e.GrantDescription)
+                .IsUnicode(false);
+
+
+
+            modelBuilder.Entity<Administrator>()
+               .Property(e => e.Email)
+               .IsUnicode(false);
+
+            modelBuilder.Entity<Administrator>()
+                .Property(e => e.Password)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Administrator>()
+                .Property(e => e.FirstName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Administrator>()
+                .Property(e => e.LastName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Administrator>()
+                .Property(e => e.mobile)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Recovery>()
+                .Property(e => e.recovery_key)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Recovery>()
+                .Property(e => e.recovery_option)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<RoleType>()
+                .Property(e => e.role_name)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<RoleType>()
+                .Property(e => e.role_description)
                 .IsUnicode(false);
         }
 

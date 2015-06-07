@@ -6,29 +6,11 @@ namespace StudentFinanceSupport.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-
-    //just for loging in purposes
-    public partial class AdministratorLogin
-    {
-        [Display(Name = "Email address")]
-        [Required(ErrorMessage = "The email address is required")]
-        [EmailAddress(ErrorMessage = "The email address is not valid")]
-        [DataType(DataType.EmailAddress)]
-        [StringLength(100)]
-        public string Email { get; set; }
-
-        [Required]
-        [StringLength(250, MinimumLength = 3)]
-        public string Password { get; set; }
-        public int UserId { get; set; }
-      
-    }
     public partial class Administrator
     {
         public Administrator()
         {
             Recoveries = new HashSet<Recovery>();
-            Roles = new HashSet<Role>();
         }
 
         [Key]
@@ -54,9 +36,18 @@ namespace StudentFinanceSupport.Models
 
         [Display(Name = "Mobile Phone Number")]
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression("^02[1-9]\\d{5,9}")]
+        [RegularExpression("^02[1-9]\\d{5,9}", ErrorMessage = "Invalid mobile number, format is 021-029... eg. 02102341111")]
+
         [StringLength(15)]
         public string mobile { get; set; }
+
+        [Required]
+        
+        public int role_type_id { get; set; }
+
+        public virtual ICollection<Recovery> Recoveries { get; set; }
+
+        public virtual RoleType RoleType { get; set; }
 
         public AdministratorLogin loginDetails()
         {
@@ -66,10 +57,21 @@ namespace StudentFinanceSupport.Models
             tmplogin.UserId = this.UserId;
             return tmplogin;
         }
-        public virtual ICollection<Role> Roles { get; set; }
+    }
 
-        public virtual ICollection<Recovery> Recoveries { get; set; }
+    public partial class AdministratorLogin
+    {
+        [Display(Name = "Email address")]
+        [Required(ErrorMessage = "The email address is required")]
+        [EmailAddress(ErrorMessage = "The email address is not valid")]
+        [DataType(DataType.EmailAddress)]
+        [StringLength(100)]
+        public string Email { get; set; }
 
-        
+        [Required]
+        [StringLength(250, MinimumLength = 3)]
+        public string Password { get; set; }
+        public int UserId { get; set; }
+
     }
 }

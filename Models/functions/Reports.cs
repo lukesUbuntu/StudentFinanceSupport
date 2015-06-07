@@ -17,7 +17,7 @@ namespace StudentFinanceSupport.Models.functions
         public int? Faculity { get; set; }
 
         public int? Campus { get; set; }
-        public string GrantType { get; set; }
+        public int? GrantType { get; set; }
         public DateTime getDate()
         {
             string theFormat = "dd/MM/yyyy";

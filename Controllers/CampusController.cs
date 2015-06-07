@@ -10,108 +10,108 @@ using StudentFinanceSupport.Models;
 
 namespace StudentFinanceSupport.Controllers
 {
-    [Authorize(Roles = "Admin")]
-    public class GrantTypesController : BaseController
+     [Authorize(Roles = "Admin")]
+    public class CampusController : BaseController
     {
         private StudentRegistrationsModel db = new StudentRegistrationsModel();
 
-        // GET: GrantTypes
+        // GET: Campus
         public ActionResult Index()
         {
-            return View(db.GrantTypes.ToList());
+            return View(db.Campus.ToList());
         }
 
-        // GET: GrantTypes/Details/5
+        // GET: Campus/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            GrantType grantType = db.GrantTypes.Find(id);
-            if (grantType == null)
+            Campus campus = db.Campus.Find(id);
+            if (campus == null)
             {
                 return HttpNotFound();
             }
-            return View(grantType);
+            return View(campus);
         }
 
-        // GET: GrantTypes/Create
+        // GET: Campus/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: GrantTypes/Create
+        // POST: Campus/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "grant_type_id,grant_name,grant_value,grant_description,grant_koha,system_asset")] GrantType grantType)
+        public ActionResult Create([Bind(Include = "id_campus,campus_name")] Campus campus)
         {
             if (ModelState.IsValid)
             {
-                db.GrantTypes.Add(grantType);
+                db.Campus.Add(campus);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(grantType);
+            return View(campus);
         }
 
-        // GET: GrantTypes/Edit/5
+        // GET: Campus/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            GrantType grantType = db.GrantTypes.Find(id);
-            if (grantType == null)
+            Campus campus = db.Campus.Find(id);
+            if (campus == null)
             {
                 return HttpNotFound();
             }
-            return View(grantType);
+            return View(campus);
         }
 
-        // POST: GrantTypes/Edit/5
+        // POST: Campus/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "grant_type_id,grant_name,grant_value,grant_description,grant_koha,system_asset")] GrantType grantType)
+        public ActionResult Edit([Bind(Include = "id_campus,campus_name")] Campus campus)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(grantType).State = EntityState.Modified;
+                db.Entry(campus).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(grantType);
+            return View(campus);
         }
 
-        // GET: GrantTypes/Delete/5
+        // GET: Campus/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            GrantType grantType = db.GrantTypes.Find(id);
-            if (grantType == null)
+            Campus campus = db.Campus.Find(id);
+            if (campus == null)
             {
                 return HttpNotFound();
             }
-            return View(grantType);
+            return View(campus);
         }
 
-        // POST: GrantTypes/Delete/5
+        // POST: Campus/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            GrantType grantType = db.GrantTypes.Find(id);
-            db.GrantTypes.Remove(grantType);
+            Campus campus = db.Campus.Find(id);
+            db.Campus.Remove(campus);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

@@ -65,9 +65,9 @@ namespace StudentFinanceSupport.Models
 
                   var adminRoles = from theAdmin in db.Administrators
                               where theAdmin.Email == username
-                              join theRoles in db.Roles on theAdmin.UserId equals theRoles.UserId
-                              join theAdminRoles in db.RoleTypes on theRoles.role_type_id equals theAdminRoles.role_type_id
-                              select theAdminRoles.role_name;
+                              join theRoles in db.RoleTypes on theAdmin.role_type_id equals theRoles.role_type_id
+                              //join theAdminRoles in db.RoleTypes on theRoles.role_type_id equals theAdminRoles.role_type_id
+                              select theRoles.role_name;
 
                 return adminRoles.ToArray();
 
@@ -87,9 +87,10 @@ namespace StudentFinanceSupport.Models
               
                   var adminRoles = from theAdmin in db.Administrators
                               where theAdmin.Email == username
-                              join theRoles in db.Roles on theAdmin.UserId equals theRoles.UserId
-                              join theAdminRoles in db.RoleTypes on theRoles.role_type_id equals theAdminRoles.role_type_id
-                              where theAdminRoles.role_name == roleName select theAdmin;
+                              join theRoles in db.RoleTypes on theAdmin.role_type_id equals theRoles.role_type_id
+                              //join theAdminRoles in db.RoleTypes on theRoles.role_type_id equals theAdminRoles.role_type_id
+                                   where theRoles.role_name == roleName
+                                   select theAdmin;
                              
 
                 return (adminRoles != null) ? true : false;
@@ -125,8 +126,8 @@ namespace StudentFinanceSupport.Models
 
                 var adminRoles = from theAdmin in db.Administrators
                               where theAdmin.Email == username
-                              join theRoles in db.Roles on theAdmin.UserId equals theRoles.UserId
-                              join theAdminRoles in db.RoleTypes on theRoles.role_type_id equals theAdminRoles.role_type_id
+                              //join theRoles in db.Roles on theAdmin.UserId equals theRoles.UserId
+                                 join theAdminRoles in db.RoleTypes on theAdmin.role_type_id equals theAdminRoles.role_type_id
                               select new 
                               {
                                   role_name = theAdminRoles.role_name

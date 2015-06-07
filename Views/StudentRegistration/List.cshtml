@@ -16,8 +16,8 @@
             <th>Student ID</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Email Address</th>
             <th>Campus</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -29,21 +29,28 @@
                 <td>@Html.DisplayFor(modelItem => student.Student_ID)</td>
                 <td>@Html.DisplayFor(modelItem => student.FirstName)</td>
                 <td>@Html.DisplayFor(modelItem => student.LastName)</td>
-                <td>@Html.DisplayFor(modelItem => student.Email)</td>
+                <td>@Html.DisplayFor(modelItem => student.Campus.campus_name)</td>
                 <td class="center">
                     <div class="btn-group">
-                        @Html.ActionLink("Add Voucher", "Add","StudentVouchers",
-                            new { id = student.Student_ID },
-                            htmlAttributes: new { @class = "btn btn-default " }
-                          )
+                        @Html.ActionLink("Edit User", "Edit", new { id = student.Student_ID },
+                            htmlAttributes: new { @class = "btn btn-default " })
+
+
+                       
                         
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                             <span class="caret"></span>
                             <span class="sr-only"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                            <li>@Html.ActionLink("Edit User", "Edit", new { id = student.Student_ID })</li>
-                            <li><a href="#">Another action</a></li>
+                            @if (student.StudentVouchers.Count > 0) { 
+                            <li>
+                                @Html.ActionLink("View Vouchers", "byStudentID", "StudentVouchers",
+                             new { id = student.Student_ID }, null)
+                            </li>
+                            }
+                            <li>@Html.ActionLink("Add Voucher", "Add", "StudentVouchers",
+                            new { id = student.Student_ID },null)</li>
                             <li class="divider"></li>
                             <li class="">@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })</li>
                         </ul>

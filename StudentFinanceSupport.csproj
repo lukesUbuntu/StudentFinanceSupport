@@ -144,9 +144,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\CustomViewEngine.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="Controllers\CampusController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\FacultiesController.cs" />
     <Compile Include="Controllers\GrantTypesController.cs" />
+    <Compile Include="Models\Administrator.cs" />
     <Compile Include="Models\functions\PasswordHashing.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdministratorsController.cs" />
@@ -165,7 +167,6 @@
       <DependentUpon>201505210154369_InitialMigrations.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Administrator.cs" />
     <Compile Include="Models\AuthorizeUserAttribute.cs" />
     <Compile Include="Models\Campus.cs" />
     <Compile Include="Models\Courses.cs" />
@@ -174,11 +175,11 @@
     <Compile Include="Models\functions\Reports.cs" />
     <Compile Include="Models\GrantType.cs" />
     <Compile Include="Models\Recovery.cs" />
-    <Compile Include="Models\Role.cs" />
     <Compile Include="Models\RoleType.cs" />
     <Compile Include="Models\StudentRegistration.cs" />
     <Compile Include="Models\StudentRegistrationsModel.cs" />
     <Compile Include="Models\StudentVoucher.cs" />
+    <Compile Include="Models\test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTesting\HelperTest.cs" />
     <Compile Include="UnitTesting\HomeControllerTest.cs" />
@@ -189,6 +190,8 @@
     <Content Include="App_Data\studentFinance_log.ldf">
       <DependentUpon>studentFinance.mdf</DependentUpon>
     </Content>
+    <Content Include="Content\Plugins\dialog\bootstrap-dialog.css" />
+    <Content Include="Content\Plugins\dialog\bootstrap-dialog.js" />
     <Content Include="Content\Plugins\plot\js\.gitignore" />
     <Content Include="Content\Plugins\plot\js\excanvas.js" />
     <Content Include="Content\Plugins\plot\js\excanvas.min.js" />
@@ -813,6 +816,13 @@
     <Content Include="Views\GrantTypes\Index.cshtml" />
     <Content Include="Views\StudentVouchers\Details.cshtml" />
     <Content Include="Views\StudentVouchers\_student_vouchers.cshtml" />
+    <Content Include="Views\Administrators\Edit.cshtml" />
+    <Content Include="Views\Administrators\Details.cshtml" />
+    <Content Include="Views\Campus\Create.cshtml" />
+    <Content Include="Views\Campus\Delete.cshtml" />
+    <Content Include="Views\Campus\Details.cshtml" />
+    <Content Include="Views\Campus\Edit.cshtml" />
+    <Content Include="Views\Campus\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

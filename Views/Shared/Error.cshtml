@@ -1,17 +1,16 @@
 ﻿@{
-    Layout = null;
+    Layout = "~/Views/Shared/_Main_Layout_.cshtml";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
+
+   
     <title>Error</title>
-</head>
-<body>
+
     <hgroup>
-        <h1>Error.</h1>
+        <h1 style="color:red">System Error.</h1>
         <h2>An error occurred while processing your request.</h2>
+        <h4>message : @ViewBag.Message</h4>
+        
     </hgroup>
-</body>
-</html>
+<small>Please contact your system admin</small>
+@Html.ActionLink("Back", "Index")

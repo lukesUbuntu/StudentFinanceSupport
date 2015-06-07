@@ -10,7 +10,7 @@ namespace StudentFinanceSupport.Models
     {
         public RoleType()
         {
-            Roles = new HashSet<Role>();
+            Administrators = new HashSet<Administrator>();
         }
 
         [Key]
@@ -22,6 +22,6 @@ namespace StudentFinanceSupport.Models
         [StringLength(200)]
         public string role_description { get; set; }
 
-        public virtual ICollection<Role> Roles { get; set; }
+        public virtual ICollection<Administrator> Administrators { get; set; }
     }
 }

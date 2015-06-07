@@ -50,16 +50,17 @@
         
         <div class="form-group">
             
-            <div class="col-md-10">
-                @Html.LabelFor(model => model.Roles, "Additional Roles", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="">
+                @Html.LabelFor(model => model.role_type_id, "Additional Roles", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-6">
-                    @Html.ListBox(
-                "Roles", 
-                 ViewBag.admin_roles as MultiSelectList,
+                    @Html.DropDownList(
+                "role_type_id",
+                ViewBag.role_type_id as SelectList, Helpers.SelectOneSpacer,
                  new { @class = "form-control", data_placeholder = "Choose a Role..." }
                     )
-                    @Html.ValidationMessageFor(model => model.Roles, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.role_type_id, "", new { @class = "text-danger" })
                 </div>
+
                 </div>
         </div>
 

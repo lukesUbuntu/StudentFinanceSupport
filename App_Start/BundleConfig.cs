@@ -23,7 +23,7 @@ namespace StudentFinanceSupport
             */
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Content/Plugins/bootstrap/dist/js/bootstrap.js",
-                      //"~/Scripts/jquery-ui.js",
+                     "~/Content/Plugins/dialog/bootstrap-dialog.js",
                       "~/Scripts/respond.js"));
 
            
@@ -32,6 +32,7 @@ namespace StudentFinanceSupport
             bundles.Add(new StyleBundle("~/Content/core").Include(
                       "~/Content/Plugins/bootstrap/dist/css/bootstrap.css",
                       "~/Content/Plugins/metisMenu/dist/metisMenu.css",
+                      "~/Content/Plugins/dialog/bootstrap-dialog.css",
                       "~/Content/site.css"
                       )
             );
@@ -95,8 +96,8 @@ namespace StudentFinanceSupport
             bundles.Add(new ScriptBundle("~/bundles/spinner").Include(
                    "~/Content/Plugins/spinner/jquery.isloading.min.js"));
 
-  
-           
+
+          
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862

@@ -4,6 +4,9 @@
 <table class="table">
     <tr>
         <th>
+            @Html.DisplayNameFor(model => model.DateOfIssue)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.GrantType.grant_name)
         </th>
         
@@ -14,16 +17,18 @@
             @Html.DisplayNameFor(model => model.GrantValue)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DateOfIssue)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.KuhaFunds)
         </th>
+       
+        
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateOfIssue)
+        </td>
         <td>
             @Html.DisplayFor(modelItem => item.GrantType.grant_name)
         </td>
@@ -32,18 +37,41 @@
             @Html.DisplayFor(modelItem => item.GrantDescription)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.GrantValue)
+            $@Html.DisplayFor(modelItem => item.GrantValue)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.DateOfIssue)
+            $@Html.DisplayFor(modelItem => item.KuhaFunds)
         </td>
+  
+   
         <td>
-            @Html.DisplayFor(modelItem => item.KuhaFunds)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id_student_vouchers }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id_student_vouchers }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id_student_vouchers })
+
+            <div class="btn-group">
+               @Html.ActionLink("Edit Voucher", "Edit", new { id = item.id_student_vouchers },
+                            htmlAttributes: new { @class = "btn btn-default " })
+
+
+
+
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                   
+                        <li>
+                            @Html.ActionLink("Details", "Details", new { id = item.id_student_vouchers })
+                        </li>
+                    
+                    
+                <li class="divider"></li>
+                    <li class="delete">@Html.ActionLink("Delete", "DeleteConfirmed", new { id = item.id_student_vouchers })</li>
+            </ul>
+        </div>
+
+            
+
+           
         </td>
     </tr>
 }

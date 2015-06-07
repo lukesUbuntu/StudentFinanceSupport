@@ -11,7 +11,7 @@
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.id_student_vouchers)
-    
+    @Html.HiddenFor(model => model.student_ID)
     <div id="add-student-form" class="form-horizontal">
         <h4>StudentVoucher</h4>
         <hr />
@@ -50,18 +50,28 @@
 
             </div>
         </div>
+
         <div class="form-group">
             @Html.LabelFor(model => model.GrantType, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-
-               @Html.DropDownList("GrantType", Helpers.GrantTypes(), Helpers.SelectOneSpacer, htmlAttributes: new { @class = "form-control" })
-                    
-                      
-                  @Html.ValidationMessageFor(model => model.GrantType, "", new { @class = "text-danger" })
-</div>
+                <select class="form-control" id="grant_type_id" name="grant_type_id">
+                    <option value="">-- Select One --</option>
+                    @foreach (var type in (IEnumerable<StudentFinanceSupport.Models.GrantType>)@ViewBag.grant_type_id)
+                    {
+                        <option value="@type.grant_type_id"
+                                data-grant_value="@type.grant_value "
+                                data-grant_description="@type.grant_description"
+                                data-grant_koha="@type.grant_koha "
+                                @(Model.grant_type_id == type.grant_type_id ? "selected" : "")>
+                            @type.grant_name
+                        </option>
+                    }
+                </select>
+                @Html.ValidationMessageFor(model => model.GrantType, "", new { @class = "text-danger" })
+            </div>
         </div>
 
-        <div id="GrantDescription_Holder" style="display:none" class="form-group amount_holders">
+        <div id="grant_description_holder" style="display:none" class="form-group amount_holders">
             @Html.LabelFor(model => model.GrantDescription, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.TextAreaFor(model => model.GrantDescription, new { @class = "form-control" })
@@ -69,7 +79,7 @@
             </div>
         </div>
 
-        <div id="GrantValue_Holder" class="form-group amount_holders">
+        <div id="grant_value_holder" class="form-group amount_holders">
             @Html.LabelFor(model => model.GrantValue, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.GrantValue, new { htmlAttributes = new { @class = "form-control" } })
@@ -81,7 +91,7 @@
 
 
 
-        <div id="KuhaFunds_Holder" class="form-group amount_holders">
+        <div id="grant_koha_holder" class="form-group amount_holders">
             @Html.LabelFor(model => model.KuhaFunds, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.KuhaFunds, new { htmlAttributes = new { @class = "form-control" } })
@@ -91,7 +101,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Update Grant" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -102,18 +112,18 @@
 @Scripts.Render("~/bundles/wizardSteps")
 <script type="text/javascript">
     $(document).ready(function () {
+
+
         //hide all the amount holders
         $(".amount_holders").hide();
 
-        //display grantvalue description if advice was selected on a reload
-        selectionChange("#GrantType")
-        /*
-        if ($("#GrantType").val().toLowerCase() == "advice")
-            adviceSelected()
-       */
-        //if grantype changed lets update other information
-        $("#GrantType").change(selectionChange);
 
+
+        //if grantype changed lets update other information
+        $("#grant_type_id").change(selectionChange);
+
+        //display grantvalue description if advice was selected on a reload
+        $("#grant_type_id").trigger('change')
         //set our suggestion selected
         var $suggest_holder = $('.suggest-holder ul');
         //set where the textbox entry is
@@ -138,6 +148,7 @@
             console.log("Empting search div");
             $suggest_holder.empty();
         }
+
         /*
          @@name  : studentSuggestion
          @@description : creates <li> based on json search results
@@ -178,42 +189,36 @@
         }
 
 
-        function selectionChange(element) {
-            var selection_element = (typeof element == "string") ? $(element) : $(this)
-            console.log("typeof element", typeof element)
+        //have made changes now the select has a drop down with data types so now we show these values based data
+        //data-grant_value="True " data-grant_description="True" data-grant_koha="True "
+        //the actual checking is done serverside this is just to show the correct elements
+        function selectionChange() {
+            //grab the selected option
+            var $selected = $(this).find(':selected');
 
-            switch (selection_element.val().toLowerCase()) {
-                case "advice":
-                    adviceSelected();
-                    break;
-                case "hardship":
-                    grantDefault("#GrantValue_Holder,#KuhaFunds_Holder,#GrantDescription_Holder");
-                    break;
-                default:
-                    grantDefault();
-                    break;
-            }
-        }
-        //what elements to show and hide on advice selected
-        function adviceSelected() {
-            console.log("running adviceSelected")
-            $(".amount_holders").hide();
-            $("#GrantDescription_Holder").show();
-        }
+            var data_objects = $($selected).data();
+            console.log("data_objects", data_objects)
+            //no data objects means no selection
+            if (data_objects == null) return;
 
-        //what elements to show and hide on advice selected
-        function grantDefault(GrantValue) {
-            console.log("running grantDefault")
-            $("#GrantDescription_Holder").hide();
-            var GrantValue = (typeof GrantValue == "undefined") ? "#GrantValue_Holder" : GrantValue;
-
-
+            //hide previous grants
             $(".amount_holders").hide();
 
-            $(GrantValue).show();
+            //loop all data elements needed
+            $.each(data_objects, function (grant_type, enabled) {
+
+                //clean up
+                enabled = ($.trim(enabled).toLowerCase() == "true")
+
+                //lets show the holders for enabled
+                if (enabled == true)
+                    $("#" + grant_type + "_holder").show();
+
+            });
 
 
         }
+
 
         //date picker
         $('.datepicker').datepicker({

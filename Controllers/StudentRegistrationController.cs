@@ -8,11 +8,18 @@ using System.Data.Entity.Validation;
 
 namespace StudentFinanceSupport.Controllers
 {
-    
+
+    [Authorize(Roles = "Admin,Advisor")]
     public class StudentRegistrationController : BaseController
     {
         //private StudentRegistrationsModel db = new StudentRegistrationsModel();
 
+        //Redirect to your student list
+        public ActionResult Index()
+        {
+            return RedirectToAction("List");
+        }
+      
         // GET: StudentRegistration/List
         public ActionResult List()
         {

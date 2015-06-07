@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Main_Layout_.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Edit Grant Types</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -24,9 +24,7 @@
         <th>
             @Html.DisplayNameFor(model => model.grant_koha)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.system_asset)
-        </th>
+        
         <th></th>
     </tr>
 
@@ -44,13 +42,13 @@
         <td>
             @Html.DisplayFor(modelItem => item.grant_koha)
         </td>
+       
         <td>
-            @Html.DisplayFor(modelItem => item.system_asset)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.grant_type_id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.grant_type_id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.grant_type_id })
+ 
+            @Html.ActionLink("Edit Grant Type", "Edit", "GrantTypes",
+                    new { id = item.grant_type_id },
+                            htmlAttributes: new { @class = "btn btn-default " }
+                          )
         </td>
     </tr>
 }

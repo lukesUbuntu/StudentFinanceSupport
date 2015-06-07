@@ -71,6 +71,12 @@ namespace StudentFinanceSupport.Controllers
         {
             return View();
         }
+        public ActionResult Error(string message)
+        {
+            ViewBag.Message = message;
+            return View();
+        }
+        
         /// <summary>
         /// This is to overide OnActionExecuting https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.onactionexecuting(v=vs.118).aspx
         /// it will be called for every action method in the class.

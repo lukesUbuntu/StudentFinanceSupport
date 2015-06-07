@@ -310,7 +310,7 @@
     })
 
     function updateReportTable() {
-
+        console.log("student_report_view", student_report_view)
         $('#voucher-report-table').DataTable({
             responsive: true,
             "data": student_report_view,
@@ -445,18 +445,24 @@
             if (typeof data.student_grants != "undefined" && data.student_grants != null) {
                 $.each(data.student_grants, function (index, grant) {
                     var new_col = []
+                   
+                   
                     new_col.push(returnDate(grant.DateOfIssue));
                     new_col.push((typeof grant.LastName == "string") ? grant.FirstName + " " + grant.LastName : grant.FirstName)
-                    new_col.push(grant.GrantyType);
+                    new_col.push(grant.Grant_Name);
                     new_col.push(grant.campus_name);
                     new_col.push(grant.GrantValue);
-                    new_col.push((typeof grant.KohaFund == "null") ? 0 : grant.KohaFund)
+                    //var KohaFund = (grant.KohaFund > 0) ? grant.KohaFund : 0;
+                    new_col.push((grant.KohaFund > 0) ? grant.KohaFund : 0)
                     new_col.push(grant.Grant_ID);
                     student_report_view.push(new_col);
+                    //console.log("grant", grant);
+                    //console.log("new_col", new_col);
+                    //return false;
                 })
 
             }
-
+            return;
             updateReportTable();
             updatePieCharts();
         }

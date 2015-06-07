@@ -87,13 +87,25 @@ namespace StudentFinanceSupport.Controllers
                                  join grants in db.StudentVouchers on student.Student_ID equals grants.student_ID         
                                  select new
                                  {
-                                     //define all our returns we require
+                                   
+                                     //GrantyType = grants.GrantType.grant_name,
+                                     grant_type_id = grants.grant_type_id,
+                                     //these are enabled values from grant types model
+                                     grant_description_enabled = grants.GrantType.grant_description,
+                                     grant_value_enabled = grants.GrantType.grant_value,
+                                     grant_koha_enabled = grants.GrantType.grant_koha,
+
+                                     //define all our returns that other filters may require
                                      Student_ID = grants.student_ID,
                                      Grant_ID = grants.id_student_vouchers,
-                                     GrantyType = grants.GrantType,
+                                     //due to cycler refrence we need to only specify data not reference to FKEY data
+                                     Grant_Name = grants.GrantType.grant_name,
+
                                      GrantValue = grants.GrantValue,
                                      KohaFund = grants.KuhaFunds,
                                      DateOfIssue = grants.DateOfIssue,
+
+                                     //From the students join
                                      FirstName = grants.StudentRegistration.FirstName,
                                      LastName = grants.StudentRegistration.LastName,
                                      Gender = grants.StudentRegistration.Gender,
@@ -147,10 +159,10 @@ namespace StudentFinanceSupport.Controllers
             {
                 student_grants = from a in student_grants where a.faculty_id == theReport.Faculity select a;
             }
-
+            //filter by grant type
             if (theReport.GrantType != null)
             {
-                student_grants = from a in student_grants where a.GrantyType.grant_name.ToLower() == theReport.GrantType.ToLower() select a;
+                student_grants = from a in student_grants where a.grant_type_id == theReport.GrantType select a;
             }
 
             if (theReport.Campus != null)
@@ -161,11 +173,16 @@ namespace StudentFinanceSupport.Controllers
             //finally grab the count of actually students for other chart
             var student_count = from a in student_grants group a by a.Student_ID into c select c;
 
-
+            
             var grant_pie_report =
                   from voucher in student_grants.ToList()
-                  where voucher.GrantyType.grant_name.ToLower() != "advice"
-                  group voucher by voucher.GrantyType into newGroup
+                  where //voucher.GrantyType.grant_name.ToLower() != "advice"
+
+                                    voucher.grant_description_enabled == true &&
+                                    voucher.grant_koha_enabled == false &&
+                                    voucher.grant_value_enabled == false
+
+                  group voucher by voucher.Grant_Name into newGroup
                   select new
                   {
 
@@ -174,9 +191,18 @@ namespace StudentFinanceSupport.Controllers
 
                   };
 
+            //report based on ONLY advice, which contains just a description field no koha or value
+            var advice_report = from advice in student_grants
+                                where
+                                    advice.grant_description_enabled == true &&
+                                    advice.grant_koha_enabled == false &&
+                                    advice.grant_value_enabled == false
+                                select advice;
+
+            
             var faculty_pie_report =
                    from students in student_grants.ToList()
-                   where students.GrantyType.grant_name.ToLower() != "advice"
+                   //where students.Grant_ID != advice_report.h 
                    group students by students.faculty_name into newGroup
 
                    select new
@@ -187,30 +213,33 @@ namespace StudentFinanceSupport.Controllers
 
                    };
 
-            
+           
+
+
             var main_report =
                 from grant in student_grants
-                where grant.GrantyType.grant_name.ToLower() != "advice"
+                //where grant.GrantyType.
                 select new
                 {
-                    GrantType = grant.GrantyType,
+                    GrantType = grant.Grant_Name,
                     GrantValue = grant.GrantValue,
                     DateOfIssue = grant.DateOfIssue
 
                 };
             
+           
             return Json(new
             {
                 success = true,
-                student_grants = student_grants,
+                student_grants = student_grants.ToList(),
                 student_count = student_count.Count(),
-                advice_count = student_grants.Where(c => c.GrantyType.grant_name.ToLower() == "advice").Count(),
+                advice_count = advice_report.Count(),
                 grant_pie_report = grant_pie_report,
                 //value = newGroup.Sum(c => c.GrantValue)
-                total_cost = student_grants.GroupBy(c => c.GrantValue).Select(c => c.Key).Sum(),
-                total_koha = student_grants.GroupBy(c => c.KohaFund).Select(c => c.Key).Sum(),
-                faculty_pie_report = faculty_pie_report,
-                main_report = main_report,
+                total_cost = student_grants.GroupBy(c => c.GrantValue).Select(c => c.Key).DefaultIfEmpty(0).Sum(),
+                total_koha = student_grants.GroupBy(c => c.KohaFund).Select(c => c.Key).DefaultIfEmpty(0).Sum(),
+               faculty_pie_report = faculty_pie_report,
+               main_report = main_report.ToArray()
                 
             }, JsonRequestBehavior.AllowGet);
         }

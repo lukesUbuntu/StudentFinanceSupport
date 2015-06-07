@@ -33,6 +33,7 @@ using System.Data.Entity.Spatial;
         [Range(0, double.MaxValue, ErrorMessage = "Please enter valid number")]
         public double? KuhaFunds { get; set; }
 
+       
         public virtual GrantType GrantType { get; set; }
 
         public virtual StudentRegistration StudentRegistration { get; set; }
