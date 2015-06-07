@@ -1,0 +1,57 @@
+﻿
+@model StudentFinanceSupport.Models.ProfileUserViewModel
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Main_Layout_.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+    <h4>@Model.UserGrant.StudentRegistration.FirstName @Model.UserGrant.StudentRegistration.LastName</h4><small>
+    (@Model.UserGrant.StudentRegistration.Student_ID)</small>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserGrant.DateOfIssue)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserGrant.DateOfIssue)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserGrant.GrantType.grant_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserGrant.GrantType.grant_name)
+        </dd>
+
+
+        <dd>
+            @Html.DisplayFor(model => model.UserGrant.GrantDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserGrant.GrantValue)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserGrant.GrantValue)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserGrant.KuhaFunds)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserGrant.KuhaFunds)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.UserGrant.id_student_vouchers }) |
+    @Html.ActionLink("Create New", "Create" , new { id = Model.UserGrant.id_student_vouchers })
+</p>
+@Html.Partial("~/Views/StudentVouchers/_student_vouchers.cshtml", Model.UserGrantList);

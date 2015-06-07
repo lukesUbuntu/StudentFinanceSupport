@@ -24,19 +24,26 @@ namespace StudentFinanceSupport.Controllers
         }
 
         // GET: StudentVouchers/Details/5
-        public ActionResult Details(string id)
+        public ActionResult Details(int id)
         {
             StudentRegistrationsModel db = new StudentRegistrationsModel();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+
             StudentVoucher studentVoucher = db.StudentVouchers.Find(id);
-            if (studentVoucher == null)
+            var pmViewModel = new ProfileUserViewModel
             {
-                return HttpNotFound();
-            }
-            return View(studentVoucher);
+                UserGrant = studentVoucher,
+                UserGrantList = db.StudentVouchers.Where(a => a.student_ID == studentVoucher.student_ID)
+            };
+
+            //var other_grants = db.StudentVouchers.Where(a => a.student_ID == studentVoucher.student_ID);
+
+            //studentVoucher.student_ID
+            return View(pmViewModel);
         }
 
         // GET: StudentVouchers/Add
@@ -169,7 +176,7 @@ namespace StudentFinanceSupport.Controllers
         }
 
         // GET: StudentVouchers/Delete/5
-        public ActionResult Delete(string id)
+        public ActionResult Delete(int id)
         {
             StudentRegistrationsModel db = new StudentRegistrationsModel();
             if (id == null)

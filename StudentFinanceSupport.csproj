@@ -811,6 +811,8 @@
     <Content Include="Views\GrantTypes\Details.cshtml" />
     <Content Include="Views\GrantTypes\Edit.cshtml" />
     <Content Include="Views\GrantTypes\Index.cshtml" />
+    <Content Include="Views\StudentVouchers\Details.cshtml" />
+    <Content Include="Views\StudentVouchers\_student_vouchers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

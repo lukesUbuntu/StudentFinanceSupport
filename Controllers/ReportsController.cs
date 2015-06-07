@@ -18,6 +18,9 @@ namespace StudentFinanceSupport.Controllers
 
             ViewBag.Faculity = new MultiSelectList(db.Faculties, "id_faculty", "faculty_name");
             ViewBag.Campus = new MultiSelectList(db.Campus, "id_campus", "campus_name");
+            ViewBag.GrantType = new MultiSelectList(db.GrantTypes, "grant_type_id", "grant_name");
+
+            
             return View(db.StudentVouchers);
         }
         // GET: Reports
@@ -59,7 +62,7 @@ namespace StudentFinanceSupport.Controllers
             };
             ViewBag.Faculity = new MultiSelectList(db.Faculties, "id_faculty", "faculty_name");
             ViewBag.Campus = new MultiSelectList(db.Campus, "id_campus", "campus_name");
-           
+            ViewBag.GrantType = new MultiSelectList(db.GrantTypes, "grant_type_id", "grant_name");
             
             return View(db.StudentVouchers.Take(10));
         }

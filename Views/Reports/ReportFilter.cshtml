@@ -102,11 +102,13 @@
 
                             <div class="col-md-10">
                                 <div class="col-md-6">
-                                    GrantType
+
                                     @Html.DropDownList(
-                                                        "GrantType",
-                                                         Helpers.GrantTypes(), Helpers.SelectOneSpacer,
-                                new { @class = "form-control", data_placeholder = "Choose a Grant..." })
+                                             "GrantType",
+                                          (IEnumerable<SelectListItem>)ViewBag.GrantType, Helpers.SelectOneSpacer,
+                                new { @class = "form-control", data_placeholder = "Select a Faculity..." })
+
+                                   
 
                                 </div>
 
