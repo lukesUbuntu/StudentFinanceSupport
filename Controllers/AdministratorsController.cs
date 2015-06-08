@@ -118,7 +118,7 @@ namespace StudentFinanceSupport.Controllers
             var change = (from a in db.Administrators
                           where a.UserId == thisUser.UserId
                             select a).SingleOrDefault();
-
+            //rehash password
             change.Password = PasswordHashing.Encrypt(theAdmin.Password);
 
             //clean up from recovery
@@ -130,9 +130,10 @@ namespace StudentFinanceSupport.Controllers
                 foreach (var entry in recovery)
                     db.Recoveries.Remove(entry);
             }
-               
 
+            db.Entry(change).State = EntityState.Modified;
             db.SaveChanges();
+ 
 
             return RedirectToAction("Index");
         }

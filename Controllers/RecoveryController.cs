@@ -86,12 +86,6 @@ namespace StudentFinanceSupport.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
             //secure to only pass some details in session
-
-
-           
-
-            //return RedirectToAction("ChangePassword", "Administrators");
-            //return View();
         }
 
 
@@ -106,6 +100,11 @@ namespace StudentFinanceSupport.Controllers
 
         }
 
+        /// <summary>
+        /// Admin details returns back some of the details to the front end for the user to verify there account
+        /// </summary>
+        /// <param name="theRecovery"></param>
+        /// <returns></returns>
         public JsonResult adminDetails(Recovery theRecovery)
         {
             StudentRegistrationsModel db = new StudentRegistrationsModel();
@@ -181,7 +180,7 @@ namespace StudentFinanceSupport.Controllers
         public JsonResult sendRecoveryCode(Recovery theRecovery)
         {
             
-
+            
                 //session has been removed
                 if (Session["AdministratorRecovery"] == null)
                 {
@@ -192,7 +191,8 @@ namespace StudentFinanceSupport.Controllers
                     }, JsonRequestBehavior.AllowGet);
                 }
 
-                StudentRegistrationsModel db = new StudentRegistrationsModel();
+               
+                
 
                 Recovery sessRecovery = (Recovery)Session["AdministratorRecovery"];
 
@@ -200,22 +200,24 @@ namespace StudentFinanceSupport.Controllers
                 theRecovery.Administrator.Password = sessRecovery.Administrator.Password;
                 theRecovery.UserId = sessRecovery.Administrator.UserId;
                 //ModelState.Clear();
-
+                StudentRegistrationsModel db = new StudentRegistrationsModel();
+               
                 if (theRecovery.recovery_option == "email")
                 {
                     RecoveryComms theComms = new RecoveryComms();
                     if (theComms.sendEmail(ref sessRecovery) == true)
                     {
 
-
-                        //db.Recoveries.Attach(theRecovery);
+                        //success lets tell the user and save
+                        var email = sessRecovery.Administrator.Email;
+                        sessRecovery.Administrator = null;
                         db.Recoveries.Add(sessRecovery);
                         db.SaveChanges();
 
                         return Json(new
                         {
                             success = true,
-                            message = String.Format("<b>Great!</b>, we have sent your recovery code to <b>{0}</b>", sessRecovery.Administrator.Email)
+                            message = String.Format("<b>Great!</b>, we have emailed you your recovery code to <b>{0}</b>", email)
 
                         }, JsonRequestBehavior.AllowGet);
 
@@ -248,20 +250,21 @@ namespace StudentFinanceSupport.Controllers
                     if (theRecovery.Administrator.mobile == correctAttempt)
                     {
                         //passover the correct mobile details
-                        //theRecovery.Administrator.mobile = sessRecovery.Administrator.mobile;
-                        //theRecovery.UserId = sessRecovery.Administrator.UserId;
 
                         RecoveryComms theComms = new RecoveryComms();
                         if (theComms.sendSMS(ref sessRecovery) == true)
                         {
-                            //db.Recoveries.Attach(theRecovery);
+
+                            var mobile_number = sessRecovery.Administrator.mobile;
+                            sessRecovery.Administrator = null;
                             db.Recoveries.Add(sessRecovery);
                             db.SaveChanges();
-                           
+
+                       
                             return Json(new
                             {
                                 success = true,
-                                message =  String.Format("Great we have sent you a TEXT Message with recovery code to <b>{0}</b>", sessRecovery.Administrator.mobile)
+                                message = String.Format("<b>Great!</b>, we have sent you a TEXT message with your recovery code to <b>{0}</b>", mobile_number)
 
                             }, JsonRequestBehavior.AllowGet);
                         }
