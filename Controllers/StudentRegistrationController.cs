@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using StudentFinanceSupport.Models;
 using System.Data.Entity.Validation;
+using System.Data.Entity;
 
 namespace StudentFinanceSupport.Controllers
 {
@@ -44,12 +45,41 @@ namespace StudentFinanceSupport.Controllers
              //if id == return
              //StudentRegistration theStudent = (StudentRegistration)db.StudentRegistrations.Where(m => m.Student_ID == id);
              StudentRegistration theStudent = db.StudentRegistrations.Find(id);
-             ViewBag.id_courses = new SelectList(String.Empty, "id_courses", "course_name");
+             ViewBag.id_courses = new SelectList(db.Courses, "id_courses", "course_name");
              ViewBag.id_faculty = new SelectList(db.Faculties, "id_faculty", "faculty_name");
              ViewBag.id_campus = new SelectList(db.Campus, "id_campus", "campus_name");
+             
              return View(theStudent);
          }
+        [HttpPost]
+         public ActionResult Edit(StudentRegistration theStudent)
+         {
+             StudentRegistrationsModel db = new StudentRegistrationsModel();
+             //if id == return
+             //StudentRegistration theStudent = (StudentRegistration)db.StudentRegistrations.Where(m => m.Student_ID == id);
+            
+             ViewBag.id_courses = new SelectList(db.Courses, "id_courses", "course_name");
+             ViewBag.id_faculty = new SelectList(db.Faculties, "id_faculty", "faculty_name");
+             ViewBag.id_campus = new SelectList(db.Campus, "id_campus", "campus_name");
 
+             if (theStudent.Student_ID == null || theStudent.Student_ID.ToString().Trim() == String.Empty)
+             {
+                 ModelState.AddModelError("Student_ID", "Can not be blank or empty");
+                 //return View(StudentRegistration);
+             }
+
+             if (ModelState.IsValid)
+             {
+
+                 //administrator.UserType = "Admin";
+                 // db.Administrators.Add(administrator);
+                 db.Entry(theStudent).State = EntityState.Modified;
+                 db.SaveChanges();
+                 return RedirectToAction("Index");
+               
+             }
+             return View(theStudent);
+         }
          //StudentRegistration/Create 
          public ActionResult Create()
          {

@@ -109,6 +109,7 @@ namespace StudentFinanceSupport.Controllers
                                      FirstName = grants.StudentRegistration.FirstName,
                                      LastName = grants.StudentRegistration.LastName,
                                      Gender = grants.StudentRegistration.Gender,
+                                     DOB = grants.StudentRegistration.DOB,
                                      faculty_name = grants.StudentRegistration.Faculty.faculty_name,
                                      faculty_id = grants.StudentRegistration.Faculty.id_faculty,
                                      campus_id = grants.StudentRegistration.Campus.id_campus,
@@ -117,6 +118,18 @@ namespace StudentFinanceSupport.Controllers
             //apply our filters
             if (theReport.gender != null)
                 student_grants = from a in student_grants where a.Gender.ToLower() == theReport.gender.ToLower() select a;
+
+            //by age
+            if (theReport.student_age != null)
+            {
+                DateTime birthYear = theReport.getBirthYear();
+
+                student_grants = from a in student_grants
+                               //where clause by year of student
+                               where a.DOB.Year == birthYear.Year
+                               select a;
+
+            }
 
             if (theReport.date_type != null && theReport.start_date != null)
             {

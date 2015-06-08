@@ -8,7 +8,7 @@
 @Scripts.Render("~/bundles/datatables")
 
 @Html.Partial("~/Views/Reports/ReportFilter.cshtml");
-<div class="panel panel-default">
+<div id="main_area" class="panel panel-default">
 
     <!-- /.panel-heading -->
     <div class="panel-body">
@@ -297,7 +297,11 @@
     //code from our report filter
     $("#search_report_btn").click(function () {
         var report_details = $(":input", $search_report_form).serialize();
-
+       
+        $("#main_area").isLoading({
+            text: "Loading Reports",
+            position: "overlay"
+        });
         console.log("report_details", report_details)
         $.ajax({
             url: "/Reports/getFilterReports",
@@ -318,11 +322,11 @@
 
             "aoColumnDefs": [
             {
-                "aTargets": [6],
+                "aTargets": [5],
                 "mData": null,
                 "mRender": function (data, type, full) {
                    
-                    return '<a class="btn btn-default " href="/StudentVouchers/Edit/' + full[6] + '">Edit Grant</a>';
+                    return '<a class="btn btn-default " href="/StudentVouchers/Edit/' + full[5] + '">Edit Grant</a>';
 
 
                 }
@@ -449,11 +453,12 @@
                    
                     new_col.push(returnDate(grant.DateOfIssue));
                     new_col.push((typeof grant.LastName == "string") ? grant.FirstName + " " + grant.LastName : grant.FirstName)
-                    new_col.push(grant.Grant_Name);
                     new_col.push(grant.campus_name);
-                    new_col.push(grant.GrantValue);
+                    new_col.push(grant.Grant_Name);
+                   
+                    new_col.push("$"+grant.GrantValue);
                     //var KohaFund = (grant.KohaFund > 0) ? grant.KohaFund : 0;
-                    new_col.push((grant.KohaFund > 0) ? grant.KohaFund : 0)
+                    //new_col.push((grant.KohaFund > 0) ? grant.KohaFund : 0)
                     new_col.push(grant.Grant_ID);
                     student_report_view.push(new_col);
                     //console.log("grant", grant);
@@ -462,9 +467,15 @@
                 })
 
             }
-            return;
+           
             updateReportTable();
             updatePieCharts();
+
+            setTimeout(function () {
+                $(".isloading-overlay").remove();
+            }, 500)
+           
+
         }
     }
 </script>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -16,8 +17,19 @@ namespace StudentFinanceSupport.Models.functions
 
         public int? Faculity { get; set; }
 
+        [RegularExpression("^(0?[1-9]|[1-9][0-9])$", ErrorMessage = "Must be a age number eg. 21")]
+        public int? student_age { get; set; }
+
         public int? Campus { get; set; }
         public int? GrantType { get; set; }
+        public DateTime getBirthYear()
+        {
+            //minus todays date eg 2015 - 15 = born 2000
+            int theAge = Convert.ToInt32(student_age) * -1;
+            
+            DateTime theDate = DateTime.Now.AddYears(theAge);
+            return theDate;
+        }
         public DateTime getDate()
         {
             string theFormat = "dd/MM/yyyy";

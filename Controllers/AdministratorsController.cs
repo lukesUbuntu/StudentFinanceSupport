@@ -77,7 +77,7 @@ namespace StudentFinanceSupport.Controllers
                 return RedirectToAction("Login");
             }
 
-             
+            CurrentAdmin.Password = "";
              return View(CurrentAdmin);
         }
 

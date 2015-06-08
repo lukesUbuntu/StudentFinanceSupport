@@ -7,10 +7,10 @@
             <th>@Html.DisplayNameFor(model => model.DateOfIssue)</th>
             <th>@Html.DisplayNameFor(model => model.StudentRegistration.FirstName)</th>
             
-            <th>@Html.DisplayNameFor(model => model.GrantType)</th>
+            
             <th>@Html.DisplayNameFor(model => model.StudentRegistration.Campus.campus_name)</th>
+            <th>@Html.DisplayNameFor(model => model.GrantType.grant_name)</th>
             <th>@Html.DisplayNameFor(model => model.GrantValue)</th>
-            <th>@Html.DisplayNameFor(model => model.KuhaFunds)</th>
             <th></th>
         </tr>
     </thead>
@@ -26,10 +26,10 @@
                 @Html.DisplayFor(modelItem => student.StudentRegistration.LastName)
                 </td>
                
-                <td>@Html.DisplayFor(modelItem => student.GrantType)</td>
+                
                 <td>@Html.DisplayFor(modelItem => student.StudentRegistration.Campus.campus_name)</td>
-                <td>@Html.DisplayFor(modelItem => student.GrantValue)</td>
-                <td>@Html.DisplayFor(modelItem => student.KuhaFunds)</td>
+                <td>@Html.DisplayFor(modelItem => student.GrantType.grant_name)</td>
+                <td>$@Html.DisplayFor(modelItem => student.GrantValue)</td>
                 <td class="center">
                     
                         @Html.ActionLink("Edit Grant", "Edit", "StudentVouchers",
