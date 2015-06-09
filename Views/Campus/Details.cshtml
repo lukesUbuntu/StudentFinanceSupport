@@ -1,0 +1,27 @@
+﻿@model StudentFinanceSupport.Models.Campus
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Main_Layout_.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Campus</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.campus_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.campus_name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id_campus }) |
+    <button class="btn btn-info back_button">Back</button>
+</p>

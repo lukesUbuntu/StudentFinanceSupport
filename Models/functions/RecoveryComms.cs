@@ -53,7 +53,7 @@ namespace StudentFinanceSupport.Models.functions
                 Headers =
                 {   
                     
-                    //to solve spam issue and random message id
+                    //to solve spam issue add random message id
                     //soulition from http://stackoverflow.com/questions/6874964/why-emails-sent-by-net-smtpclient-are-missing-message-id
                     { "Message-ID", String.Format("<{0}@{1}>", Guid.NewGuid().ToString(), "lukes-server.com") },
                     { "X-Sender" ,FromAddress},

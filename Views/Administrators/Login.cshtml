@@ -21,11 +21,24 @@
                         
                         <fieldset>
                             <div class="form-group">
-                                @Html.TextBoxFor(u => u.Email, new { @class = "form-control" , @placeholder="E-mail" , @type="email" , @autofocus =""})
-                                
+                                <button class="btn btn-default pull-left" type="button">
+                                    <i class="fa fa-user"></i>
+                                </button>
+                               
+                                <span class="input-group-btn">
+                                    @Html.TextBoxFor(u => u.Email, new { @class = "form-control", @placeholder = "E-mail", @type = "email", @autofocus = "", @style = "width:80%" })
+                                </span>
                             </div>
                             <div class="form-group">
-                                @Html.PasswordFor(u => u.Password, new { @class = "form-control" })
+                                <button class="btn btn-default pull-left" type="button">
+                                    <i class="fa fa-lock"></i>
+                                </button>
+
+                                <span class="input-group-btn">
+                                    @Html.PasswordFor(u => u.Password, new { @class = "form-control", @style = "width:80%" })
+                                </span>
+                               
+
                             </div>
                             <div class="checkbox">
                                 <label>
@@ -38,7 +51,7 @@
                    }
                 </div>
 
-                <span class="pull-right">@Html.ActionLink("Forgotten Password?", "Index", "Recovery")</span>
+                <span class="pull-right btn btn-default"><b>@Html.ActionLink("Forgotten Password?", "Index", "Recovery")</b></span>
                 
                 
             </div>

@@ -5,8 +5,15 @@
     Layout = "~/Views/Shared/_Main_Layout_.cshtml";
 }
 
-
-
+<style>
+    .amount_holders {
+        display: none;
+    }
+    .custom-search-form #student_ID{
+        width : 400px;
+    }
+</style>
+<button class="btn btn-info back_button">Back</button>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -18,6 +25,9 @@
         <div class="form-group">
             @Html.LabelFor(model => model.student_ID, "student_ID", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
+
+              
+
                 <div class="input-group custom-search-form">
 
 
@@ -26,8 +36,12 @@
 
 
                         <span class="input-group-btn">
-                            <i class="fa fa-search"></i>
-                            @Html.TextBox("student_ID", (string)ViewBag.student_ID, new { @class = "form-control suggest-prompt", @placeholder = "Search Student ID Or Name...", @autofocus = "", @autocomplete = "off" })
+                           
+                            @Html.TextBox("student_ID", (string)ViewBag.student_ID, new { @class = "form-control suggest-prompt", @placeholder = "Search Student ID, First or Last Names...", @autofocus = "", @autocomplete = "off" })
+                            <button class="btn btn-success" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
                         </span>
 
                         <ul></ul>
@@ -49,16 +63,32 @@
 
             </div>
         </div>
+
+
         <div class="form-group">
             @Html.LabelFor(model => model.GrantType, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-
-                @Html.DropDownList("GrantType", null, Helpers.SelectOneSpacer, htmlAttributes: new { @class = "form-control" })
+                <select class="form-control" id="grant_type_id" name="grant_type_id">
+                    <option value="">-- Select One --</option>
+                    @foreach (var type in (IEnumerable<StudentFinanceSupport.Models.GrantType>)@ViewBag.grant_type_id)
+                    {
+                        <option value="@type.grant_type_id"
+                                data-grant_value="@type.grant_value "
+                                data-grant_description="@type.grant_description"
+                                data-grant_koha="@type.grant_koha "
+                                @(Model.grant_type_id == type.grant_type_id ? "selected" : "")>
+                            @type.grant_name
+                        </option>
+                    }
+                </select>
                 @Html.ValidationMessageFor(model => model.GrantType, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div id="GrantDescription_Holder" style="display:none" class="form-group amount_holders">
+
+
+
+        <div id="grant_description_holder" style="display:none" class="form-group amount_holders">
             @Html.LabelFor(model => model.GrantDescription, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.TextAreaFor(model => model.GrantDescription, new { @class = "form-control" })
@@ -66,7 +96,7 @@
             </div>
         </div>
 
-        <div id="GrantValue_Holder" class="form-group amount_holders">
+        <div id="grant_value_holder" class="form-group amount_holders">
             @Html.LabelFor(model => model.GrantValue, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.GrantValue, new { htmlAttributes = new { @class = "form-control" } })
@@ -78,7 +108,7 @@
 
 
 
-        <div id="KuhaFunds_Holder" class="form-group amount_holders">
+        <div id="grant_koha_holder" class="form-group amount_holders">
             @Html.LabelFor(model => model.KuhaFunds, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.KuhaFunds, new { htmlAttributes = new { @class = "form-control" } })
@@ -87,30 +117,30 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+            <div class="col-md-offset-2 col-md-2">
+                <input type="submit" value="Create" class="btn btn-success" />
             </div>
         </div>
     </div>
-
+    <div id="students_vouchers"></div>
 
 }
 @Styles.Render("~/Content/Wizard")
 @Scripts.Render("~/bundles/wizardSteps")
 <script type="text/javascript">
     $(document).ready(function () {
+
+
         //hide all the amount holders
         $(".amount_holders").hide();
 
-        //display grantvalue description if advice was selected on a reload
-        selectionChange("#GrantType")
-        /*
-        if ($("#GrantType").val().toLowerCase() == "advice")
-            adviceSelected()
-       */
-        //if grantype changed lets update other information
-        $("#GrantType").change(selectionChange);
 
+
+        //if grantype changed lets update other information
+        $("#grant_type_id").change(selectionChange);
+
+        //display grantvalue description if advice was selected on a reload
+        $("#grant_type_id").trigger('change')
         //set our suggestion selected
         var $suggest_holder = $('.suggest-holder ul');
         //set where the textbox entry is
@@ -125,16 +155,43 @@
             console.log("student_id", student_id);
             $('#student_ID').val(student_id);
             $suggest_holder.hide();
+            //lets ajax and pull the student data
+            $.ajax({
+                url: "/StudentVouchers/StudentVouchersAll",
+                type: "POST",
+               // dataType: "json",
+                data: { id: student_id },
+                success: function (response) {
+                    $("#students_vouchers").html(response)
+                    //console.log("response", response)
+                }
+            })
             //$suggest_holder.empty();
+
         });
 
+        $('body').on('focusout', ".suggested-student", function (e) {
+        $.ajax({
+                url: "/StudentVouchers/StudentVouchersAll",
+                type: "POST",
+               // dataType: "json",
+                data: { id: student_id },
+                success: function (response) {
+                    $("#students_vouchers").html(response)
+                    console.log("response", response)
+                }
+            })
+        });
         function emptySearch() {
             if ($.trim($('#student_ID').val()) == "") {
                 $suggest_holder.hide();
             }
             console.log("Empting search div");
             $suggest_holder.empty();
+            $("#students_vouchers").empty()
+            $("#student_ID_validationMessage").text("")
         }
+
         /*
          @@name  : studentSuggestion
          @@description : creates <li> based on json search results
@@ -175,42 +232,36 @@
         }
 
 
-        function selectionChange(element) {
-            var selection_element = (typeof element == "string") ? $(element) : $(this)
-            console.log("typeof element", typeof element)
+        //have made changes now the select has a drop down with data types so now we show these values based data
+        //data-grant_value="True " data-grant_description="True" data-grant_koha="True "
+        //the actual checking is done serverside this is just to show the correct elements
+        function selectionChange() {
+            //grab the selected option
+            var $selected = $(this).find(':selected');
 
-            switch (selection_element.val().toLowerCase()) {
-                case "advice":
-                    adviceSelected();
-                    break;
-                case "hardship":
-                    grantDefault("#GrantValue_Holder,#KuhaFunds_Holder,#GrantDescription_Holder");
-                    break;
-                default:
-                    grantDefault();
-                    break;
-            }
-        }
-        //what elements to show and hide on advice selected
-        function adviceSelected() {
-            console.log("running adviceSelected")
-            $(".amount_holders").hide();
-            $("#GrantDescription_Holder").show();
-        }
+            var data_objects = $($selected).data();
+            console.log("data_objects", data_objects)
+            //no data objects means no selection
+            if (data_objects == null) return;
 
-        //what elements to show and hide on advice selected
-        function grantDefault(GrantValue) {
-            console.log("running grantDefault")
-            $("#GrantDescription_Holder").hide();
-            var GrantValue = (typeof GrantValue == "undefined") ? "#GrantValue_Holder" : GrantValue;
-
-
+            //hide previous grants
             $(".amount_holders").hide();
 
-            $(GrantValue).show();
+            //loop all data elements needed
+            $.each(data_objects, function (grant_type, enabled) {
+
+                //clean up
+                enabled = ($.trim(enabled).toLowerCase() == "true")
+
+                //lets show the holders for enabled
+                if (enabled == true)
+                    $("#" + grant_type + "_holder").show();
+
+            });
 
 
         }
+
 
         //date picker
         $('.datepicker').datepicker({
@@ -218,7 +269,8 @@
             autoclose: true,
             toggleActive: true
         });
-
+        
+     
     });
 </script>
 

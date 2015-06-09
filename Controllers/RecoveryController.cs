@@ -12,6 +12,7 @@ namespace StudentFinanceSupport.Controllers
     {
         public RecoveryController()
         {
+            //bypass the complete controller no need for session checking
             bypassControllerCheck("Recovery");
         }
         // GET: Recovery
@@ -30,45 +31,64 @@ namespace StudentFinanceSupport.Controllers
         {
             return View();
         }
-        // GET: Recovery/Create
-        public ActionResult Code()
-        {
-           
-            return View();
-        }
+
+       
 
         // POST: Recovery/Create
+        /// <summary>
+        ///  Checks and verifyies a recovery key code 
+        /// </summary>
+        /// <param name="recovery_key">JSON response</param>
+        /// <returns></returns>
         [HttpPost]
-        public ActionResult Code(Recovery theRecovery)
+        public ActionResult Code(String recovery_key)
         {
+            if (String.IsNullOrEmpty(recovery_key))
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Please eter a recovery key"
+                }, JsonRequestBehavior.AllowGet);
+            }
+
             StudentRegistrationsModel db = new StudentRegistrationsModel();
-            var theAdmin = (from a in db.Administrators
+            /*var theAdmin = (from a in db.Administrators
                             join b in db.Recoveries on a.UserId equals b.UserId
-                            where b.recovery_key == theRecovery.recovery_key
+                            where b.recovery_key == theRecoverCodey
+                            select a).SingleOrDefault();*/
+            var theAdmin = (from a in db.Recoveries
+                            where a.recovery_key == recovery_key
+                            join b in db.Administrators on a.UserId equals b.UserId
+                            //where b.recovery_key == theRecoverCodey
                             select a).SingleOrDefault();
 
             if (theAdmin == null)
             {
-                ModelState.AddModelError("recovery_key", "Incorrect Recovery KEY Details");
-                return View(theRecovery);
+              
+                return Json(new
+                {
+                    success = false,
+                    message = "Incorrect Recovery KEY Details"
+                }, JsonRequestBehavior.AllowGet);
 
             }
+            else
+            {
+                //set session the sesion
+                Session["AdministratorRecovery"] = (Recovery)theAdmin;
+                return Json(new
+                {
+                    success = true,
+                    message = "<b>Success</b> Redirecting you now...",
+                    url = "/Administrators/ChangePassword"
+
+                }, JsonRequestBehavior.AllowGet);
+            }
             //secure to only pass some details in session
-           
-
-            Session["AdministratorRecovery"] = (Recovery)theRecovery;
-
-            return RedirectToAction("ChangePassword", "Administrators");
-            //return View();
         }
 
 
-
-
-
-
-
-  
 
         private void clearErrorStates(List<string> theKeys)
         {
@@ -79,6 +99,12 @@ namespace StudentFinanceSupport.Controllers
             }
 
         }
+
+        /// <summary>
+        /// Admin details returns back some of the details to the front end for the user to verify there account
+        /// </summary>
+        /// <param name="theRecovery"></param>
+        /// <returns></returns>
         public JsonResult adminDetails(Recovery theRecovery)
         {
             StudentRegistrationsModel db = new StudentRegistrationsModel();
@@ -111,15 +137,30 @@ namespace StudentFinanceSupport.Controllers
                      kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
                  );
 
-                return Json(errorList, JsonRequestBehavior.AllowGet);
+                return Json(new
+                {
+                    success = false,
+                    errors = errorList
+                }, JsonRequestBehavior.AllowGet);
+                
             }
 
             Session["AdministratorRecovery"] = theRecovery;
 
             if (theRecovery.recovery_option == "mobile")
             {
-              
-                string mobile = theRecovery.Administrator.mobile.Remove(theRecovery.Administrator.mobile.Length - 4, 4) + "****";
+                
+                
+                if (theRecovery.Administrator.mobile == null)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        mobile_guess = "Sorry no mobile with this account please use email"
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                string mobile = "Enter last 4 digits of this number " + theRecovery.Administrator.mobile.Remove(theRecovery.Administrator.mobile.Length - 4, 4) + "****";
+                
                 return Json(new
                 {
                     success = true,
@@ -132,29 +173,36 @@ namespace StudentFinanceSupport.Controllers
             return Json(new
             {
                 success = true,
+                message = "You can now request a reset a recovery code.."
             }, JsonRequestBehavior.AllowGet);
 
 
-           
+            //return sendRecoveryCode(theRecovery);
 
            
         }
 
+        /// <summary>
+        ///  Sends the recovery code to the user via email or sms
+        /// </summary>
+        /// <param name="theRecovery">Recovery details</param>
+        /// <returns>JSON if has passed Recovery checks</returns>
         public JsonResult sendRecoveryCode(Recovery theRecovery)
         {
             
-
+            
                 //session has been removed
                 if (Session["AdministratorRecovery"] == null)
                 {
                     return Json(new
                     {
                         success = false,
-                        message = "Invalid State"
+                        message = "Invalid Session please refresh the browser"
                     }, JsonRequestBehavior.AllowGet);
                 }
 
-                StudentRegistrationsModel db = new StudentRegistrationsModel();
+               
+                
 
                 Recovery sessRecovery = (Recovery)Session["AdministratorRecovery"];
 
@@ -162,25 +210,36 @@ namespace StudentFinanceSupport.Controllers
                 theRecovery.Administrator.Password = sessRecovery.Administrator.Password;
                 theRecovery.UserId = sessRecovery.Administrator.UserId;
                 //ModelState.Clear();
-
+                StudentRegistrationsModel db = new StudentRegistrationsModel();
+               
                 if (theRecovery.recovery_option == "email")
                 {
                     RecoveryComms theComms = new RecoveryComms();
                     if (theComms.sendEmail(ref sessRecovery) == true)
                     {
 
-
-                        //db.Recoveries.Attach(theRecovery);
+                        //success lets tell the user and save
+                        var email = sessRecovery.Administrator.Email;
+                        sessRecovery.Administrator = null;
                         db.Recoveries.Add(sessRecovery);
                         db.SaveChanges();
 
                         return Json(new
                         {
                             success = true,
-                            message = "Sent an email with recovery code"
+                            message = String.Format("<b>Great!</b>, we have emailed you your recovery code to <b>{0}</b>", email)
 
                         }, JsonRequestBehavior.AllowGet);
-                       
+
+                    }
+                    else
+                    {
+                        return Json(new
+                        {
+                            success = false,
+                            message = "Something bad happend"
+
+                        }, JsonRequestBehavior.AllowGet);
                     }
                 }
 
@@ -201,20 +260,21 @@ namespace StudentFinanceSupport.Controllers
                     if (theRecovery.Administrator.mobile == correctAttempt)
                     {
                         //passover the correct mobile details
-                        //theRecovery.Administrator.mobile = sessRecovery.Administrator.mobile;
-                        //theRecovery.UserId = sessRecovery.Administrator.UserId;
 
                         RecoveryComms theComms = new RecoveryComms();
                         if (theComms.sendSMS(ref sessRecovery) == true)
                         {
-                            //db.Recoveries.Attach(theRecovery);
+
+                            var mobile_number = sessRecovery.Administrator.mobile;
+                            sessRecovery.Administrator = null;
                             db.Recoveries.Add(sessRecovery);
                             db.SaveChanges();
-                           
+
+                       
                             return Json(new
                             {
                                 success = true,
-                                message = "sent a SMS message to mobile with recovery code"
+                                message = String.Format("<b>Great!</b>, we have sent you a TEXT message with your recovery code to <b>{0}</b>", mobile_number)
 
                             }, JsonRequestBehavior.AllowGet);
                         }

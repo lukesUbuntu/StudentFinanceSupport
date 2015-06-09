@@ -12,11 +12,11 @@
         <div class="panel-heading">
             Recover Account
         </div>
-        <div class="panel-body">
+        <div class="panel-body recovery_code">
             <section id="recovery_email" class="">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="form-group">
-                    
+
                     @Html.LabelFor(model => model.Administrator.Email, "Email", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-8">
                         @Html.EditorFor(model => model.Administrator.Email, new { htmlAttributes = new { @class = "form-control" } })
@@ -26,7 +26,7 @@
             </section>
 
             <section id="recovery_details" class="">
-              
+
                 <div class="form-group">
                     @Html.LabelFor(model => model.recovery_option, htmlAttributes: new { @class = "control-label col-md-8" })
                     <div class="col-md-10">
@@ -36,37 +36,38 @@
                 </div>
 
                 <div id="recover_entry" class="form-group" style="display:none">
-                    
+
                     <div id="mobile_number" class="col-md-10" style="display:none">
-                       
-                        <h4>Enter last 4 digits of this number 
+
+                        <h4>
                             
+
                             <span id="mobile_number_guess" style="padding-top:10px;">
-                                
+
                             </span>
 
                         </h4>
-                       
-                           @Html.EditorFor(model => model.Administrator.mobile, new { htmlAttributes = new { @class = "form-control" } })
-                           @Html.ValidationMessageFor(model => model.Administrator.mobile, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-               
-            </section>
-           
-            <!--
-            <section id="recovery-try" class="col-md-8" style="display:none">
-                <h3>Recovery Entry</h3>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.recovery_key, htmlAttributes: new { @class = "control-label col-md-8" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(model => model.recovery_key, null, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.recovery_key, "", new { @class = "text-danger" })
+
+                        @Html.EditorFor(model => model.Administrator.mobile, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Administrator.mobile, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
             </section>
-             -->
+
+            <!--
+        <section id="recovery-try" class="col-md-8" style="display:none">
+            <h3>Recovery Entry</h3>
+            <div class="form-group">
+                @Html.LabelFor(model => model.recovery_key, htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.recovery_key, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.recovery_key, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </section>
+         -->
             <div class="form-group">
 
                 <div class="col-md-offset-2 col-md-8 " style="padding-top:15px;">
@@ -103,14 +104,15 @@
         //selected options change
         $("#recovery_option", $recovery_code).change(function () {
             var recovery = $(":input", $recovery_code).serialize();
-            $("#Administrator_Email_validationMessage").empty();
-            
+            //$("#Administrator_Email_validationMessage").empty();
+            $("#recovery_errors").alertBox();
             //retrieve options
             getOptions(recovery)
 
         });
 
         $("#request_reset_code", $recovery_code).click(function () {
+            $("#recovery_errors").alertBox();
             $(this).isLoading();
             //lets send for check
             var recovery = $(":input", $recovery_code).serialize();
@@ -121,13 +123,16 @@
                 //data: { option: $(this).val() },
                 data: recovery,
                 success: function (response) {
+                    console.log("sendRecoveryCode", response)
                     //$(this).isLoading();
-                    $(this).isLoading('hide');
+                    $("#request_reset_code").isLoading('hide');
+
                     if (response.success == false) {
                         $("#recovery_errors").alertBox(response.message)
                     }
                     if (response.success == true) {
-                        $("#recovery_errors").alertBox(response.message, true);
+                        $("#recovery_errors").alertBox(response.message, "info");
+                        $(".recovery_code").slideUp();
                         $("#recovery_code :input").attr("disabled", true)
                     }
                     
@@ -156,9 +161,10 @@
                     $("#request_reset_code").isLoading('hide');
 
                     //check for errors for admin email
-                    if (typeof data['Administrator.Email'] == "object") {
+                    console.log("errors",typeof data.errors)
+                    if (data.success == false && typeof data.errors != "undefined" && typeof data.errors['Administrator.Email'] == "object") {
 
-                        $.map(data, function (error, key) {
+                        $.map(data.errors, function (error, key) {
                             //if we have issue with administrator move select box back to default
                             if (key == "Administrator.Email") {
                                 $("#recovery_errors", $recovery_code).text(error);
@@ -181,9 +187,14 @@
                         $("#mobile_number", $recovery_code).hide();
                     }
 
-                    if (data.success == true)
+                    //if success lets do some cleanup
+                    if (data.success == true){
                         $("#request_reset_code").removeClass("disabled");
-                    else
+
+                        if (typeof data.message == "string")
+                            $("#recovery_errors").alertBox(data.message, true);
+
+                    } else
                         $("#request_reset_code").addClass("disabled");
 
                 }

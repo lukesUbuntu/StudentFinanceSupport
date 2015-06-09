@@ -1,0 +1,63 @@
+﻿@model StudentFinanceSupport.Models.Administrator
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Main_Layout_.cshtml";
+}
+
+<h2>Details</h2>
+<button class="btn btn-info back_button">Back</button>
+<div>
+    <h4>Administrator</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RoleType.role_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RoleType.role_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        
+
+        
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mobile)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mobile)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.UserId }) |
+    @Html.ActionLink("Back to List", "Admins")
+</p>

@@ -23,6 +23,8 @@ namespace StudentFinanceSupport.Controllers
         {
             //list of Actions in this controller that we don't want to security check session on
             bypassAdminCheck("Administrators/Login");
+            bypassAdminCheck("Administrators/ChangePassword");
+            
             //bypassAdminCheck("Administrators/Login");
         }
 
@@ -37,7 +39,7 @@ namespace StudentFinanceSupport.Controllers
         }
 
         // GET: Administrators/Add
-
+        [Authorize(Roles = "Admin")]
         public ActionResult Admins()
         {
             StudentRegistrationsModel db = new StudentRegistrationsModel();
@@ -75,7 +77,7 @@ namespace StudentFinanceSupport.Controllers
                 return RedirectToAction("Login");
             }
 
-             
+            CurrentAdmin.Password = "";
              return View(CurrentAdmin);
         }
 
@@ -116,7 +118,7 @@ namespace StudentFinanceSupport.Controllers
             var change = (from a in db.Administrators
                           where a.UserId == thisUser.UserId
                             select a).SingleOrDefault();
-
+            //rehash password
             change.Password = PasswordHashing.Encrypt(theAdmin.Password);
 
             //clean up from recovery
@@ -128,13 +130,15 @@ namespace StudentFinanceSupport.Controllers
                 foreach (var entry in recovery)
                     db.Recoveries.Remove(entry);
             }
-               
 
+            db.Entry(change).State = EntityState.Modified;
             db.SaveChanges();
+ 
 
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Add()
         {
             StudentRegistrationsModel db = new StudentRegistrationsModel();
@@ -144,10 +148,10 @@ namespace StudentFinanceSupport.Controllers
 
 
 
-            var role_list = db.RoleTypes;
+            //var role_list = db.RoleTypes;
             //var model = new Administrator();
             //model.Roles = new SelectList(db.RoleTypes, "role_type_id", "role_name");
-            ViewBag.admin_roles = new MultiSelectList(db.RoleTypes, "role_type_id", "role_description");
+            ViewBag.role_type_id = new SelectList(db.RoleTypes, "role_type_id", "role_description");
             ViewBag.password_match = String.Empty;
             return View(theAdmins);
         }
@@ -157,16 +161,16 @@ namespace StudentFinanceSupport.Controllers
         {
             StudentRegistrationsModel db = new StudentRegistrationsModel();
             //newAdmin.Roles = Request.Form["admin_roles"];
-           
-            ViewBag.admin_roles = new MultiSelectList(db.RoleTypes, "role_type_id", "role_description");
-            ViewBag.Roles = Request.Form["admin_roles"];
+
+            ViewBag.role_type_id = new SelectList(db.RoleTypes, "role_type_id", "role_description");
+            //ViewBag.Roles = Request.Form["admin_roles"];
             ViewBag.password_match = Request.Form["password_match"];
             
            
             //check for unique email address
-            if (ModelState.ContainsKey("Roles"))
-                ModelState["Roles"].Errors.Clear();
-
+            //if (ModelState.ContainsKey("Roles"))
+              //  ModelState["Roles"].Errors.Clear();
+            
             if (db.Administrators.Any(m => m.Email.ToLower() == newAdmin.Email.ToLower()))
             {
                 ModelState.AddModelError("Email", "Admin email already exists!");
@@ -181,13 +185,7 @@ namespace StudentFinanceSupport.Controllers
             }
 
             //check mobile phone number if added
-            if (!String.IsNullOrEmpty(newAdmin.mobile)) { 
-                Regex mobileRegex = new Regex(@"^(?:\(?)(?:\+|0{2})([0-9]{3})\)? ([0-9]{2}) ([0-9]{7})$");
-                if (!mobileRegex.IsMatch(newAdmin.mobile))
-                {
-                    ModelState.AddModelError("mobile", "Incorect mobile format example : 02107770777 or (021)07770777");
-                }
-            }
+
             if (!ModelState.IsValid)
             {
                 return View(newAdmin);
@@ -205,62 +203,80 @@ namespace StudentFinanceSupport.Controllers
             //check roles that need to be added
 
             //store roles into a string array
-            this.addRoles(newAdmin, Request.Form["roles"]);
+            //this.addRoles(newAdmin, Request.Form["roles"]);
 
             
-            return RedirectToAction("Index");
+            return RedirectToAction("Admins");
         }
-
-        
-
-        /// <summary>
-        /// Updates or adds roles to an admin
-        /// </summary>
-        /// <param name="theAdmin">Administrator</param>
-        /// <param name="theRoles">Roles_ID from roletypes as comma delimited</param>
-        private void addRoles(Administrator theAdmin,String theRoles)
+         [Authorize(Roles = "Admin")]
+        public ActionResult Details(int? id)
         {
             StudentRegistrationsModel db = new StudentRegistrationsModel();
-            string[] AddRoles = theRoles.Split(new Char[] { ',' });
-            //incase we are updating lets remove previous roles
-            //lets check previous roles and remove them
-            var old_roles = from s in db.Roles
-                            where s.UserId == theAdmin.UserId
-                            select s.role_id;
-            //remove
-            if (old_roles.Count() > 0)
-            foreach (var role_type in old_roles)
+            if (id == null)
             {
-                int role_id = Convert.ToInt32(role_type);
-                Role rmvRole = db.Roles.Find(role_id);
-                db.Roles.Remove(rmvRole);
-            }           
-
-            //add in new roles
-            if (AddRoles.Count() > 0)
-            {
-                    
-
-
-                var roles = new Role();
-                roles.UserId = theAdmin.UserId;
-                foreach (var role_type in AddRoles)
-                {
-                    int role_id = Convert.ToInt32(role_type);
-                    roles.role_type_id = role_id;
-                    db.Roles.Add(roles);
-                }
-                db.SaveChanges();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            Administrator administrator = db.Administrators.Find(id);
+            if (administrator == null)
+            {
+                return HttpNotFound();
+            }
+            return View(administrator);
         }
-  
+        // GET: Administrators1/Edit/5
+         [Authorize(Roles = "Admin")]
+        public ActionResult Edit(int? id)
+        {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Administrator administrator = db.Administrators.Find(id);
+            if (administrator == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.role_type_id = new SelectList(db.RoleTypes, "role_type_id", "role_name", administrator.role_type_id);
+            return View(administrator);
+        }
+
+        // POST: Administrators1/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "UserId,Email,Password,FirstName,LastName,mobile,role_type_id")] Administrator administrator)
+        {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
+            if (ModelState.IsValid)
+            {
+                db.Entry(administrator).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Admins");
+            }
+            ViewBag.role_type_id = new SelectList(db.RoleTypes, "role_type_id", "role_name", administrator.role_type_id);
+            return View(administrator);
+        }
+
+
+        // POST: Administrators1/Delete/5
+         [Authorize(Roles = "Admin")]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
+            Administrator administrator = db.Administrators.Find(id);
+            db.Administrators.Remove(administrator);
+            db.SaveChanges();
+            return RedirectToAction("Admins");
+        }
+      
       
 
        
         [HttpGet]
         public ActionResult Login()
         {
-            //this.bypassAdminCheck();
             return View();
         }
 
@@ -271,12 +287,22 @@ namespace StudentFinanceSupport.Controllers
             if (IsValid(ref administrator))
             
             {
+
+               
+                
+                
                 
                 //FormsAuthenticationTicket with the supplied username & persistence options, serializes it,
+                
+                
+                
                 FormsAuthentication.SetAuthCookie(administrator.Email, false);
+                //Roles.AddUserToRole(administrator.Email, "Admin");
                 //http://stackoverflow.com/questions/23301445/formsauthentication-setauthcookie-vs-formsauthentication-encrypt
                 Session["logged_in"] = true;
                 Session["AdministratorLogin"] = administrator;
+                //set users roles
+
 
                 //return RedirectToAction("Index", "Home");
 
@@ -318,6 +344,7 @@ namespace StudentFinanceSupport.Controllers
                         //account is valid we need to update our admin account with the ID
                         administrator.UserId = user.UserId;
                         IsValid = true;
+                       
                     }
                 }
            
@@ -326,11 +353,7 @@ namespace StudentFinanceSupport.Controllers
 
 
 
-        public void sendEmail()
-        {
-           
-
-        }
+       
 
        
 

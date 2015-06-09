@@ -15,8 +15,14 @@
     #report-btn-group {
         width :350px;
     }
+    #search_report_form{
+         height:350px;
+         min-width: 825px;
+    }
+
+   
 </style>
-<div id="search_report_form" class="" style="height:350px">
+<div id="search_report_form" class="" style="">
     <div class="panel panel-primary">
         <div class="panel-heading">
             Report Filters
@@ -24,16 +30,7 @@
         <div id="filter_wizard" class="panel-body">
             <h3>Report Dates</h3>
             <section id="view_by" class="">
-                <div class="form-group">
-                    <div class="col-md-8">
-                        <div id="select_date">
-
-                            Date
-                            @Html.TextBox("start_date", @DateTime.Now.ToShortDateString(), htmlAttributes: new { @class = "datepicker" })
-
-                        </div>
-                    </div>
-                </div>
+               
                 <div class="form-group">
                     <div class="col-md-8">
                         <div id="select_date_type">
@@ -45,7 +42,16 @@
                         </div>
                     </div>
                 </div>
-       
+                <div class="form-group">
+                    <div class="col-md-8">
+                        <div id="select_date">
+
+                            Date
+                            @Html.TextBox("start_date", @DateTime.Now.ToShortDateString(), htmlAttributes: new { @class = "datepicker form-control" })
+
+                        </div>
+                    </div>
+                </div>
                 </section>
                 
             <h3>Campus Filters</h3>
@@ -102,11 +108,13 @@
 
                             <div class="col-md-10">
                                 <div class="col-md-6">
-                                    GrantType
+
                                     @Html.DropDownList(
-                                                        "GrantType",
-                                                         Helpers.GrantTypes(), Helpers.SelectOneSpacer,
-                                new { @class = "form-control", data_placeholder = "Choose a Grant..." })
+                                             "GrantType",
+                                          (IEnumerable<SelectListItem>)ViewBag.GrantType, Helpers.SelectOneSpacer,
+                                new { @class = "form-control", data_placeholder = "Select a Faculity..." })
+
+                                   
 
                                 </div>
 
@@ -138,23 +146,61 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+
+                            <div class="col-md-10">
+                                <div class="col-md-6">
+                                    Age
+                                    @Html.TextBox("student_age", null, htmlAttributes: new { @class = "form-control", @placeholder = "Age" })
+                                </div>
+                                <div class="col-md-6">
+                                    Ethnicity
+                                    @Html.DropDownList(
+                                                        "Ethnicity",
+                                                         Helpers.Ethnicity(), Helpers.SelectOneSpacer,
+                                new { @class = "form-control", data_placeholder = "Choose a Gender..." })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </section>
-            <div class="form-group pull-left">
 
-                <div class="col-md-offset-2 col-md-8 " style="padding-top:15px;">
-                    <span id="report-btn-group" class="pull-left">
-                        <button id="search_report_reset_btn" class="btn btn-warning">Reset Filters</button>
-                        <button id="search_report_btn" class="btn btn-success">Generate Report</button>
-                    </span>
+            <h3>Saved Filters</h3>
+            <section>
+                <div class="form-group">
+
+
+                    <div class="col-md-8">
+                        <div class="form-group">
+
+                            <div class="col-md-10">
+                                <div class="col-md-6">
+                                    Sorry not implmented
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
-            </div>
+            </section>
         </div>
        
     </div>
     <!-- /.col-lg-4 -->
-    
+    <div class="form-group pull-left col-md-10" style="bottom:15px;right:30px">
+
+        <div class="col-md-2 ">
+            <span id="report-btn-group" style="display:inline-block">
+                <button id="search_report_reset_btn" class="btn btn-warning">Reset Filters</button>
+                <button id="search_report_btn" class="btn btn-success">Generate Report</button>
+            </span>
+        </div>
+
+    </div>
 </div>
 
 <script>
@@ -176,6 +222,11 @@
                 minViewMode: "weeks",
                 viewMode: "weeks",
                 autoclose: true,
+                beforeShowDay: function (date) {
+                    //console.log("date", date.getDay())
+                    
+                    return date.getDay() == 1
+                }
             },
             month: {
                 format: "mm/yyyy",
@@ -216,8 +267,9 @@
             //console.log("bin", calander_selections[selection]);
             var options = calander_selections[selection];
             $('.datepicker').datepicker('remove');
+            $('.datepicker').val('')
             $('.datepicker').datepicker(options);
-
+            $('.datepicker').datepicker("show");
         })
       
     })

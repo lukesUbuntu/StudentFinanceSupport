@@ -85,24 +85,7 @@ public static class Helpers
 
         return Ethnicity;
     }
-    /// <summary>
-    ///  Generate dropdown for GrantTypes
-    ///  @todo make this into a dynamic and editable list
-    /// </summary>
-    /// <returns>List</returns>
-    public static List<SelectListItem> GrantTypes()
-    {
-        List<SelectListItem> GrantTypesList = new List<SelectListItem>()
-                    {
-                         new SelectListItem { Text = "Advice",    Value = "Advice" }, 
-                         new SelectListItem { Text = "Petrol Vouchers",  Value = "PetrolVouchers" },
-                         new SelectListItem { Text = "Food Vouchers",  Value = "FoodVouchers" },
-                         new SelectListItem { Text = "Train Tickets",  Value = "TrainTickets" },
-                         new SelectListItem { Text = "Hard Ship",  Value = "Hardship" }
-                    };
-
-        return GrantTypesList;
-    }
+    
 
     public static List<SelectListItem> RecoveryOptions()
     {
@@ -144,11 +127,16 @@ public static class Helpers
 
     public static bool UserLoggedIn()
     {
-        
         HttpContext context = HttpContext.Current;
         return (context.Session["logged_in"] != null) && (bool)context.Session["logged_in"] == true;
     }
 
+
+    public static bool UserLoggedIn(string role)
+    {
+        HttpContext context = HttpContext.Current;
+        return (context.Session["logged_in"] != null) && (bool)context.Session["logged_in"] == true;
+    }
    
     
     

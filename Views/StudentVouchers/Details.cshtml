@@ -1,0 +1,82 @@
+﻿
+@model StudentFinanceSupport.Models.ProfileUserViewModel
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Main_Layout_.cshtml";
+}
+@Html.ActionLink("Back to List", "Index")
+<h2>Student Voucher Details</h2>
+<button class="btn btn-info back_button">Back</button>
+<div>
+    
+    <h4>@Model.UserGrant.StudentRegistration.FirstName @Model.UserGrant.StudentRegistration.LastName <small>
+    (@Model.UserGrant.StudentRegistration.Student_ID)
+</small></h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserGrant.DateOfIssue)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserGrant.DateOfIssue)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserGrant.GrantType.grant_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserGrant.GrantType.grant_name)
+        </dd>
+
+
+        <dd>
+            @Html.DisplayFor(model => model.UserGrant.GrantDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserGrant.GrantValue)
+        </dt>
+
+        <dd>
+           $@Html.DisplayFor(model => model.UserGrant.GrantValue)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserGrant.KuhaFunds)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserGrant.KuhaFunds)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit Voucher", "Edit", new { id = Model.UserGrant.id_student_vouchers },
+                            htmlAttributes: new { @class = "btn btn-warning " })
+
+    @Html.ActionLink("Add Voucher", "Create", new { id = Model.UserGrant.id_student_vouchers },
+                            htmlAttributes: new { @class = "btn btn-success " })
+    <span class="delete">
+        @Html.ActionLink("Delete Voucher", "DeleteConfirmed", new { id = Model.UserGrant.id_student_vouchers },
+                            htmlAttributes: new { @class = "btn btn-danger" })
+    </span>
+  
+</p>
+<h1>All Grants</h1>
+@Html.Partial("~/Views/StudentVouchers/_student_vouchers.cshtml", Model.UserGrantList);
+<script>
+    $(document).ready(function () {
+        
+        $(".delete").on('click', function (e) {
+            var delete_location = $('a', this).attr('href');
+            e.preventDefault();
+            BootstrapDialog.confirm('Are you sure you want to delete this voucher?', function (result) {
+                if (result) {
+                    window.location = delete_location;
+                }
+            });
+
+        })
+    })
+</script>

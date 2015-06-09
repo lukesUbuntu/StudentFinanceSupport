@@ -1,0 +1,59 @@
+﻿@model StudentFinanceSupport.Models.GrantType
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Main_Layout_.cshtml";
+}
+
+<h2>Details</h2>
+<button class="btn btn-info back_button">Back</button>
+<div>
+    <h4>GrantType</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.grant_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.grant_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.grant_value)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.grant_value)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.grant_description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.grant_description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.grant_koha)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.grant_koha)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.system_asset)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.system_asset)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.grant_type_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

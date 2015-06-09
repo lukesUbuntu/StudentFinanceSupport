@@ -16,6 +16,7 @@ namespace StudentFinanceSupport.Models
         }
 
         [Key]
+        [Display(Name = "Faculty")]
         public int id_faculty { get; set; }
 
         [StringLength(50)]

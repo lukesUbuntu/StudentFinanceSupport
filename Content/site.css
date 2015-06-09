@@ -1,3 +1,17 @@
+
+    
+    /*form label {*/
+    /*color: rgb(51, 51, 51);*/
+    /*display: block;*/
+    /*text-transform: initial;*/
+    /*margin-bottom: 10px;*/
+    /*font-size: 15px;*/
+    /*}*/
+    
+
+
+
+
 /*.modal {
     display:    none;
     position:   fixed;
@@ -18,7 +32,14 @@ body.loading {
 body.loading .modal {
     display: block;
 }*/
-
+/*pie chart header fixing*/
+ #pie-report {
+        top: -50px;
+        position: relative;
+    }
+    .list-group-item {
+        height : 50px;
+    }
 .isloading-wrapper.isloading-right{
     margin-left:10px;
 
@@ -63,7 +84,7 @@ body.loading .modal {
       z-index: 1000;
       float: left;
       display: none;
-      min-width: 250px;
+      min-width: 400px;
       _width: 160px;
       padding: 4px 0;
       margin: 2px 0 0 0;
@@ -92,8 +113,9 @@ body.loading .modal {
 .suggest-holder li:hover {
     cursor: pointer;
 }
-.suggest-holder li:hover, li.active {
-    background: rgba(0,120,0, .2);
+.suggest-holder li:hover, .suggest-holder li.active {
+    /*background: rgba(0,120,0, .2);*/
+    background: rgba(120, 0, 55, 0);
 }
 .suggest-holder .student-name {
      font-weight: bold;

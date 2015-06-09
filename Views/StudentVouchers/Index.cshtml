@@ -6,60 +6,80 @@
 
 @Styles.Render("~/Content/datatables")
 @Scripts.Render("~/bundles/datatables")
-<table class="table table-striped table-bordered table-hover col-md-8" id="grants-list-table">
-    <thead>
-        <tr>
-            <th class="col-lg-3">@Html.DisplayNameFor(model => model.StudentRegistration.FirstName)</th>
-            <th class="col-lg-3">@Html.DisplayNameFor(model => model.KuhaFunds)</th>
+<button class="btn btn-info back_button">Back</button>
+<div class="row">
+    <table class="table table-striped table-bordered table-hover col-md-6" id="grants-list-table">
+        <thead>
+            <tr>
+                <th class="col-md-1">@Html.DisplayNameFor(model => model.DateOfIssue)</th>
+                <th class="col-md-1">@Html.DisplayNameFor(model => model.StudentRegistration.Student_ID)</th>
+                <th class="col-md-2">@Html.DisplayNameFor(model => model.StudentRegistration.FirstName)</th>
+                <th class="col-md-1">@Html.DisplayNameFor(model => model.GrantType.grant_name)</th>
+                <th class="col-md-1">@Html.DisplayNameFor(model => model.GrantValue)</th>
+                <th class="col-lg-1"></th>
+            </tr>
+        </thead>
+        <tbody>
 
-            <th class="col-lg-2"></th>
-        </tr>
-    </thead>
-    <tbody>
 
-
-        @foreach (var grants in Model)
-        {
-            <tr class="odd gradeX">
-                <td>
-                    @Html.DisplayFor(modelItem => grants.StudentRegistration.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => grants.KuhaFunds)
-                </td>
-
-                <td class="center">
-                    <div class="btn-group">
-                        @Html.ActionLink("View Students", "Create", "Courses",
-              new { id = grants.student_ID },
+            @foreach (var grants in Model)
+            {
+                <tr class="odd gradeX">
+                    <td>
+                        @Html.DisplayFor(modelItem => grants.DateOfIssue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => grants.StudentRegistration.Student_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => grants.StudentRegistration.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => grants.GrantType.grant_name)
+                    </td>
+                    <td>
+                        $@Html.DisplayFor(modelItem => grants.GrantValue)
+                    </td>
+                    <td class="center">
+                        <div class="btn-group">
+                            @Html.ActionLink("View Grant", "Details", "StudentVouchers",
+                            new { id = grants.id_student_vouchers },
                             htmlAttributes: new { @class = "btn btn-default " }
                           )
 
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <span class="caret"></span>
-                            <span class="sr-only"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>@Html.ActionLink("Edit Faculty", "Edit", new { id = grants.id_student_vouchers })</li>
-                            <li>@Html.ActionLink("Details", "Details", new { id = grants.id_student_vouchers })</li>
-                            <li class="divider"></li>
-                            <li class=""> @Html.ActionLink("Delete", "Delete", new { id = grants.id_student_vouchers })</li>
-                        </ul>
-                    </div>
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li class="delete" data-voucher_id="@grants.id_student_vouchers">@Html.ActionLink("Delete", "DeleteConfirmed", new { id = grants.id_student_vouchers })</li>
+                            </ul>
+                        </div>
 
-                </td>
+                    </td>
 
-            </tr>
-        }
+                </tr>
+            }
 
-    </tbody>
-</table>
-
+        </tbody>
+    </table>
+</div>
 <script>
     $(document).ready(function () {
         $('#grants-list-table').DataTable({
             responsive: true
         });
+        //delete a student voucher
+        $(".delete").click(function (e) {
+            var delete_location = $('a', this).attr('href');
+            e.preventDefault();
+            BootstrapDialog.confirm('Are you sure you want to delete this voucher?', function (result) {
+                if (result) {
+                    window.location = delete_location;
+                } 
+            });
+            
+        })
     });
 </script>
 

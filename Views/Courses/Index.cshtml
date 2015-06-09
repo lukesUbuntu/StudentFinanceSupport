@@ -6,7 +6,7 @@
 }
 
 <h2>Index</h2>
-
+<button class="btn btn-info back_button">Back</button>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
@@ -36,21 +36,12 @@
                
                 <td class="center">
                     <div class="btn-group">
-                        @Html.ActionLink("View Students", "Create", "Courses",
+                        @Html.ActionLink("Edit", "Edit", "Courses",
                      new { id = course.id_courses },
-                            htmlAttributes: new { @class = "btn btn-default " }
+                            htmlAttributes: new { @class = "btn btn-success " }
                           )
 
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <span class="caret"></span>
-                            <span class="sr-only"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>@Html.ActionLink("Edit Faculty", "Edit", new { id = course.id_courses })</li>
-                            <li>@Html.ActionLink("Details", "Details", new { id = course.id_courses })</li>
-                            <li class="divider"></li>
-                            <li class=""> @Html.ActionLink("Delete", "Delete", new { id = course.id_courses })</li>
-                        </ul>
+                       
                     </div>
 
                 </td>
@@ -66,6 +57,8 @@
         $('#faculty-list-table').DataTable({
             responsive: true
         });
+
+       
     });
 </script>
 

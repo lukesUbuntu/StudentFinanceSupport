@@ -10,6 +10,7 @@ using StudentFinanceSupport.Models;
 
 namespace StudentFinanceSupport.Controllers
 {
+     [Authorize(Roles = "Admin")]
     public class CoursesController : Controller
     {
         private StudentRegistrationsModel db = new StudentRegistrationsModel();

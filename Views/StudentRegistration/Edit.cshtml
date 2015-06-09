@@ -1,5 +1,6 @@
 ﻿
-
+@model StudentFinanceSupport.Models.StudentRegistration
+@using StudentFinanceSupport.Helpers
 
 @{
     ViewBag.Title = "Create Student";
@@ -11,7 +12,7 @@
           padding-top: 15px;
     }
 </style>
-
+<button class="btn btn-info back_button">Back</button>
     <div class="row">
         <div class="col-lg-12">
             <h2>Add Student</h2>
@@ -24,8 +25,149 @@
     {
          @Html.ValidationSummary(true, "", new { @class = "text-danger" })
          @Html.AntiForgeryToken()
-         @RenderPage("_student_details.cshtml")
+         
        
+        <div id="add-student-form">
+            <h3>Student Details</h3>
+            <section id="student_details">
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Student_ID, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.Student_ID, new { @class = "form-control ", @placeholder = "Student ID", @autofocus = "" })
+                        @Html.ValidationMessageFor(model => model.Student_ID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @placeholder = "First Name" })
+                        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+                        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.Gender, Helpers.DropDownGender(), Helpers.SelectOneSpacer, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DOB, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.DOB, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker", placeholder = "Enter Date of Birth." })
+                        @Html.ValidationMessageFor(model => model.DOB, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+            </section>
+
+            <h3>Contact Details</h3>
+            <section id="contact_details">
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Address1, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.Address1, new { @class = "form-control ", @placeholder = "Student Adress", @autofocus = "" })
+                        @Html.ValidationMessageFor(model => model.Address1, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Accomodition_Type, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.Accomodition_Type, Helpers.AccomoditionTypes(), Helpers.SelectOneSpacer, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Accomodition_Type, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Mobile, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control ", @placeholder = "Mobile Number", @autofocus = "" })
+                        @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.Phone, new { @class = "form-control ", @placeholder = "Phone Number", @autofocus = "" })
+                        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control ", @placeholder = "Email Address", @autofocus = "" })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </section>
+
+            <h3>Student Enrollment</h3>
+            <section id="student_entrollment">
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Marital_Status, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.Marital_Status, Helpers.MaritalStatus(), Helpers.SelectOneSpacer, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Marital_Status, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Main_Ethnicity, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.Main_Ethnicity, Helpers.Ethnicity(),  new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Main_Ethnicity, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.id_campus, "id_campus", htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+
+                        @Html.DropDownList("id_campus", null,  htmlAttributes: new { @class = "form-control" })
+
+                        @Html.ValidationMessageFor(model => model.id_campus, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.id_faculty, "id_faculty", htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+
+                        @Html.DropDownList("id_faculty", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.id_faculty, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+
+                    @Html.LabelFor(model => model.id_courses, "id_courses", htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+
+                        @Html.DropDownList("id_courses", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.id_courses, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </section>
+
+        </div>
     }
 
 
@@ -50,7 +192,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-
+            
             //start our wizard on step 0 tab
             var startWizardTab = 0
 

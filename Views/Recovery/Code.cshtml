@@ -3,7 +3,7 @@
 
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div id="recover_account" class="col-md-4 pull-right">
+    <div id="reset_account" class="col-md-4 pull-right">
         <div class="panel panel-green">
             <div class="panel-heading">
                 Have recovery key
@@ -22,4 +22,46 @@
                 @Html.ValidationMessageFor(model => model.recovery_key, "", new { @class = "text-danger" })
             </div>
         </div>
+        <div id="recovery_code_errors" class="alert alert-danger alert-dismissable" style="display:none">
+
+        </div>
     </div>
+<script>
+    //define our form locations
+    var $recover_account = $("#reset_account");
+    var $error_box = $("#recovery_code_errors", $recover_account);
+    var $reset_password_btn = $("#reset_password", $recover_account)
+    var $recovery_key = $("#recovery_key", $recover_account);
+
+    $reset_password_btn.click(function () {
+        $(this).isLoading();
+       
+        $.ajax({
+            url: "/Recovery/Code",
+            type: "POST",
+            dataType: "json",
+            data: { recovery_key: $recovery_key.val() },
+            success: function (response) {
+                $reset_password_btn.isLoading('hide');
+
+                if (response.success == true && typeof response.url == "string") {
+                    //success only when the code was correct
+                    $recover_account.find(".panel").slideUp();
+                    $error_box.alertBox(response.message, true);
+
+                    setTimeout(function () {
+                        window.location = response.url
+                    },500)
+                    //console.log("response", response)
+                }
+
+                else if (response.success == false )
+                    $error_box.alertBox(response.message);
+                
+                console.log("response", response)
+            }
+
+        });
+       
+    })
+</script>

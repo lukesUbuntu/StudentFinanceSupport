@@ -16,10 +16,12 @@ namespace StudentFinanceSupport.Models
         }
 
         [Key]
+        [Display(Name = "Campus")]
         public int id_campus { get; set; }
 
         [Required]
         [StringLength(100)]
+        [Display(Name = "Campus Name")]
         public string campus_name { get; set; }
 
 
