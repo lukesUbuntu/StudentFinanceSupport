@@ -8,6 +8,7 @@
 @Scripts.Render("~/bundles/datatables")
 
 @Html.Partial("~/Views/Reports/ReportFilter.cshtml")
+
 <div id="main_area" class="panel panel-default col-sm-12">
      <!-- Errors to be displyed-->
     <div id="filter_errors" class="alert alert-danger pull-left col-sm-12" style="display:none"></div>
@@ -32,8 +33,9 @@
                 <div class="">
 
                     <div class="">
-
+                        
                         <div class="other-stats" style="z-index: 100;">
+                            <h3>Report Type : <span id="report_type"></span></h3>
                             <div class="list-group">
                                 <div class="list-group-item">
                                     <i class="fa fa-group fa-fw"></i> Students With Grants
@@ -106,9 +108,19 @@
                 </div>
                 <!--</div>-->
 
-                <div id="pie_charts">
-                    <div id="grant_pie_report" class="pull-left" style="width: 300px; height:300px"></div>
-                    <div id="faculty_pie_report" class="pull-right" style="width: 300px; height:300px "></div>
+                <div id="pie_charts" class="col-sm-6">
+
+
+                    <div id="grant_pie_report" class="pull-left" style="width: 300px; height:300px;padding-right:10px;"></div>
+
+
+                    <div id="faculty_pie_report" class="pull-right" style="width: 300px; height:300px ">  </div>
+
+
+
+                    <div id="campus_pie_report" class="pull-left" style="width: 300px; height:300px;top:20px; "></div>
+
+
                 </div>
 
             </div>
@@ -333,6 +345,7 @@
             //data: recovery,
             success: function (response) {
                 var errors = [];
+               
                 //error_message.empty();
                 $error_message.alertBox();
                 //go through out error list if any
@@ -433,6 +446,9 @@
                 defaultTheme: false
             }
         });
+        var xaxisLabel = $("<div class='axisLabel xaxisLabel'></div>")
+            .text("Grant Types")
+            .appendTo($('#grant_pie_report'));
 
         if (pie_reports["faculty_pie_report"].length > 0)
         $.plot($("#faculty_pie_report"), pie_reports["faculty_pie_report"], {
@@ -454,10 +470,40 @@
                 defaultTheme: false
             }
         });
+        var xaxisLabel = $("<div class='axisLabel xaxisLabel'></div>")
+            .text("Faculty")
+            .appendTo($('#faculty_pie_report'));
+
+
+        if (pie_reports["campus_pie_report"].length > 0)
+            $.plot($("#campus_pie_report"), pie_reports["campus_pie_report"], {
+                series: {
+                    pie: {
+                        show: true
+                    }
+                },
+                grid: {
+                    hoverable: true
+                },
+                tooltip: true,
+                tooltipOpts: {
+                    content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
+                    shifts: {
+                        x: 20,
+                        y: 0
+                    },
+                    defaultTheme: false
+                }
+            });
+        var xaxisLabel = $("<div class='axisLabel xaxisLabel'></div>")
+            .text("Campus")
+            .appendTo($('#campus_pie_report'));
+        
     }
 
 
     function processDataReports(data) {
+        $("#report_type").text(data.report_type)
         //clear student student_report_view
         student_report_view = [];
         if (typeof data.student_count == "number") 
@@ -494,9 +540,10 @@
 
             if (typeof data.faculty_pie_report != "undefined" && data.faculty_pie_report != null) {
                 pie_reports["faculty_pie_report"] = data.faculty_pie_report;
+            }
 
-
-
+            if (typeof data.campus_pie_report != "undefined" && data.campus_pie_report != null) {
+                pie_reports["campus_pie_report"] = data.campus_pie_report;
             }
 
             if (typeof data.student_grants != "undefined" && data.student_grants != null) {

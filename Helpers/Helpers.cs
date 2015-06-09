@@ -103,10 +103,11 @@ public static class Helpers
     {
         List<SelectListItem> DayWeekMonthYearSelect = new List<SelectListItem>()
                     {
-                         new SelectListItem { Text = "Day",    Value = "day" }, 
-                         new SelectListItem { Text = "Week",    Value = "week" },
-                         new SelectListItem { Text = "Month",    Value = "month" },
-                         new SelectListItem { Text = "Year",    Value = "year" }
+                         new SelectListItem { Text = "Daily Report",    Value = "day" }, 
+                         new SelectListItem { Text = "Weekly Report",    Value = "week" },
+                         new SelectListItem { Text = "Monthly Report",    Value = "month" },
+                         new SelectListItem { Text = "Yearly Report",    Value = "year" },
+                         new SelectListItem { Text = "Year To Date",    Value = "todate" }
                     };
 
         return DayWeekMonthYearSelect;
