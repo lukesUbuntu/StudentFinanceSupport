@@ -39,6 +39,7 @@ namespace StudentFinanceSupport.Models
         [RegularExpression("^02[1-9]\\d{5,9}", ErrorMessage = "Invalid mobile number, format is 021-029... eg. 02102341111")]
 
         [StringLength(15)]
+ 
         public string mobile { get; set; }
 
         [Required]

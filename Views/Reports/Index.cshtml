@@ -7,9 +7,10 @@
 @Styles.Render("~/Content/datatables")
 @Scripts.Render("~/bundles/datatables")
 
-@Html.Partial("~/Views/Reports/ReportFilter.cshtml");
+@Html.Partial("~/Views/Reports/ReportFilter.cshtml")
 <div id="main_area" class="panel panel-default">
-
+     <!-- Errors to be displyed-->
+    <div id="filter_errors" class="alert alert-danger col-md-12 pull-left" style="display:none"></div>
     <!-- /.panel-heading -->
     <div class="panel-body">
         <!-- Nav tabs -->
@@ -292,8 +293,9 @@
     $("#pie_grant_chart").click(pieChartValue);
     $("#pie_faculty_chart").click(pieChartValue);*/
     getMainOveriew();
-
+    var $error_message = $("#filter_errors");
     var $search_report_form = $("#filter_wizard");
+
     //code from our report filter
     $("#search_report_btn").click(function () {
         var report_details = $(":input", $search_report_form).serialize();
@@ -309,7 +311,29 @@
             dataType: "json",
             data: report_details,
             //data: recovery,
-            success: processDataReports
+            success: function (response) {
+                var errors = [];
+                //error_message.empty();
+                $error_message.alertBox();
+                //go through out error list if any
+                $.each(response.error_list, function (index, field) {
+
+                    if (field.Value.length > 0)
+                    {
+                        //error_message.append("<b>" + field.Key.replace("_", " ") + "</b> " + field.Value)
+                        errors.push("<b>" + field.Key.replace("_", " ") + "</b> " + field.Value)
+                        console.log("error", field)
+                       
+                        //take the key and apply issue
+                    }
+                    
+                    
+                })
+                if (errors.length > 0) {
+                    $error_message.alertBox(errors.join("<p>",false))
+                }
+                processDataReports(response)
+            }
         });
     })
 
@@ -335,6 +359,7 @@
         });
 
     }
+
     function returnDate(theDate) {
         var parsedDate = new Date(parseInt(theDate.substr(6)));
         var jsDate = new Date(parsedDate); //Date object

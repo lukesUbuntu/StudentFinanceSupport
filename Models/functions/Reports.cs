@@ -10,9 +10,16 @@ namespace StudentFinanceSupport.Models.functions
 {
     public class Reports
     {
+        //valid dates
+        //2015
+        //06/2015
+        //09/06/2015
+        
         public string date_type { get; set; }
         public string gender { get; set; }
 
+        [Display(Name = "Date")]
+        [RegularExpression("^\\d{0,2}\\/\\d{0,2}\\/\\d{0,4}|^\\d{0,2}\\/\\d{0,4}", ErrorMessage = "Date must be in the following format dd/mm/yyyy or mm/yyyy")]
         public string start_date { get; set; }
 
         public int? Faculity { get; set; }
@@ -32,6 +39,7 @@ namespace StudentFinanceSupport.Models.functions
         }
         public DateTime getDate()
         {
+            //need to check if date valid
             string theFormat = "dd/MM/yyyy";
             switch (this.date_type.ToLower())
             {

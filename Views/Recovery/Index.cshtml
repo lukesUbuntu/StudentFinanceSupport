@@ -40,7 +40,7 @@
                     <div id="mobile_number" class="col-md-10" style="display:none">
 
                         <h4>
-                            Enter last 4 digits of this number
+                            
 
                             <span id="mobile_number_guess" style="padding-top:10px;">
 
@@ -161,7 +161,8 @@
                     $("#request_reset_code").isLoading('hide');
 
                     //check for errors for admin email
-                    if (data.success == false && typeof data.errors['Administrator.Email'] == "object") {
+                    console.log("errors",typeof data.errors)
+                    if (data.success == false && typeof data.errors != "undefined" && typeof data.errors['Administrator.Email'] == "object") {
 
                         $.map(data.errors, function (error, key) {
                             //if we have issue with administrator move select box back to default

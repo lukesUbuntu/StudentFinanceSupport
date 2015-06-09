@@ -149,8 +149,18 @@ namespace StudentFinanceSupport.Controllers
 
             if (theRecovery.recovery_option == "mobile")
             {
-              
-                string mobile = theRecovery.Administrator.mobile.Remove(theRecovery.Administrator.mobile.Length - 4, 4) + "****";
+                
+                
+                if (theRecovery.Administrator.mobile == null)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        mobile_guess = "Sorry no mobile with this account please use email"
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                string mobile = "Enter last 4 digits of this number " + theRecovery.Administrator.mobile.Remove(theRecovery.Administrator.mobile.Length - 4, 4) + "****";
+                
                 return Json(new
                 {
                     success = true,

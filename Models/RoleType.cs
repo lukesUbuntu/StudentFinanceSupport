@@ -17,6 +17,7 @@ namespace StudentFinanceSupport.Models
         public int role_type_id { get; set; }
 
         [StringLength(20)]
+        [Display(Name = "Role Name")]
         public string role_name { get; set; }
 
         [StringLength(200)]

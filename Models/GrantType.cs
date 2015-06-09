@@ -15,6 +15,7 @@ namespace StudentFinanceSupport.Models
         }
 
         [Key]
+        [Display(Name = "Grant Type")]
         public int grant_type_id { get; set; }
 
         [Required]
