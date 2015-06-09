@@ -15,8 +15,14 @@
     #report-btn-group {
         width :350px;
     }
+    #search_report_form{
+         height:350px;
+         min-width: 825px;
+    }
+
+   
 </style>
-<div id="search_report_form" class="" style="height:350px">
+<div id="search_report_form" class="" style="">
     <div class="panel panel-primary">
         <div class="panel-heading">
             Report Filters
@@ -148,13 +154,21 @@
                                     Age
                                     @Html.TextBox("student_age", null, htmlAttributes: new { @class = "form-control", @placeholder = "Age" })
                                 </div>
+                                <div class="col-md-6">
+                                    Ethnicity
+                                    @Html.DropDownList(
+                                                        "Ethnicity",
+                                                         Helpers.Ethnicity(), Helpers.SelectOneSpacer,
+                                new { @class = "form-control", data_placeholder = "Choose a Gender..." })
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </section>
 
-            <h3>Saved Report Filters</h3>
+            <h3>Saved Filters</h3>
             <section>
                 <div class="form-group">
 
@@ -164,27 +178,13 @@
 
                             <div class="col-md-10">
                                 <div class="col-md-6">
-                                    Gender
-                                    @Html.DropDownList(
-                                                         "gender",
-                                                         Helpers.DropDownGender(), Helpers.SelectOneSpacer,
-                                new { @class = "form-control", data_placeholder = "Choose a Gender..." })
+                                    Sorry not implmented
 
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-8">
-                        <div class="form-group">
-
-                            <div class="col-md-10">
-                                <div class="col-md-6">
-                                    Age
-                                    @Html.TextBox("student_age", null, htmlAttributes: new { @class = "form-control", @placeholder = "Age" })
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
             </section>
         </div>

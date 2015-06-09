@@ -17,18 +17,22 @@ namespace StudentFinanceSupport.Models.functions
         
         public string date_type { get; set; }
         public string gender { get; set; }
-
+        //\d{0,2}\/\d{0,2}\/\d{0,4}|\d{0,2}\/\d{0,4}|
         [Display(Name = "Date")]
-        [RegularExpression("^\\d{0,2}\\/\\d{0,2}\\/\\d{0,4}|^\\d{0,2}\\/\\d{0,4}", ErrorMessage = "Date must be in the following format dd/mm/yyyy or mm/yyyy")]
+        [RegularExpression(@"\d{0,2}\/\d{0,2}\/\d{0,4}|\d{0,2}\/\d{4}|\s*\d{4}", ErrorMessage = "Date must be in the following format dd/mm/yyyy or mm/yyyy or yyyy")]
+        //[RegularExpression("\\d{0,4}", ErrorMessage = "Date must be in the following format dd/mm/yyyy or mm/yyyy or yyyy bbbb")]
         public string start_date { get; set; }
 
+        public string Ethnicity { get; set; }
         public int? Faculity { get; set; }
 
+        [Display(Name = "Student Age")]
         [RegularExpression("^(0?[1-9]|[1-9][0-9])$", ErrorMessage = "Must be a age number eg. 21")]
         public int? student_age { get; set; }
 
         public int? Campus { get; set; }
         public int? GrantType { get; set; }
+       
         public DateTime getBirthYear()
         {
             //minus todays date eg 2015 - 15 = born 2000

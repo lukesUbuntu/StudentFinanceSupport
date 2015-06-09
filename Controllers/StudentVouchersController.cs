@@ -42,22 +42,29 @@ namespace StudentFinanceSupport.Controllers
                                ).FirstOrDefault();
 
             if (theVouchers == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+                return RedirectToAction("Error", new { message = "Invalid student details." });
             //var other_grants = db.StudentVouchers.Where(a => a.student_ID == studentVoucher.student_ID);
 
             //studentVoucher.student_ID
             return RedirectToAction("Details", new { id = theVouchers });
         }
         // GET: StudentVouchers/Details/5
+        //_student_vouchers
+        
+        public ActionResult StudentVouchersAll(string id)
+        {
+            StudentRegistrationsModel db = new StudentRegistrationsModel();
+            IEnumerable<StudentVoucher> studentVouchers = db.StudentVouchers.Where(a => a.student_ID == id).ToList();
+
+            if (studentVouchers == null)
+                return RedirectToAction("Error", new { message = "Invalid student details." });
+
+            return View(studentVouchers);
+        }
         public ActionResult Details(int id)
         {
             StudentRegistrationsModel db = new StudentRegistrationsModel();
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+         
 
 
             StudentVoucher studentVoucher = db.StudentVouchers.Find(id);

@@ -8,7 +8,9 @@
 <h2>Edit Grant Types</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    <button class="btn btn-info back_button">Back</button>
+    @Html.ActionLink("Create New", "Create", "GrantTypes", htmlAttributes: new { @class = "btn btn-success " })
+
 </p>
 <table class="table">
     <tr>

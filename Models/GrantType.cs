@@ -20,7 +20,7 @@ namespace StudentFinanceSupport.Models
 
         [Required]
         [StringLength(50)]
-        //[Display(Name = "Grant Type")]
+        [Display(Name = "Grant Type")]
         public string grant_name { get; set; }
 
         [Display(Name = "Value Enabled")]

@@ -28,6 +28,8 @@ using System.Data.Entity.Spatial;
         [Range(0, double.MaxValue, ErrorMessage = "Please enter a valid number")]
         public double GrantValue { get; set; }
 
+        [Display(Name = "Issue Date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateOfIssue { get; set; }
 
         [Range(0, double.MaxValue, ErrorMessage = "Please enter valid number")]

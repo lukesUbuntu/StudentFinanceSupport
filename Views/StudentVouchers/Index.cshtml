@@ -6,10 +6,12 @@
 
 @Styles.Render("~/Content/datatables")
 @Scripts.Render("~/bundles/datatables")
+<button class="btn btn-info back_button">Back</button>
 <div class="row">
     <table class="table table-striped table-bordered table-hover col-md-6" id="grants-list-table">
         <thead>
             <tr>
+                <th class="col-md-1">@Html.DisplayNameFor(model => model.DateOfIssue)</th>
                 <th class="col-md-1">@Html.DisplayNameFor(model => model.StudentRegistration.Student_ID)</th>
                 <th class="col-md-2">@Html.DisplayNameFor(model => model.StudentRegistration.FirstName)</th>
                 <th class="col-md-1">@Html.DisplayNameFor(model => model.GrantType.grant_name)</th>
@@ -23,6 +25,9 @@
             @foreach (var grants in Model)
             {
                 <tr class="odd gradeX">
+                    <td>
+                        @Html.DisplayFor(modelItem => grants.DateOfIssue)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => grants.StudentRegistration.Student_ID)
                     </td>

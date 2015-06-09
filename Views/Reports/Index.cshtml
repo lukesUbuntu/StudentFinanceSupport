@@ -8,13 +8,13 @@
 @Scripts.Render("~/bundles/datatables")
 
 @Html.Partial("~/Views/Reports/ReportFilter.cshtml")
-<div id="main_area" class="panel panel-default">
+<div id="main_area" class="panel panel-default col-sm-12">
      <!-- Errors to be displyed-->
-    <div id="filter_errors" class="alert alert-danger col-md-12 pull-left" style="display:none"></div>
+    <div id="filter_errors" class="alert alert-danger pull-left col-sm-12" style="display:none"></div>
     <!-- /.panel-heading -->
     <div class="panel-body">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs ">
             <li class="active">
                 <a href="#graph_stats" data-toggle="tab">Graph StaticsView</a>
             </li>
@@ -31,42 +31,12 @@
                 <!--<div id="graph_view">  <h4>Graph View</h4>-->
                 <div class="">
 
-                    <div class="col-lg-3">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover table-striped">
-                                <thead>
-                                    <tr>
-                                        <th style="width:150px">Grant Type</th>
-                                        <th style="width:50px">Color</th>
+                    <div class="">
 
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Hardship</td>
-                                        <td style="background-color:#FFE600"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Train Tickets</td>
-                                        <td style="background-color:#223EB2"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Food</td>
-                                        <td style="background-color:#FF8000"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Petrol</td>
-                                        <td style="background-color:#95D7BB"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.table-responsive -->
                         <div class="other-stats" style="z-index: 100;">
                             <div class="list-group">
                                 <div class="list-group-item">
-                                    <i class="fa fa-comment fa-fw"></i> Students With Grants
+                                    <i class="fa fa-group fa-fw"></i> Students With Grants
                                     <div class="pull-right text-muted small">
                                         <div id="student_count"></div>
                                     </div>
@@ -79,13 +49,13 @@
                                     </div>
                                 </div>
                                 <div class="list-group-item">
-                                    <i class="fa fa-comment fa-fw"></i> Total Grant Cost
+                                    <i class="fa fa-dollar fa-fw"></i> Total Grant Cost
                                     <div class="pull-right text-muted small">
                                         <div>$<span id="total_cost"></span></div>
                                     </div>
                                 </div>
                                 <div class="list-group-item">
-                                    <i class="fa fa-comment fa-fw"></i> Total Koha Cost
+                                    <i class="fa fa-gift fa-fw"></i> Total Koha Cost
                                     <div class="pull-right text-muted small">
                                         <div>$<span id="total_koha"></span></div>
                                     </div>
@@ -97,9 +67,9 @@
 
                 </div>
                 <div class="row">
-                    <div class="col-lg-8">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
+                    <div class="">
+                        <div class="panel panel-default ">
+                            <div class="panel-heading ">
                                 <i class="fa fa-bar-chart-o fa-fw"></i> Graph Overview
                                 <div class="pull-right">
                                     <div class="btn-group">
@@ -138,7 +108,7 @@
 
                 <div id="pie_charts">
                     <div id="grant_pie_report" class="pull-left" style="width: 300px; height:300px"></div>
-                    <div id="faculty_pie_report" class="pull-right" style="width: 300px; height:300px" "></div>
+                    <div id="faculty_pie_report" class="pull-right" style="width: 300px; height:300px "></div>
                 </div>
 
             </div>
@@ -154,15 +124,20 @@
 </div>
 
 <script>
+    //ourglobals at the top
     var graph_data = [];
     var grant_pie_report = [];
     var pie_chart_faculty = [];
     var student_report_view = [];
+    var $error_message = $("#filter_errors");
+    var $search_report_form = $("#filter_wizard");
 
+    var keys = []
     //for our pie graph reports
     var pie_reports = [];
 
-    function getMainOveriew() {
+    function getMainOveriew(event) {
+        
         $.ajax({
             url: "/Reports/getFilterReports",
             type: "GET",
@@ -172,9 +147,9 @@
     }
 
 
-
+  
     function mainReport(data) {
-        //console.log("mainReport running", data)
+        
         var report_data = [];
         var index = 0;
 
@@ -189,9 +164,18 @@
                 'date': thedate,
                 'index': index++
             }
+
             //add the key as a type name to data object
+            if (keys.indexOf(reportData.GrantType, keys) == -1)
+                keys.push(reportData.GrantType)
+
+          
+
+               
+
             data[reportData.GrantType] = reportData.GrantValue;
             report_data.push(data)
+            
         })
 
         //store graph data for switching from bar graph
@@ -204,6 +188,7 @@
 
 
     function barGraphOverview() {
+        
         console.log("running barGraphOverview");
         $("#main-report").empty();
 
@@ -212,7 +197,7 @@
             return;
         }
             
-
+        console.log("graph_data", graph_data)
         Morris.Bar({
             element: 'main-report',
             data: graph_data,
@@ -220,39 +205,44 @@
             xLabels: 'day',
             parseTime: false,
             smooth: false,
-            ykeys: ["Hardship", "TrainTickets", "Food", "PetrolVouchers"],
+            ykeys: keys,
             //['Hardship', 'Food', 'TrainTickets'],
-            labels: ["Hardship", "Train Tickets", "Food", "Petrol Vouchers"],
+            labels: keys,
             //['Hardship', 'Food Vouchers', 'Train Tickets'],
             ymax: 'auto',
             pointSize: 2,
             hideHover: 'auto',
             resize: true,
+            /*
             lineColors: [
            '#FFE600',
            '#223EB2',
            '#FF8000',
            '#95D7BB'
-            ],
+            ],*/
             pointFillColors: ['#00ff00']
         });
     }
-    function areaGraphOverview() {
+    function areaGraphOverview(event) {
         //cammel case words regex
-        /*
+        //event.preventDefault();
+
         var rex = /([A-Z])([A-Z])([a-z])|([a-z])([A-Z])/g;
 
         var ykeys = [];
         var labels = [];
+        /*
+        $.map(graph_data,function(index,value){
+            //ykeys.push(key)
+            //var label = key.replace(rex, "$1$4 $2$3$5");
+            //labels.push(label);
+            console.log("index", index)
+           
 
-        for (key in key_store) {
-            ykeys.push(key)
-            var label = key.replace(rex, "$1$4 $2$3$5");
-            labels.push(label);
-
-        }
-        */
-        console.log("running areaGraphOverview");
+        });*/
+        //console.log("keys", keys)
+        
+        
         //report_data
         $("#main-report").empty();
 
@@ -267,37 +257,67 @@
             xLabels: 'day',
             parseTime: false,
             smooth: false,
-            ykeys: ["Hardship", "TrainTickets", "Food", "PetrolVouchers"],
+            ykeys: keys,
             //['Hardship', 'Food', 'TrainTickets'],
-            labels: ["Hardship", "Train Tickets", "Food", "Petrol Vouchers"],
+            labels: keys,
             //['Hardship', 'Food Vouchers', 'Train Tickets'],
             ymax: 'auto',
             pointSize: 2,
             hideHover: 'auto',
             resize: true,
+            /*
             lineColors: [
            '#FFE600',
            '#223EB2',
            '#FF8000',
            '#95D7BB'
-            ],
+            ],*/
             pointFillColors: ['#00ff00']
         });
     }
     //switch graphs binding click event
 
-    $("#bar_graph_switch").click(barGraphOverview);
-    $("#area_graph_switch").click(areaGraphOverview);
-    $("#reload_graph_over").click(getMainOveriew);
+    $("#bar_graph_switch").click(function (e) {
+        e.preventDefault();
+        barGraphOverview()
+    });
+    $("#area_graph_switch").click(function (e) {
+        e.preventDefault();
+        areaGraphOverview();
+    });
+    $("#reload_graph_over").click(function (e) {
+        e.preventDefault();
+        getMainOveriew()
+    });
+    //bind our reset
+    
+    $("#search_report_reset_btn").click(function (e) {
+
+        //reset all input box to selected
+        var select_options = $("#search_report_form option:selected");
+        var text_box = $("#search_report_form :input:text");
+        $.each(select_options, function () {
+            //$(this).prop('selectedIndex', 0);
+            $(this).removeAttr("selected");
+
+        })
+        $.each(text_box, function () {
+            $(this).val('')
+        })
+        $error_message.alertBox("Filters Reset", true)
+        setTimeout(function () {
+            $error_message.alertBox()
+        }, 1500)
+    });
     /*
     $("#pie_grant_chart").click(pieChartValue);
     $("#pie_faculty_chart").click(pieChartValue);*/
     getMainOveriew();
-    var $error_message = $("#filter_errors");
-    var $search_report_form = $("#filter_wizard");
+  
 
     //code from our report filter
     $("#search_report_btn").click(function () {
+        $("#start_date").val($.trim($("#start_date").val()));
         var report_details = $(":input", $search_report_form).serialize();
        
         $("#main_area").isLoading({
@@ -378,7 +398,7 @@
     }
 
     function updatePieCharts() {
-
+       
         if (pie_reports["grant_pie_report"].length < 1)
             $("#grant_pie_report").text("Not enought grants to show pie chart")
         else
@@ -389,6 +409,9 @@
             $("#faculty_pie_report").text("Not enought faculty to show pie chart")
         else
             $("#faculty_pie_report").empty();
+
+        console.log("grant_pie_report", pie_reports["grant_pie_report"])
+        console.log("faculty_pie_report", pie_reports["faculty_pie_report"])
 
         if (pie_reports["grant_pie_report"].length > 0)
         $.plot($("#grant_pie_report"), pie_reports["grant_pie_report"], {
@@ -437,20 +460,25 @@
     function processDataReports(data) {
         //clear student student_report_view
         student_report_view = [];
-        if (typeof data.student_count == "number") {
+        if (typeof data.student_count == "number") 
             $("#student_count").text(data.student_count)
-        }
+        else
+            $("#student_count").text("0")
 
-        if (typeof data.advice_count == "number") {
+        if (typeof data.advice_count == "number") 
             $("#advice_count").text(data.advice_count)
-        }
-        if (typeof data.total_cost == "number") {
-            $("#total_cost").text(data.total_cost)
-        }
+        else
+            $("#advice_count").text("0")
 
-        if (typeof data.total_koha == "number") {
-            $("#total_koha").text(data.total_koha)
-        }
+        if (typeof data.total_cost == "number") 
+            $("#total_cost").text(data.total_cost)
+        else
+            $("#total_cost").text("0")
+
+        if (typeof data.total_koha == "number") 
+            $("#total_koha").text(data.total_koha);
+        else
+            $("#total_koha").text("0")
 
         if (data.success == true) {
 
@@ -475,7 +503,6 @@
                 $.each(data.student_grants, function (index, grant) {
                     var new_col = []
                    
-                   
                     new_col.push(returnDate(grant.DateOfIssue));
                     new_col.push((typeof grant.LastName == "string") ? grant.FirstName + " " + grant.LastName : grant.FirstName)
                     new_col.push(grant.campus_name);
@@ -495,10 +522,10 @@
            
             updateReportTable();
             updatePieCharts();
-
+            areaGraphOverview();
             setTimeout(function () {
                 $(".isloading-overlay").remove();
-            }, 500)
+            }, 250)
            
 
         }

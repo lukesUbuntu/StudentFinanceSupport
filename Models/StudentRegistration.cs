@@ -69,11 +69,11 @@ namespace StudentFinanceSupport.Models
 
         [StringLength(50)]
         public string Detailed_Ethnicity { get; set; }
-       
+       [Display(Name = "Faculty")]
         public int id_faculty { get; set; }
-        
+        [Display(Name = "Course")]
         public int id_courses { get; set; }
-        
+         [Display(Name = "Campus")]
         public int id_campus { get; set; }
 
         

@@ -116,7 +116,8 @@ namespace StudentFinanceSupport.Controllers
                                      faculty_name = grants.StudentRegistration.Faculty.faculty_name,
                                      faculty_id = grants.StudentRegistration.Faculty.id_faculty,
                                      campus_id = grants.StudentRegistration.Campus.id_campus,
-                                     campus_name = grants.StudentRegistration.Campus.campus_name
+                                     campus_name = grants.StudentRegistration.Campus.campus_name,
+                                     ethnicty = grants.StudentRegistration.Main_Ethnicity
                                  };
             //apply our filters
             if (theReport.gender != null)
@@ -191,26 +192,36 @@ namespace StudentFinanceSupport.Controllers
             {
                 student_grants = from a in student_grants where a.campus_id == theReport.Campus select a;
             }
+            //etnicity filter
+            if (theReport.Ethnicity != null)
+            {
+                bool is_Ethnicity = false;
+                List<SelectListItem> EthnicityList = Helpers.Helpers.Ethnicity();
 
+                foreach(var Ethnicity in EthnicityList)
+                    if (Ethnicity.Value == theReport.Ethnicity) //we have ethncity
+                        is_Ethnicity = true;
+                        //student_grants = from a in student_grants where a.e == theReport.Faculity select a;
+                
+                if (is_Ethnicity)
+                    student_grants = from a in student_grants where a.ethnicty == theReport.Ethnicity select a;
+                else
+                ModelState.AddModelError("Ethnicity", "invalid Ethnicity type");
+                
+                //student_grants = from a in student_grants where a.faculty_id == theReport.Faculity select a;
+            }
+            
             //finally grab the count of actually students for other chart
             var student_count = from a in student_grants group a by a.Student_ID into c select c;
 
             
             var grant_pie_report =
                   from voucher in student_grants.ToList()
-                  where //voucher.GrantyType.grant_name.ToLower() != "advice"
-
-                                    voucher.grant_description_enabled == true &&
-                                    voucher.grant_koha_enabled == false &&
-                                    voucher.grant_value_enabled == false
-
                   group voucher by voucher.Grant_Name into newGroup
                   select new
                   {
-
                       label = newGroup.Key,
                       data = newGroup.Sum(c => c.GrantValue)
-
                   };
 
             //report based on ONLY advice, which contains just a description field no koha or value

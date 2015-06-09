@@ -8,8 +8,9 @@
 <h2>Manage Admins</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Add")
-</p>
+    <button class="btn btn-info back_button">Back</button>
+    @Html.ActionLink("Create New", "Add",null, htmlAttributes: new { @class = "btn btn-success " })
+    
 <table class="table">
     <tr>
         <th>

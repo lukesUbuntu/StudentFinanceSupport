@@ -13,7 +13,7 @@
         width : 400px;
     }
 </style>
-
+<button class="btn btn-info back_button">Back</button>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -38,7 +38,7 @@
                         <span class="input-group-btn">
                            
                             @Html.TextBox("student_ID", (string)ViewBag.student_ID, new { @class = "form-control suggest-prompt", @placeholder = "Search Student ID, First or Last Names...", @autofocus = "", @autocomplete = "off" })
-                            <button class="btn btn-default" type="button">
+                            <button class="btn btn-success" type="button">
                                 <i class="fa fa-search"></i>
                             </button>
                             
@@ -117,12 +117,12 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+            <div class="col-md-offset-2 col-md-2">
+                <input type="submit" value="Create" class="btn btn-success" />
             </div>
         </div>
     </div>
-
+    <div id="students_vouchers"></div>
 
 }
 @Styles.Render("~/Content/Wizard")
@@ -155,15 +155,41 @@
             console.log("student_id", student_id);
             $('#student_ID').val(student_id);
             $suggest_holder.hide();
+            //lets ajax and pull the student data
+            $.ajax({
+                url: "/StudentVouchers/StudentVouchersAll",
+                type: "POST",
+               // dataType: "json",
+                data: { id: student_id },
+                success: function (response) {
+                    $("#students_vouchers").html(response)
+                    //console.log("response", response)
+                }
+            })
             //$suggest_holder.empty();
+
         });
 
+        $('body').on('focusout', ".suggested-student", function (e) {
+        $.ajax({
+                url: "/StudentVouchers/StudentVouchersAll",
+                type: "POST",
+               // dataType: "json",
+                data: { id: student_id },
+                success: function (response) {
+                    $("#students_vouchers").html(response)
+                    console.log("response", response)
+                }
+            })
+        });
         function emptySearch() {
             if ($.trim($('#student_ID').val()) == "") {
                 $suggest_holder.hide();
             }
             console.log("Empting search div");
             $suggest_holder.empty();
+            $("#students_vouchers").empty()
+            $("#student_ID_validationMessage").text("")
         }
 
         /*
@@ -243,7 +269,8 @@
             autoclose: true,
             toggleActive: true
         });
-
+        
+     
     });
 </script>
 

@@ -31,7 +31,11 @@
     <div class="modal"><!-- Place at bottom of page --></div>
     <!-- This is to remove the internal validation css been adding as im using custom alert boxes-->
     <script>
-
+        $(document).ready(function () {
+            $('.back_button').on('click', function () {
+                window.history.back();
+            })
+        })
         $("#nav_search").keyup(function(){
 
             var valThis = $(this).val();
