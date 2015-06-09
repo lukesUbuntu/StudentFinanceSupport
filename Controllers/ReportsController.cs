@@ -81,9 +81,10 @@ namespace StudentFinanceSupport.Controllers
         {
           
             //build list of issue with thereport filter model been passed
-          
-            
-            
+
+
+            string report_type = "Year To Date";
+
             StudentRegistrationsModel db = new StudentRegistrationsModel();
             
             var student_grants = from student in db.StudentRegistrations 
@@ -152,6 +153,7 @@ namespace StudentFinanceSupport.Controllers
                         //return results by day
                     case "day":
                         student_grants = from a in student_grants where a.DateOfIssue.Day == theDate.Day select a;
+                        report_type = "Daily Report";
                         break;
                     case "week":
                         //calc between days
@@ -162,17 +164,20 @@ namespace StudentFinanceSupport.Controllers
                                          where a.DateOfIssue >= theDate
                                          && a.DateOfIssue < endDate
                                          select a;
+                        report_type = "Weekly Report";
                         break;
                     case "month":
                         student_grants = from a in student_grants 
                                          where a.DateOfIssue.Month == theDate.Month &&
                                          a.DateOfIssue.Year == theDate.Year
                                          select a;
+                        report_type = "Monthly Report";
                         break;
                     case "year":
                         student_grants = from a in student_grants 
                                          where a.DateOfIssue.Year == theDate.Year 
                                          select a;
+                        report_type = "Yearly Report";
                         break;
                 }
                    
@@ -246,7 +251,20 @@ namespace StudentFinanceSupport.Controllers
 
                    };
 
-           
+
+            var campus_pie_report =
+                   from students in student_grants.ToList()
+                   //where students.Grant_ID != advice_report.h 
+                   group students by students.campus_name into newGroup
+
+                   select new
+                   {
+
+                       label = newGroup.Select(c => c.campus_name).Distinct(),
+                       data = newGroup.Sum(c => c.GrantValue)
+
+                   };
+
 
 
             var main_report =
@@ -268,6 +286,7 @@ namespace StudentFinanceSupport.Controllers
             return Json(new
             {
                 success = true,
+                report_type = report_type,
                 student_grants = student_grants.ToList(),
                 student_count = student_count.Count(),
                 advice_count = advice_report.Count(),
@@ -276,6 +295,7 @@ namespace StudentFinanceSupport.Controllers
                 total_cost = student_grants.GroupBy(c => c.GrantValue).Select(c => c.Key).DefaultIfEmpty(0).Sum(),
                 total_koha = student_grants.GroupBy(c => c.KohaFund).Select(c => c.Key).DefaultIfEmpty(0).Sum(),
                 faculty_pie_report = faculty_pie_report,
+                campus_pie_report = campus_pie_report,
                 main_report = main_report.ToArray(),
                 error_list = errorList.ToArray()
                 
