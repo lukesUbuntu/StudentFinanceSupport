@@ -1,6 +1,6 @@
 # Student Finance Support
 This was an Assignment i did for paper IT7x11 which was devolped in ASP MVC within 2 weeks.
-<img src=http://i.imgur.com/aKdxCNo.png>
+
 #Assignment Breif
 The objective of this project was to develop an information system to streamline work for Student Financial Advisor for a university. The Advisor provides free and confidential advice on financial matters for students. An information system is developed to provide the client a graphical user interface at the front-end and a database at the back-end. This enables the client to insert, delete, update and retrieve student information/data
 
@@ -11,7 +11,11 @@ The objective of this project was to develop an information system to streamline
 -	The client would initially be provided with a working model with minimum functionality. The functionality is then added incrementally to complete this project.
 -	The user may be able to view the breakdown of the budget spending (by Faculty) on food vouchers, petrol vouchers, and hardship grant on a yearly, monthly, weekly and up-to-date basis.
 
-
+#Screen Shots
+###Reports System
+<img src=http://i.imgur.com/aKdxCNo.png>
+###Forgot Password
+<img src=http://i.imgur.com/bxDT7vE.png>
 #Requirements Completed
 List of requirements from the Student Financial report that was given and implemented into MVC 
 -	Adding/Deleting student grants.
@@ -47,5 +51,16 @@ List of requirements from the Student Financial report that was given and implem
 
 
 
+- Full Admin 
+    - username : admin@example.com
+    - password : test
+
+- Advisor & Reports only
+    - username : advisor@example.com
+    - password : test
+
+- Reports only
+    - username : reports@example.com
+    - password : test
 
 
