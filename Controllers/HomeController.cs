@@ -6,11 +6,11 @@ using System.Web.Mvc;
 
 namespace StudentFinanceSupport.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public HomeController()
         {
-          
+            bypassAdminCheck("Home/About");
         }
         public ActionResult Index()
         {
