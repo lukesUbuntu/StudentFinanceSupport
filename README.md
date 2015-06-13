@@ -1,7 +1,7 @@
 # Student Finance Support
-This was an Assignment i did for paper IT7x11 which was devolped in ASP MVC within 2 weeks.
+This was an Assignment i did for paper IT7x11 which was developed in ASP MVC within 2 weeks.
 
-#Assignment Breif
+#Assignment Brief
 The objective of this project was to develop an information system to streamline work for Student Financial Advisor for a university. The Advisor provides free and confidential advice on financial matters for students. An information system is developed to provide the client a graphical user interface at the front-end and a database at the back-end. This enables the client to insert, delete, update and retrieve student information/data
 
 #Project Scope
